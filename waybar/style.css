@@ -10,30 +10,22 @@
  * ----------------------------------------------------- 
 */
 
-@define-color backgroundlight #FFFFFF;
-@define-color backgrounddark #FFFFFF;
-@define-color workspacesbackground1 #FFFFFF;
-@define-color workspacesbackground2 #CCCCCC;
-@define-color bordercolor #FFFFFF;
-@define-color textcolor1 #000000;
-@define-color textcolor2 #000000;
-@define-color textcolor3 #FFFFFF;
-@define-color iconcolor #FFFFFF;
+@import url("/home/shayan/.cache/wal/colors-waybar.css");
 
 /* -----------------------------------------------------
  * General 
  * ----------------------------------------------------- */
 
 * {
-    font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-family: "Fira Sans Semibold",Symbols Nerd Font, Roboto, Helvetica, Arial, sans-serif;
     border: none;
     border-radius: 0px;
 }
 
 window#waybar {
-    background-color: rgba(0,0,0,0.2);
-    border-bottom: 0px solid #ffffff;
-    /* color: #FFFFFF; */
+    background-color: transparent;
+    border-bottom: 0px solid @color7;
+    /* color: @foreground; */
     transition-property: background-color;
     transition-duration: .5s;
     border-radius: 15px;
@@ -51,7 +43,7 @@ window#waybar {
     font-weight: bold;
     font-style: normal;
     font-size: 16px;
-    color: @textcolor1;
+    color: @color7;
 }
 
 #workspaces button {
@@ -59,21 +51,21 @@ window#waybar {
     margin: 4px 3px;
     border-radius: 15px;
     border: 0px;
-    color: @textcolor3;
+    color: @foreground;
     transition: all 0.3s ease-in-out;
 }
 
 #workspaces button.active {
-    color: @textcolor1;
-    background: @workspacesbackground2;
+    color: @background;
+    background: @color7;
     border-radius: 15px;
     min-width: 40px;
     transition: all 0.3s ease-in-out;
 }
 
 #workspaces button:hover {
-    color: @textcolor1;
-    background: @workspacesbackground2;
+    color: @background;
+    background: @color7;
     border-radius: 15px;
 }
 
@@ -83,14 +75,14 @@ window#waybar {
 
 tooltip {
     border-radius: 10px;
-    background-color: @backgroundlight;
+    background-color: @background;
     opacity:0.8;
     padding:20px;
     margin:0px;
 }
 
 tooltip label {
-    color: @textcolor2;
+    color: @foreground;
 }
 
 /* -----------------------------------------------------
@@ -98,11 +90,11 @@ tooltip label {
  * ----------------------------------------------------- */
 
 #window {
-    background: @backgroundlight;
+    background: transparent;
     margin: 10px 15px 10px 0px;
     padding: 2px 10px 0px 10px;
     border-radius: 12px;
-    color:@textcolor2;
+    color: @foreground;
     font-size:16px;
     font-weight:normal;
 }
@@ -116,13 +108,13 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #taskbar {
-    background: @backgroundlight;
+    background: @color0;
     margin: 6px 15px 6px 0px;
     padding:0px;
     border-radius: 15px;
     font-weight: normal;
     font-style: normal;
-    border: 3px solid @backgroundlight;
+    border: 3px solid @color0;
 }
 
 #taskbar button {
@@ -157,7 +149,7 @@ window#waybar.empty #window {
     margin-right: 20px;
     font-size: 20px;
     font-weight: bold;
-    color: @iconcolor;
+    color: @foreground;
     padding: 4px 10px 2px 10px;
     font-size: 16px;
 }
@@ -175,7 +167,7 @@ window#waybar.empty #window {
     padding:0px;
     margin-right: 7px;
     font-size:20px;
-    color: @iconcolor;
+    color: @foreground;
 }
 
 /* -----------------------------------------------------
@@ -183,8 +175,8 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #custom-appmenu {
-    background-color: @backgrounddark;
-    color: @textcolor1;
+    background-color: transparent;
+    color: @foreground;
     border-radius: 15px;
     margin: 10px 10px 10px 10px;
 }
@@ -194,10 +186,11 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #custom-exit {
-    margin: 2px 20px 0px 0px;
-    padding:0px;
+    margin: 2px 20px 0px 20px;
+    padding:3px;
     font-size:20px;
-    color: @iconcolor;
+    color: @foreground;
+    border-radius: 15px;
 }
 
 /* -----------------------------------------------------
@@ -208,7 +201,7 @@ window#waybar.empty #window {
     margin:0px;
     padding:0px;
     font-size:16px;
-    color:@iconcolor;
+    color: @foreground;
 }
 
 #language {
@@ -220,28 +213,43 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #clock {
-    background-color: @backgrounddark;
+    background-color: transparent;
     font-size: 16px;
-    color: @textcolor1;
+    color: @foreground;
     border-radius: 15px;
     margin: 10px 7px 10px 0px;
 }
+
+/*
+#clock:hover {
+    color: @foreground;
+    background: @color0;
+    border-radius: 15px;
+}
+*/
 
 /* -----------------------------------------------------
  * Pulseaudio
  * ----------------------------------------------------- */
 
 #pulseaudio {
-    background-color: @backgroundlight;
+    background-color: transparent;
     font-size: 16px;
-    color: @textcolor2;
+    color: @foreground;
     border-radius: 15px;
     margin: 10px 10px 10px 0px;
 }
+/*
+#pulseaudio:hover {
+    color: @foreground;
+    background: @color0;
+    border-radius: 15px;
+}
+*/
 
 #pulseaudio.muted {
-    background-color: @backgrounddark;
-    color: @textcolor1;
+    background-color: transparent;
+    color: @foreground;
 }
 
 /* -----------------------------------------------------
@@ -249,21 +257,21 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #network {
-    background-color: @backgroundlight;
+    background-color: transparent;
     font-size: 16px;
-    color: @textcolor2;
+    color: @foreground;
     border-radius: 15px;
     margin: 10px 10px 10px 0px;
 }
 
 #network.ethernet {
-    background-color: @backgroundlight;
-    color: @textcolor2;
+    background-color: transparent;
+    color: @foreground;
 }
 
 #network.wifi {
-    background-color: @backgroundlight;
-    color: @textcolor2;
+    background-color: transparent;
+    color: @foreground;
 }
 
 /* -----------------------------------------------------
@@ -271,9 +279,9 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
  #bluetooth, #bluetooth.on, #bluetooth.connected {
-    background-color: @backgroundlight;
+    background-color: transparent;
     font-size: 16px;
-    color: @textcolor2;
+    color: @foreground;
     border-radius: 15px;
     margin: 10px 15px 10px 0px;
 }
@@ -289,28 +297,36 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #battery {
-    background-color: @backgroundlight;
+    background-color: transparent;
     font-size: 16px;
-    color: @textcolor2;
+    color: @foreground;
     border-radius: 15px;
     margin: 10px 15px 10px 0px;
 }
 
+/*
+#battery:hover {
+    color: @foreground;
+    background: @color0;
+    border-radius: 15px;
+}
+*/
+
 #battery.charging, #battery.plugged {
-    color: @textcolor2;
-    background-color: @backgroundlight;
+    color: @foreground;
+    background-color: transparent;
 }
 
 @keyframes blink {
     to {
-        background-color: @backgroundlight;
-        color: @textcolor2;
+        background-color: transparent;
+        color: @color1;
     }
 }
 
 #battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: @textcolor3;
+    background-color: transparent;
+    color: @color1;
     animation-name: blink;
     animation-duration: 0.5s;
     animation-timing-function: linear;
@@ -332,7 +348,7 @@ window#waybar.empty #window {
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background-color: #eb4d4b;
+    background-color: transparent;
 }
 
 /* -----------------------------------------------------
@@ -340,17 +356,18 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 label:focus {
-    background-color: #000000;
+    background-color: @background;
 }
 
 #backlight {
-    background-color: #90b1b1;
+    background-color: transparent;
 }
 
 #network {
-    background-color: #2980b9;
+    background-color: transparent;
 }
 
 #network.disconnected {
-    background-color: #f53c3c;
+    background-color: transparent;
+    color: @color1;
 }
