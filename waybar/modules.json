@@ -43,7 +43,7 @@
     "custom/exit": {
         "format": "",
         "tooltip-format": "Powermenu",
-        "on-click-right": "wlogout -b 4",
+        "on-click-right": "wlogout",
         "on-click": "hyprlock",
         "tooltip": false
     },
@@ -142,9 +142,9 @@
             "critical": 15
         },
         "format": "{icon}   {capacity}%",
-        "format-charging": "  {capacity}%",
-        "format-plugged": "  {capacity}%",
-        "format-alt": "{icon}  {time}",
+        "format-charging": "   {capacity}%",
+        "format-plugged": "   {capacity}%",
+        "format-alt": "{icon}   69%",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": [" ", " ", " ", " ", " "]
