@@ -117,6 +117,13 @@ window#waybar.empty #window {
     border: 3px solid @color0;
 }
 
+#taskbar button.active {
+    border: 1.5px solid @color7;   /* outline color from pywal */
+    border-radius: 15px;          /* slightly rounded corners */
+    background: transparent;     /* keep background clean */
+    padding: 0 5px;              /* adjust for the border thickness */
+}
+
 #taskbar button {
     margin:0;
     border-radius: 15px;
