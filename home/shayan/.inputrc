@@ -1,0 +1,5 @@
+# Ctrl+Backspace = delete previous word
+"\C-h": backward-kill-word
+
+# Ctrl+Alt+Backspace = delete line to beginning
+"\e\C-h": unix-line-discard
