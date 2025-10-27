@@ -22,7 +22,8 @@
 
     ],
     "modules-right": [
-        "mpd", 
+//        "mpd", 
+		"custom/timer",
         "pulseaudio", 
 //        "network", 
 //        "cpu", 

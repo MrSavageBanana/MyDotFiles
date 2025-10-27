@@ -68,7 +68,7 @@
     // Clock
     "clock": {
         // "timezone": "America/New_York",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "tooltip-format": "<big>{:%I %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%B %e}"
     },
 
@@ -206,5 +206,23 @@
                 "rofi - drun"
                 ],
          "sort-by-app-id": true
-     }
+     },
+     
+	// Timer
+	"custom/timer": {
+	    "exec": "/home/shayan/.config/waybar/scripts/waybar_timer hook",
+	    "exec-on-event": false,
+	    "return-type": "json",
+	    "format": "{icon} {0}",
+	    "format-icons": {
+	        "standby": "\uf254  ",
+	        "running": "\uf253  ",
+	        "paused": "\uf04c + \uf253  "
+	    },
+	    "on-click": "/home/shayan/.config/waybar/scripts/waybar_timer togglepause",
+	    "on-click-middle": "/home/shayan/.config/waybar/scripts/waybar_timer cancel",
+	    "on-click-right": "/home/shayan/.config/waybar/scripts/waybar_timer cancel",
+	    "on-scroll-up": "/home/shayan/.config/waybar/scripts/waybar_timer increase 60 || /home/shayan/.config/waybar/scripts/waybar_timer new 1 'notify-send -u critical \"Timer expired\"'",
+	    "on-scroll-down": "/home/shayan/.config/waybar/scripts/waybar_timer decrease 60"
+	}
 }
