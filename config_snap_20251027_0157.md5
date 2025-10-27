@@ -223,7 +223,7 @@ d41d8cd98f00b204e9800998ecf8427e  /home/shayan/.config/DigitalZen/WebStorage/Quo
 30f017b37c16fb7cb69c9814ca33d87e  /home/shayan/.config/rygel.conf
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/microsoft-edge-dev/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
 d41d8cd98f00b204e9800998ecf8427e  /home/shayan/.config/menus/applications-merged/xdg-desktop-menu-dummy.menu
-15ebf36e30ccd62818650c9afc43a2c5  /home/shayan/.config/micro/buffers/history
+b74801bace66b4967c61ffcbe7d960ac  /home/shayan/.config/micro/buffers/history
 082bae4ad27245de43030b61b8310445  /home/shayan/.config/micro/backups/%home%shayan%temp.txt
 b1a2f164ca44d64e47b03c0fea1a50e6  /home/shayan/.config/micro/plug/misspell/misspell.lua
 925795802d7a568fd45f37171911a61c  /home/shayan/.config/micro/plug/misspell/README.md
@@ -231,7 +231,7 @@ b1a2f164ca44d64e47b03c0fea1a50e6  /home/shayan/.config/micro/plug/misspell/missp
 143ac5095010c7e4fc70a49bbbd5aaf9  /home/shayan/.config/micro/bindings.json
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/google-chrome-unstable/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
 3ae42e5789f2f1af871e2a07dcdb3f7d  /home/shayan/.config/libinput-gestures.conf
-959ff66ee1a9bdfa46347d026aa7def7  /home/shayan/.config/kde.org/ghostwriter.conf
+433326fa1641c806d8feb6ae269df500  /home/shayan/.config/kde.org/ghostwriter.conf
 43ac88d8dcb3c31c727037a35bd2ebc1  /home/shayan/.config/pulse/cookie
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/microsoft-edge-beta/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
 9fd8d144a74ad1111e85d34a6c969ba0  /home/shayan/.config/gnome-xdg-terminals.list
@@ -240,7 +240,7 @@ b1a2f164ca44d64e47b03c0fea1a50e6  /home/shayan/.config/micro/plug/misspell/missp
 adf79a1567689526ef4822721481a005  /home/shayan/.config/wireshark/recent
 9fd8d144a74ad1111e85d34a6c969ba0  /home/shayan/.config/ubuntu-xdg-terminals.list
 e8611b48917df378a4188e86a68fceb0  /home/shayan/.config/gtk-3.0/bookmarks
-ff3d3c45ef0e558fd08e9bde0c54ab6f  /home/shayan/.config/copyq/copyq_tab_JmNsaXBib2FyZA==.dat
+fe291447ddf85b1e6afc484a723963b7  /home/shayan/.config/copyq/copyq_tab_JmNsaXBib2FyZA==.dat
 d7c1d447412fee29758a9920894fe4aa  /home/shayan/.config/copyq/copyq.lock
 dab2bc936769e052ff3692d25a1c6d81  /home/shayan/.config/copyq/copyq-commands.ini
 44032966551aff1ad58ad659f374ebdf  /home/shayan/.config/copyq/copyq-filter.ini
@@ -6434,7 +6434,14 @@ ba67222e720972aa4a0a8dd8706ad038  /home/shayan/.config/autostart/auto_pin_earbud
 3be7a37c908112ceaee03440fb26e16b  /home/shayan/.config/remmina/remmina.pref
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/google-chrome/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
 bdadce70263e4176456b0898f4279e3e  /home/shayan/.config/neofetch/config.conf
-0b798d18d15881d0b86bc810297aeb1b  /home/shayan/.config/yazi/keymap.toml
+418d7da66f87a7f9741d0d3551d6432d  /home/shayan/.config/yazi/plugins/smart-enter.yazi/README.md
+38fdd93acc41610d3c9567bae8800c81  /home/shayan/.config/yazi/plugins/smart-enter.yazi/LICENSE
+1eec6560008a5ed8678d6b221f6faf1a  /home/shayan/.config/yazi/plugins/smart-enter.yazi/main.lua
+90a8bb9d470a2a16348328865d304843  /home/shayan/.config/yazi/plugins/diff.yazi/README.md
+38fdd93acc41610d3c9567bae8800c81  /home/shayan/.config/yazi/plugins/diff.yazi/LICENSE
+d81440c750682de40d2c0f415e39152d  /home/shayan/.config/yazi/plugins/diff.yazi/main.lua
+d130b6f43d513437f44c2b229280d85c  /home/shayan/.config/yazi/package.toml
+6d333494bf61e76cd728c8ea2417a610  /home/shayan/.config/yazi/keymap.toml
 d41d8cd98f00b204e9800998ecf8427e  /home/shayan/.config/yazi/theme.toml
 3aca397e25a47a12a26fcf0c0826169f  /home/shayan/.config/yazi/yazi.toml
 ea3cd87ba4bbc1b41dfe3308cfbee9af  /home/shayan/.config/vlc/vlc-qt-interface.conf
