@@ -20,7 +20,7 @@ keymap = [
 	{ on = "<Down>", run = "arrow next", desc = "Next file" },
 
 	{ on = "<C-u>", run = "arrow -50%",  desc = "Move cursor up half page" },
-	{ on = "<C-d>", run = "arrow 50%",   desc = "Move cursor down half page" },
+	{ on = "<C-d>", run = "plugin diff",   desc = "Diff the selected with the hovered file" },
 	{ on = "<C-b>", run = "arrow -100%", desc = "Move cursor up one page" },
 	{ on = "<C-f>", run = "arrow 100%",  desc = "Move cursor down one page" },
 
@@ -61,7 +61,7 @@ keymap = [
 	# Operation
 	{ on = "o",         run = "open",                        desc = "Open selected files" },
 	{ on = "O",         run = "open --interactive",          desc = "Open selected files interactively" },
-	{ on = "<Enter>",   run = "open",                        desc = "Open selected files" },
+	{ on = "<Enter>",   run = "plugin smart-enter",                        desc = "Enter the child directory, or open the file" },
 	{ on = "<S-Enter>", run = "open --interactive",          desc = "Open selected files interactively" },
 	{ on = "y",         run = "yank",                        desc = "Yank selected files (copy)" },
 	{ on = "x",         run = "yank --cut",                  desc = "Yank selected files (cut)" },
