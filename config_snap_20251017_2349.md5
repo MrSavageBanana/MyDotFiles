@@ -7,7 +7,7 @@ d41d8cd98f00b204e9800998ecf8427e  /home/shayan/.config/enchant/en_US.exc
 7344e608c912fb632b464b1b9e9cf58d  /home/shayan/.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
 13a3eb65947da4572a777f1a9e153ce4  /home/shayan/.config/xfce4/xfconf/xfce-perchannel-xml/catfish.xml
 bbc3f0184a21f6b5d3179acf71095d0e  /home/shayan/.config/monitors.xml
-dc73d64ae33ccd07efcd7bb1fad31d7d  /home/shayan/.config/QtProject.conf
+04c2aad5a2b7a5f756a6f2457cea3219  /home/shayan/.config/QtProject.conf
 9638c1e8aa4282ed10aeebd1e647800c  /home/shayan/.config/input-remapper-2/presets/AT Translated Set 2 keyboard/new preset.json
 d41d8cd98f00b204e9800998ecf8427e  /home/shayan/.config/input-remapper-2/presets/keyd virtual pointer/new preset.json
 d41d8cd98f00b204e9800998ecf8427e  /home/shayan/.config/input-remapper-2/presets/keyd virtual keyboard/new preset.json
@@ -57,7 +57,7 @@ b89e8bd43e550d9e5eaa037b1d33e822  /home/shayan/.config/WallRizz/wallpaperDaemonH
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/BraveSoftware/Brave-Browser-Beta/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/BraveSoftware/Brave-Browser/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/BraveSoftware/Brave-Browser-Nightly/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
-6a38c42273c866560d5fc67f872b7604  /home/shayan/.config/dconf/user
+86ecad708db2bccff4f8a72cb08cdb02  /home/shayan/.config/dconf/user
 1fe4d387a30cdda15a32bcabd55150a9  /home/shayan/.config/DigitalZen/.updaterId
 df801e0d587c1bcbf68d95c7aa86f93c  /home/shayan/.config/DigitalZen/.org.chromium.Chromium.fSKoJR
 41876349cb12d6db992f1309f22df3f0  /home/shayan/.config/DigitalZen/DawnGraphiteCache/data_3
@@ -223,7 +223,7 @@ d41d8cd98f00b204e9800998ecf8427e  /home/shayan/.config/DigitalZen/WebStorage/Quo
 30f017b37c16fb7cb69c9814ca33d87e  /home/shayan/.config/rygel.conf
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/microsoft-edge-dev/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
 d41d8cd98f00b204e9800998ecf8427e  /home/shayan/.config/menus/applications-merged/xdg-desktop-menu-dummy.menu
-b74801bace66b4967c61ffcbe7d960ac  /home/shayan/.config/micro/buffers/history
+bb8c5c8510ced3e5bcfe497ce21f5770  /home/shayan/.config/micro/buffers/history
 082bae4ad27245de43030b61b8310445  /home/shayan/.config/micro/backups/%home%shayan%temp.txt
 b1a2f164ca44d64e47b03c0fea1a50e6  /home/shayan/.config/micro/plug/misspell/misspell.lua
 925795802d7a568fd45f37171911a61c  /home/shayan/.config/micro/plug/misspell/README.md
@@ -232,20 +232,22 @@ b1a2f164ca44d64e47b03c0fea1a50e6  /home/shayan/.config/micro/plug/misspell/missp
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/google-chrome-unstable/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
 3ae42e5789f2f1af871e2a07dcdb3f7d  /home/shayan/.config/libinput-gestures.conf
 433326fa1641c806d8feb6ae269df500  /home/shayan/.config/kde.org/ghostwriter.conf
+6892cbd454296911f900b631c0bf6fe2  /home/shayan/.config/kactivitymanagerdrc
 43ac88d8dcb3c31c727037a35bd2ebc1  /home/shayan/.config/pulse/cookie
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/microsoft-edge-beta/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
 9fd8d144a74ad1111e85d34a6c969ba0  /home/shayan/.config/gnome-xdg-terminals.list
+fcf035d708f86b3f320bdd5b98270d63  /home/shayan/.config/kuriikwsfilterrc
 58d9bdd609518e184ec152116a30871f  /home/shayan/.config/gowall/config.yml
 3cce2465a2ffa1f73464e03aaa82f8e1  /home/shayan/.config/wireshark/recent_common
 adf79a1567689526ef4822721481a005  /home/shayan/.config/wireshark/recent
 9fd8d144a74ad1111e85d34a6c969ba0  /home/shayan/.config/ubuntu-xdg-terminals.list
 e8611b48917df378a4188e86a68fceb0  /home/shayan/.config/gtk-3.0/bookmarks
-fe291447ddf85b1e6afc484a723963b7  /home/shayan/.config/copyq/copyq_tab_JmNsaXBib2FyZA==.dat
-d7c1d447412fee29758a9920894fe4aa  /home/shayan/.config/copyq/copyq.lock
+b2b6fdde204be2507f8adcae41b3881c  /home/shayan/.config/copyq/copyq_tab_JmNsaXBib2FyZA==.dat
+ec5c6628730ba34e4f9c77916042aafd  /home/shayan/.config/copyq/copyq.lock
 dab2bc936769e052ff3692d25a1c6d81  /home/shayan/.config/copyq/copyq-commands.ini
 44032966551aff1ad58ad659f374ebdf  /home/shayan/.config/copyq/copyq-filter.ini
 9c8fcf9987e1ea45f4197676881bc737  /home/shayan/.config/copyq/copyq-monitor.ini
-d19cf8f5d069aaac2e5013fd4eb859fc  /home/shayan/.config/copyq/copyq_geometry.ini
+ad6c2357109de455a1605f3b89ade7fb  /home/shayan/.config/copyq/copyq_geometry.ini
 50df46ddf7a92c4961d4951df7b26570  /home/shayan/.config/copyq/copyq_tabs.ini
 344a78355477c4e53928143e0897c866  /home/shayan/.config/copyq/copyq.pub
 86a08a986b3befb35212f7d660a839be  /home/shayan/.config/copyq/copyq.conf
@@ -6406,6 +6408,7 @@ feae93b6244e9f5ed065c60a081c2a4f  /home/shayan/.config/mimeapps.list
 4dc7628ae64202c78e7a969189ecce31  /home/shayan/.config/taskwarrior-tui/config.toml
 d41d8cd98f00b204e9800998ecf8427e  /home/shayan/.config/.gsd-keyboard.settings-ported
 40b27cd7ca75b32fbc9e5c70afb889f9  /home/shayan/.config/krulerrc
+1cb2bb7596eaa50f20cc8ad512e05514  /home/shayan/.config/okularpartrc
 d751713988987e9331980363e24189ce  /home/shayan/.config/com.ml4w.hyprlandsettings/hyprctl.json
 d492fd1a63b31202116507a2d4aaed0a  /home/shayan/.config/com.ml4w.hyprlandsettings/hyprctl.sh
 55d03ce993fcb48426c670e8c15e29c9  /home/shayan/.config/burn-my-windows/profiles/1759266382666830.conf
@@ -6429,6 +6432,7 @@ f49e57b970bf9d82ab447ae39bcb8fec  /home/shayan/.config/gsconnect/private.pem
 13d0e3be3518430accd7102fa3255891  /home/shayan/.config/pavucontrol.ini
 6adc9e0df5814161f93aa086c8f9a7e1  /home/shayan/.config/google-chrome-beta/NativeMessagingHosts/org.gnome.shell.extensions.gsconnect.json
 5f0406120fa013b17ae325309e8ed625  /home/shayan/.config/eog/accels
+5991b99232192093708af453d8a116d5  /home/shayan/.config/autostart/remmina-applet.desktop
 ba67222e720972aa4a0a8dd8706ad038  /home/shayan/.config/autostart/auto_pin_earbuds.sh.desktop
 773143b795822c78033fb571736332f7  /home/shayan/.config/autostart/libinput-gestures.desktop
 3be7a37c908112ceaee03440fb26e16b  /home/shayan/.config/remmina/remmina.pref
@@ -6443,10 +6447,10 @@ d81440c750682de40d2c0f415e39152d  /home/shayan/.config/yazi/plugins/diff.yazi/ma
 d130b6f43d513437f44c2b229280d85c  /home/shayan/.config/yazi/package.toml
 6d333494bf61e76cd728c8ea2417a610  /home/shayan/.config/yazi/keymap.toml
 d41d8cd98f00b204e9800998ecf8427e  /home/shayan/.config/yazi/theme.toml
-3aca397e25a47a12a26fcf0c0826169f  /home/shayan/.config/yazi/yazi.toml
+30a6e47b40189501632f5a324e487c9f  /home/shayan/.config/yazi/yazi.toml
 ea3cd87ba4bbc1b41dfe3308cfbee9af  /home/shayan/.config/vlc/vlc-qt-interface.conf
 e818455bcc2ea57c9e5bdc591ed19a25  /home/shayan/.config/vlc/vlcrc
-f6295c67e419c6975f0615cc32da251f  /home/shayan/.config/bottom/bottom.toml
+e175c0aa531fea7abd2a77f48b243853  /home/shayan/.config/bottom/bottom.toml
 b1896f0efe1dea0311b8dc11fbe704ca  /home/shayan/.config/ibus/bus/79f25b80d45b4e05ba18cbac9278e030-unix-0
 b1896f0efe1dea0311b8dc11fbe704ca  /home/shayan/.config/ibus/bus/79f25b80d45b4e05ba18cbac9278e030-unix-wayland-0
 5d2c10b32a196bc40cba4728d8203ece  /home/shayan/.config/Modus/.gitignore
@@ -6704,3 +6708,4 @@ f77f8355aeb029cfaea711542e06d746  /home/shayan/.config/Modus/assets/wallpapers_e
 20f56220c1fed086af8a3e13447e1ccf  /home/shayan/.config/Modus/assets/screenshots/home.png
 85a25b39d204b02a8a9d973d6a72267b  /home/shayan/.config/Modus/assets/screenshots/lock.png
 5e29354ea6202e0e6e08dbfa15db3ca2  /home/shayan/.config/monitors.xml~
+2a875c2baa2194ddcdb76fb26fb61d1b  /home/shayan/.config/okularrc
