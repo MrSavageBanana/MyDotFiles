@@ -1,5 +1,6 @@
 {
     "Alt-/": "lua:comment.comment",
-    "CtrlUnderscore": "lua:comment.comment",
-    "Alt-S": "SelectLine"
+    "Alt-S": "SelectLine",
+    "Alt-o": "command:urlopen",
+    "CtrlUnderscore": "lua:comment.comment"
 }
