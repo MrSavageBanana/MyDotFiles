@@ -177,21 +177,27 @@ alias bose='bluetoothctl connect 78:2B:64:D1:7C:DD'
 alias lock='hyprlock &'
 alias nano='micro'
 alias pwd='pwd | tee /dev/tty | wl-copy'
+alias on='/home/shayan/Downloads/smartthings devices:commands cf93efd0-639d-4dff-a805-36405e9397ef switch:on'
+alias off='/home/shayan/Downloads/smartthings devices:commands cf93efd0-639d-4dff-a805-36405e9397ef switch:off'
+alias x='exit'
+alias q='systemctl suspend'
 
 # Notify me on long commands
 # created with Claude. Account: Milobowler
-ntfy() {
-    "$@"
-    local exit_code=$?
-    if [ $exit_code -eq 0 ]; then
-        notify-send "Command Completed ✓" "Command finished successfully: $*"
-    else
-        notify-send "Command Failed ✗" "Command failed with code $exit_code: $*"
-    fi
-    return $exit_code
+# Notify me on long commands
+# created with Claude. Account: Milobowler
+n() {
+	notify-send "Command completed" "Previous command finished"
 }
 
 # Notify when an already-running process completes (FOREGROUND version)
+# workflow example
+#sleep 1000		# Start Command
+# ^z 			# pause (Ctrl + z)
+# notif 		# resume with notification
+# ^z 			# change your mind, pause again
+# notif-cancel # cancels notifications AND automatically resumes with fg!
+
 ntfy-pid() {
     local pid=$1
     if [ -z "$pid" ]; then
@@ -375,3 +381,25 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/usr/bin:$PATH"
 export PATH=$PATH:$HOME/go/bin
+
+
+
+alias sigma="/opt/sigma/sigma --no-sandbox"
+. "$HOME/.cargo/env"
+# --- Yazi Setup ---
+export EDITOR="kitty micro"
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
+# --- Zoxide Setup ---
+eval "$(zoxide init bash)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
