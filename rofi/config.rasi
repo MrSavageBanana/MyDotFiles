@@ -3,6 +3,8 @@ configuration {
   modes: "window,drun,run,ssh";
   font: "JetBrainsMono NF 18";
   drun-display-format: "{name}";
+  window-transition-type: "none";
+  run-command: "/home/shayan/.local/bin/rofi-run-wrapper.sh {cmd}";
 }
 
 @import "~/.cache/wal/colors-rofi-dark.rasi"
