@@ -197,6 +197,27 @@ window#waybar.empty #window {
 	color: @foreground
 }
 
+/* The styling for the drawer container */
+#group-expandable-tray {
+    background-color: #222;
+    border-radius: 10px;
+}
+
+/* Hide the children when the drawer is closed */
+#group-expandable-tray.empty .child-drawer {
+    opacity: 0;
+}
+
+/* Show the children when open/hovered */
+#group-expandable-tray.open .child-drawer {
+    opacity: 1;
+}
+#custom-tray-handle {
+    padding-right: 5px;
+    font-weight: bold;
+    color: @foreground; 
+}
+
 
 /* -----------------------------------------------------
  * Custom Exit

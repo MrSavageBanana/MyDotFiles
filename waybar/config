@@ -31,8 +31,22 @@
 //        "memory", 
 //        "keyboard-state", 
         "battery", 
-        "tray",
-        "custom/exit",
+		"group/expandable-tray",
         "clock"
-    ]
+    ],
+    
+	"group/expandable-tray": {
+	        "orientation": "horizontal",
+	        "modules": ["custom/tray-handle", "tray", "custom/exit"],
+	        "drawer": {
+	            "transition-duration": 500,
+	            "children-class": "child-drawer",
+	            "transition-left-to-right": false
+	        }
+	    },
+
+	"custom/tray-handle": {
+	        "format": " | ", 
+	        "tooltip": false
+	 },
 }
