@@ -8,5 +8,10 @@ use = "yazi-rs/plugins:diff"
 rev = "8f1d971"
 hash = "82376c3381ae915fd799d40f4dd4c6cd"
 
+[[plugin.deps]]
+use = "AnirudhG07/custom-shell"
+rev = "b04213d"
+hash = "3efc7ddc9bac120c618462eb994edf75"
+
 [flavor]
 deps = []

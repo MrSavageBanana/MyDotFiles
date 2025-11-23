@@ -44,11 +44,17 @@ open = [
 	{ run = 'termux-open "$1"',             desc = "Open", for = "android" },
 ]
 reveal = [
-	{ run = 'xdg-open "$(dirname "$1")"',           desc = "Reveal", for = "linux" },
+#	{ run = 'xdg-open "$(dirname "$1")"',           desc = "Reveal", for = "linux" },
 	{ run = 'open -R "$1"',                         desc = "Reveal", for = "macos" },
 	{ run = 'explorer /select,"%1"', orphan = true, desc = "Reveal", for = "windows" },
 	{ run = 'termux-open "$(dirname "$1")"',        desc = "Reveal", for = "android" },
 	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
+]
+newindow = [
+	{ run = 'xdg-open "$(dirname "$1")"',           desc = "Open in New Window", for = "linux" },
+	{ run = 'open -R "$1"',                         desc = "Open in New Window", for = "macos" },
+	{ run = 'explorer /select,"%1"', orphan = true, desc = "Open in New Window", for = "windows" },
+	{ run = 'termux-open "$(dirname "$1")"',        desc = "Open in New Window", for = "android" },
 ]
 extract = [
 	{ run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
@@ -60,13 +66,18 @@ play = [
 	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
 pdff = [
-	{ run = 'papers "$@"', desc = "papers", block = false, for = "unix" },
+	{ run = 'tdf "$@"', desc = "open in tdf", block = true, for = "unix" },
 ]
-
+mdd = [
+	{ run = '/home/shayan/Applications/squashfs-root/marktext "$@"', desc = "open in MarkText", block = false, for = "unix" },
+]
 [open]
 rules = [
 	# Folder
-	{ name = "*/", use = [ "edit", "open", "reveal" ] },
+	{ name = "*/", use = [ "open", "reveal", "newindow" ] },
+	# Markdown	
+	{ mime = "text/{markdown,x-markdown}", use = [ "mdd" ] },
+	{ name = "*.md", use = [ "mdd" ] },
 	# Text
 	{ mime = "text/*", use = [ "edit", "reveal" ] },
 	# Image
