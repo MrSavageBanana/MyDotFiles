@@ -117,6 +117,11 @@ window#waybar.empty #window {
     border: 3px solid @color0;
 }
 
+#taskbar.empty {
+    background: transparent;
+    border: none;
+}
+
 #taskbar button.active {
     border: 1.5px solid @color7;   /* outline color from pywal */
     border-radius: 15px;          /* slightly rounded corners */
@@ -129,6 +134,7 @@ window#waybar.empty #window {
     border-radius: 15px;
     padding: 0px 5px 0px 5px;
 }
+
 
 /* -----------------------------------------------------
  * Modules

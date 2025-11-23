@@ -1,0 +1,16 @@
+[package]
+name = "waybar_timer"
+version = "0.4.0"
+edition = "2021"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+time = { version = "0.3", features = ["formatting", "local-offset", "macros"] }
+serde_dispatch = { git = "https://github.com/jbirnick/serde-dispatch" }
+serde = { version = "1", features = ["derive"] }
+notify-rust = "4"
