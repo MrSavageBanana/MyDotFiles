@@ -1,17 +1,47 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "8f1d971"
+rev = "eaf6920"
 hash = "56fdabc96fc1f4d53c96eb884b02a5be"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:diff"
-rev = "8f1d971"
+rev = "eaf6920"
 hash = "82376c3381ae915fd799d40f4dd4c6cd"
 
 [[plugin.deps]]
 use = "AnirudhG07/custom-shell"
 rev = "b04213d"
 hash = "3efc7ddc9bac120c618462eb994edf75"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:jump-to-char"
+rev = "eaf6920"
+hash = "ce67445ebb1bf3d97b8e44f50904b2c5"
+
+[[plugin.deps]]
+use = "uhs-robert/recycle-bin"
+rev = "1762676"
+hash = "c77042b4296544a9edb4849338056039"
+
+[[plugin.deps]]
+use = "Deepak22903/kdeconnect-send"
+rev = "7d9098d"
+hash = "498bda3e06d793f79fe1df7b28fc14a1"
+
+[[plugin.deps]]
+use = "iynaix/time-travel"
+rev = "7e0179e"
+hash = "69967963fba96295a07b68354fc91ea9"
+
+[[plugin.deps]]
+use = "Rolv-Apneseth/bypass"
+rev = "c1e5fcf"
+hash = "208e77480824f62558a5b037c8569d61"
+
+[[plugin.deps]]
+use = "boydaihungst/gvfs"
+rev = "d4b8d83"
+hash = "8767b5484bc3e8fc23796b91e0a102b2"
 
 [flavor]
 deps = []
