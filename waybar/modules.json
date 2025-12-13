@@ -1,4 +1,4 @@
-//  __  __           _       _            
+//bleh  __  __           _       _            
 // |  \/  | ___   __| |_   _| | ___  ___  
 // | |\/| |/ _ \ / _` | | | | |/ _ \/ __| 
 // | |  | | (_) | (_| | |_| | |  __/\__ \ 
@@ -145,7 +145,7 @@
         "format": "{icon}   {capacity}%",
         "format-charging": "   {capacity}%",
         "format-plugged": "   {capacity}%",
-        "format-alt": "{icon}   69%",
+        "format-alt": "{icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": [" ", " ", " ", " ", " "]
@@ -207,7 +207,8 @@
                 "rofi - drun",
                 "rofi - Quick add"
                 ],
-         "sort-by-app-id": true
+         "sort-by-app-id": true,
+         "icon-size": 18
      },
      
 	// Timer
@@ -224,13 +225,24 @@
 	    "on-click": "/home/shayan/.config/waybar/scripts/waybar_timer togglepause",
 	    "on-click-middle": "/home/shayan/.config/waybar/scripts/waybar_timer cancel",
 	    "on-click-right": "/home/shayan/.config/waybar/scripts/waybar_timer cancel",
-	    "on-scroll-up": "/home/shayan/.config/waybar/scripts/waybar_timer increase 60 || /home/shayan/.config/waybar/scripts/waybar_timer new 1 'notify-send -u critical \"Timer expired\"'",
-	    "on-scroll-down": "/home/shayan/.config/waybar/scripts/waybar_timer decrease 60"
+	    "on-scroll-up": "/home/shayan/.config/waybar/scripts/waybar_timer increase 30 || /home/shayan/.config/waybar/scripts/waybar_timer new 1 'notify-send -u critical \"Timer expired\"'",
+	    "on-scroll-down": "/home/shayan/.config/waybar/scripts/waybar_timer decrease 10"
 	},
 	// Rofi With status
 	"custom/rofi-status": {
 	    "format": "{}",
 	    "interval": 1,
 	    "exec": "cat /tmp/rofi_status 2>/dev/null || echo ''"
-	}
+	},
+	
+	// Privacy Dots
+	 "custom/privacy-dots": {
+        "exec": "/home/shayan/.config/waybar/scripts/privacy_dots.sh", // or if installed from AUR: "exec": "privacy-dots",
+        "return-type": "json",
+        "interval": 3,
+        "format": "{text}",
+        "tooltip": true,
+        "escape": false,
+        "markup": "pango"
+    }
 }
