@@ -32,6 +32,7 @@
 //        "keyboard-state", 
         "battery", 
 		"group/expandable-tray",
+		"custom/privacy-dots",
         "clock"
     ],
     
