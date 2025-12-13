@@ -34,7 +34,7 @@ keymap = [
 
 	# Navigation
 	{ on = "h", run = "leave", desc = "Back to the parent directory" },
-	{ on = "l", run = "plugin smart-enter", desc = "Enter the child directory" },
+	{ on = "l", run = "plugin bypass smart-enter", desc = "Enter the child directory" },
 
 	{ on = "<Left>",  run = "leave", desc = "Back to the parent directory" },
 	{ on = "<Right>", run = "enter", desc = "Enter the child directory" },
@@ -51,6 +51,18 @@ keymap = [
 	{ on = "v", run = "visual_mode",         desc = "Enter visual mode (selection mode)" },
 	{ on = "V", run = "visual_mode --unset", desc = "Enter visual mode (unset mode)" },
 
+	# Plugins
+	{ on = "e", run = "plugin jump-to-char", desc = "Jump to char" },
+	{ on = ["R"], run = "plugin recycle-bin -- open", desc = "Open Trash" },
+	{ on = ["<C-s>"], run = "plugin kdeconnect-send", desc = "Send Selected Files via KDE Connect" },
+
+	# Time-Travel
+	{ on = ["m", "p"], run = "plugin restic-time-travel --args prev", desc = "Go to Previous Snapshot" },
+	{ on = ["m", "n"], run = "plugin restic-time-travel --args next", desc = "Go to Next Snapshot" },
+	{ on = ["m", "x"], run = "plugin restic-time-travel --args exit", desc = "Exit Browsing Snapshots" },
+	{ on = ["m", "l"], run = "plugin restic-time-travel --args list", desc = "Show all snapshots (interactive)" },
+	{ on = ["m", "s"], run = "plugin restic-time-travel --args snapshot", desc = "Take a new snapshot" },	
+	
 	# Seeking
 	{ on = "K", run = "seek -5", desc = "Seek up 5 units in the preview" },
 	{ on = "J", run = "seek 5",  desc = "Seek down 5 units in the preview" },
@@ -81,17 +93,17 @@ keymap = [
 	{ on = ".",         run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
 	{ on = "s",         run = "search --via=fd",             desc = "Search files by name via fd" },
 	{ on = "S",         run = "search --via=rg",             desc = "Search files by content via ripgrep" },
-	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
+#	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
 	{ on = "z",         run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
 	{ on = "Z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
 
 	# Linemode
-	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: size" },
-	{ on = [ "m", "p" ], run = "linemode permissions", desc = "Linemode: permissions" },
-	{ on = [ "m", "b" ], run = "linemode btime",       desc = "Linemode: btime" },
-	{ on = [ "m", "m" ], run = "linemode mtime",       desc = "Linemode: mtime" },
-	{ on = [ "m", "o" ], run = "linemode owner",       desc = "Linemode: owner" },
-	{ on = [ "m", "n" ], run = "linemode none",        desc = "Linemode: none" },
+#	{ on = [ "m", "p" ], run = "linemode permissions", desc = "Linemode: permissions" },
+#	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: size" },
+#	{ on = [ "m", "b" ], run = "linemode btime",       desc = "Linemode: btime" },
+#	{ on = [ "m", "m" ], run = "linemode mtime",       desc = "Linemode: mtime" },
+#	{ on = [ "m", "o" ], run = "linemode owner",       desc = "Linemode: owner" },
+#	{ on = [ "m", "n" ], run = "linemode none",        desc = "Linemode: none" },
 
 	# Copy
 	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy the file path" },
@@ -113,7 +125,7 @@ keymap = [
 	{ on = [ ",", "M" ], run = [ "sort mtime --reverse", "linemode mtime" ],    desc = "Sort by modified time (reverse)" },
 	{ on = [ ",", "b" ], run = [ "sort btime --reverse=no", "linemode btime" ], desc = "Sort by birth time" },
 	{ on = [ ",", "B" ], run = [ "sort btime --reverse", "linemode btime" ],    desc = "Sort by birth time (reverse)" },
-	{ on = [ ",", "e" ], run = "sort extension --reverse=no",                   desc = "Sort by extension" },
+	{ on = [ ",", "e" ], run = "sort extension --revense=no",                   desc = "Sort by extension" },
 	{ on = [ ",", "E" ], run = "sort extension --reverse",                      desc = "Sort by extension (reverse)" },
 	{ on = [ ",", "a" ], run = "sort alphabetical --reverse=no",                desc = "Sort alphabetically" },
 	{ on = [ ",", "A" ], run = "sort alphabetical --reverse",                   desc = "Sort alphabetically (reverse)" },
