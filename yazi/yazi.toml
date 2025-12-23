@@ -106,10 +106,16 @@ image_bound      = [ 5000, 5000 ]
 suppress_preload = true
 
 [plugin]
-fetchers = [
+prepend_fetchers = [
 	# Mimetype
 	{ id = "mime", name = "*", run = "mime", prio = "high" },
 ]
+
+append_fetchers = [
+  { id = "simple-tag", name = "*", run = "simple-tag" },
+  { id = "simple-tag", name = "*/", run = "simple-tag" },
+]
+
 spotters = [
 	{ name = "*/", run = "folder" },
 	# Code

@@ -4,6 +4,10 @@
 
 [mgr]
 
+# prepend_keymap = [
+#   { on = [ "E" ], run = "plugin simple-tag -- toggle-tag", desc = "Finder-style tag menu" },
+# ]
+
 keymap = [
 	{ on = "<Esc>", run = "escape",             desc = "Exit visual mode, clear selection, or cancel search" },
 	{ on = "<C-[>", run = "escape",             desc = "Exit visual mode, clear selection, or cancel search" },
@@ -52,10 +56,21 @@ keymap = [
 	{ on = "V", run = "visual_mode --unset", desc = "Enter visual mode (unset mode)" },
 
 	# Plugins
-	{ on = "e", run = "plugin jump-to-char", desc = "Jump to char" },
 	{ on = ["R"], run = "plugin recycle-bin -- open", desc = "Open Trash" },
 	{ on = ["<C-s>"], run = "plugin kdeconnect-send", desc = "Send Selected Files via KDE Connect" },
+	{ on = "e", run = "plugin jump-to-char", desc = "Jump to char" },
+	{ on = "E", run = "plugin simple-tag -- toggle-tag", desc = "Tag Menu" },
 
+	# Relative-motions
+	{ on = [ "1" ], run = "plugin relative-motions 1 ", desc = "Trigger Relative Motion" },
+	{ on = [ "2" ], run = "plugin relative-motions 2 ", desc = "Trigger Relative Motion" },
+	{ on = [ "4" ], run = "plugin relative-motions 4 ", desc = "Trigger Relative Motion" },
+	{ on = [ "3" ], run = "plugin relative-motions 3 ", desc = "Trigger Relative Motion" },
+	{ on = [ "5" ], run = "plugin relative-motions 5 ", desc = "Trigger Relative Motion" },
+	{ on = [ "7" ], run = "plugin relative-motions 7 ", desc = "Trigger Relative Motion" },
+	{ on = [ "8" ], run = "plugin relative-motions 8 ", desc = "Trigger Relative Motion" },
+	{ on = [ "6" ], run = "plugin relative-motions 6 ", desc = "Trigger Relative Motion" },
+	{ on = [ "9" ], run = "plugin relative-motions 9 ", desc = "Trigger Relative Motion" },
 	# Time-Travel
 	{ on = ["m", "p"], run = "plugin restic-time-travel --args prev", desc = "Go to Previous Snapshot" },
 	{ on = ["m", "n"], run = "plugin restic-time-travel --args next", desc = "Go to Next Snapshot" },
@@ -143,17 +158,17 @@ keymap = [
 	{ on = [ "g", "f" ],       run = "follow",           desc = "Follow hovered symlink" },
 
 	# Tabs
-	{ on = "t", run = "tab_create --current", desc = "Create a new tab with CWD" },
+	{ on = "T", run = "tab_create --current", desc = "Create a new tab with CWD" },
 
-	{ on = "1", run = "tab_switch 0", desc = "Switch to first tab" },
-	{ on = "2", run = "tab_switch 1", desc = "Switch to second tab" },
-	{ on = "3", run = "tab_switch 2", desc = "Switch to third tab" },
-	{ on = "4", run = "tab_switch 3", desc = "Switch to fourth tab" },
-	{ on = "5", run = "tab_switch 4", desc = "Switch to fifth tab" },
-	{ on = "6", run = "tab_switch 5", desc = "Switch to sixth tab" },
-	{ on = "7", run = "tab_switch 6", desc = "Switch to seventh tab" },
-	{ on = "8", run = "tab_switch 7", desc = "Switch to eighth tab" },
-	{ on = "9", run = "tab_switch 8", desc = "Switch to ninth tab" },
+	{ on = [ "t", "1" ], run = "tab_switch 0", desc = "Switch to first tab" },
+	{ on = [ "t", "2" ], run = "tab_switch 1", desc = "Switch to second tab" },
+	{ on = [ "t", "3" ], run = "tab_switch 2", desc = "Switch to third tab" },
+	{ on = [ "t", "4" ], run = "tab_switch 3", desc = "Switch to fourth tab" },
+	{ on = [ "t", "5" ], run = "tab_switch 4", desc = "Switch to fifth tab" },
+	{ on = [ "t", "6" ], run = "tab_switch 5", desc = "Switch to sixth tab" },
+	{ on = [ "t", "7" ], run = "tab_switch 6", desc = "Switch to seventh tab" },
+	{ on = [ "t", "8" ], run = "tab_switch 7", desc = "Switch to eighth tab" },
+	{ on = [ "t", "9" ], run = "tab_switch 8", desc = "Switch to ninth tab" },
 
 	{ on = "[", run = "tab_switch -1 --relative", desc = "Switch to previous tab" },
 	{ on = "]", run = "tab_switch 1 --relative",  desc = "Switch to next tab" },

@@ -68,9 +68,23 @@
     // Clock
     "clock": {
         // "timezone": "America/New_York",
+        // "format-alt": "{:%B %e}",
+        "format": "{:%I:%M}",
+        "on-click": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_timer/config -s /home/shayan/.config/waybar/additional_styles/w_timer/style.css",
+        "on-click-right": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/config -s /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/style.css",
         "tooltip-format": "<big>{:%I %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%B %e}",
-        "format": "{:%I:%M}"
+        "calendar": {
+                    "mode"          : "month",
+                    "weeks-pos"     : "left",
+                    "on-scroll"     : 1,
+                    "format": {
+//                              "months":     "<span color='#ffead3'><b>{}</b></span>",
+//                              "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+//                              "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+//                              "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                              "today":      "<span color='#1ae5cc'><b><u>{}</u></b></span>"
+                              }
+                    },
     },
 
     // System
@@ -138,7 +152,7 @@
     // Battery
     "battery": {
         "states": {
-            // "good": 95,
+            // "good": 80,
             "warning": 30,
             "critical": 15
         },
@@ -155,8 +169,8 @@
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
         "format": "{icon}  {volume}%",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-bluetooth": "{volume}% {icon} ",
+        "format-bluetooth-muted": "\ueee8  {icon} ",
         "format-muted": "\ueee8",
         
         "format-source": "{volume}% ",
@@ -168,7 +182,7 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["\uf026", "\uf027", "\uf028"]
+            "default": ["\uf026 ", "\uf027  ", "\uf028 "]
         },
         "on-click": "pavucontrol"
     },
@@ -228,6 +242,15 @@
 	    "on-scroll-up": "/home/shayan/.config/waybar/scripts/waybar_timer increase 30 || /home/shayan/.config/waybar/scripts/waybar_timer new 1 'notify-send -u critical \"Timer expired\"'",
 	    "on-scroll-down": "/home/shayan/.config/waybar/scripts/waybar_timer decrease 10"
 	},
+
+	"custom/stopwatch": {
+	    "exec": "/home/shayan/.config/waybar/scripts/stopwatch.sh start",
+	    "format": "{}",
+	    "interval": 1,
+	    "return-type": "json",
+	    "on-click": "/home/shayan/.config/waybar/scripts/stopwatch.sh toggle"
+	},
+	
 	// Rofi With status
 	"custom/rofi-status": {
 	    "format": "{}",

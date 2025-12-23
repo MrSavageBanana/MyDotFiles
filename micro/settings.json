@@ -1,4 +1,8 @@
 {
+    "autosave": 5,
     "colorscheme": "monokai2",
-    "hlsearch": true
+    "hlsearch": true,
+    "pluginrepos": [
+        "https://raw.githubusercontent.com/pjg11/micro-urlopen/main/repo.json"
+    ]
 }

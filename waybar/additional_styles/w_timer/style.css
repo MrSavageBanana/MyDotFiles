@@ -110,7 +110,7 @@ window#waybar.empty #window {
 #taskbar {
     background: @color0;
     margin: 6px 15px 6px 0px;
-    padding: 0px;
+    padding:0px;
     border-radius: 15px;
     font-weight: normal;
     font-style: normal;
@@ -125,18 +125,17 @@ window#waybar.empty #window {
 #taskbar button {
     margin: 0 3px;
     border-radius: 50%;              
-    padding: 3px 0px 3px 0px; 
-    font-size: 20px;   
-    background: transparent;}
-    
+    padding: 0px 0px 0px 0px;                    /* equal padding on all sides */
+    background: transparent;
+}
 
 #taskbar button.active {
     border: 2px solid @color7;
     border-radius: 50%;
-    background: @color0;
-    padding: 1px 0px 1px 5px;
-    margin: 0 3px;
+    background: transparent;
+    padding: 0px 0px 0px 2px;                    /* keep same padding for consistency */
 }
+
 /* -----------------------------------------------------
  * Modules
  * ----------------------------------------------------- */
