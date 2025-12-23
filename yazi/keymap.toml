@@ -114,12 +114,12 @@ keymap = [
 	{ on = "Z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
 
 	# Linemode
-#	{ on = [ "m", "p" ], run = "linemode permissions", desc = "Linemode: permissions" },
-#	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: size" },
-#	{ on = [ "m", "b" ], run = "linemode btime",       desc = "Linemode: btime" },
-#	{ on = [ "m", "m" ], run = "linemode mtime",       desc = "Linemode: mtime" },
-#	{ on = [ "m", "o" ], run = "linemode owner",       desc = "Linemode: owner" },
-#	{ on = [ "m", "n" ], run = "linemode none",        desc = "Linemode: none" },
+	{ on = [ "M", "p" ], run = "linemode permissions", desc = "Linemode: permissions" },
+	{ on = [ "M", "s" ], run = "linemode size",        desc = "Linemode: size" },
+	{ on = [ "M", "b" ], run = "linemode btime",       desc = "Linemode: btime" },
+	{ on = [ "M", "m" ], run = "linemode mtime",       desc = "Linemode: mtime" },
+	{ on = [ "M", "o" ], run = "linemode owner",       desc = "Linemode: owner" },
+	{ on = [ "M", "n" ], run = "linemode none",        desc = "Linemode: none" },
 
 	# Copy
 	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy the file path" },
