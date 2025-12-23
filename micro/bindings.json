@@ -1,0 +1,17 @@
+{
+    "Alt-/": "lua:comment.comment",
+    "Alt-F": "Find",
+    "Alt-S": "SelectLine",
+    "Alt-h": "StartOfTextToggle",
+    "Alt-l": "EndOfLine",
+    "Alt-o": "command:urlopen",
+    "Ctrl-Backspace": "DeleteWordLeft",
+    "Ctrl-Delete": "DeleteWordRight",
+    "Ctrl-f": "FindLiteral",
+    "Ctrl-h": "CursorLeft",
+    "Ctrl-j": "CursorDown",
+    "Ctrl-k": "CursorUp",
+    "Ctrl-l": "CursorRight",
+    "CtrlUnderscore": "lua:comment.comment",
+    "F1": "command:cheat"
+}

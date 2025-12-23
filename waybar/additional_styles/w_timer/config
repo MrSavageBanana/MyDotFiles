@@ -1,0 +1,53 @@
+{
+    "layer": "top",
+    "margin-top": 5,
+    "margin-bottom": -10,
+    "margin-left": 5,
+    "margin-right": 5,    
+    "spacing": 0,
+
+    // Load Modules
+    "include": [
+//        "~/.config/ml4w/settings/waybar-quicklinks.json",
+        "~/.config/waybar/modules.json"
+    ],    
+    "modules-left": [
+//        "custom/appmenu",
+		"wlr/taskbar",
+        "group/quicklinks",
+//        "hyprland/window"
+		"custom/rofi-status"
+    ],
+    "modules-center": [
+        "hyprland/workspaces"
+
+    ],
+    "modules-right": [
+//        "mpd", 
+		"custom/timer",
+        "pulseaudio", 
+//        "network", 
+//        "cpu", 
+//        "memory", 
+//        "keyboard-state", 
+        "battery", 
+		"group/expandable-tray",
+		"custom/privacy-dots",
+        "clock"
+    ],
+    
+	"group/expandable-tray": {
+	        "orientation": "horizontal",
+	        "modules": ["custom/tray-handle", "tray", "custom/exit"],
+	        "drawer": {
+	            "transition-duration": 500,
+	            "children-class": "child-drawer",
+	            "transition-left-to-right": false
+	        }
+	    },
+
+	"custom/tray-handle": {
+	        "format": " | ", 
+	        "tooltip": false
+	 },
+}
