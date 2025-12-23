@@ -16,8 +16,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=50000
+HISTFILESIZE=100000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -117,7 +117,6 @@ if ! shopt -oq posix; then
 fi
 export PATH=$PATH:$HOME/go/bin
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # created with Claude. Account: Milobowler
 fix() {
@@ -181,7 +180,9 @@ alias on='/home/shayan/Downloads/smartthings devices:commands cf93efd0-639d-4dff
 alias off='/home/shayan/Downloads/smartthings devices:commands cf93efd0-639d-4dff-a805-36405e9397ef switch:off'
 alias x='exit'
 alias q='systemctl suspend'
-
+alias ls='eza --grid --color=always --icons=always --no-user'
+alias cat='bat --theme="Monokai Extended Origin" --paging=never'
+alias bat='bat --theme="Monokai Extended Origin"'
 # Notify me on long commands
 # created with Claude. Account: Milobowler
 # Notify me on long commands
@@ -377,12 +378,34 @@ notif-cancel-pid() {
     fi
 }
 
+# created with Claude. Account: Milobowler. Title: filtering directories and binary files from micro wildcard
+microall() {
+    local dir="${1:-.}"
+    local files=()
+    
+    # Find all regular files (not directories) in the specified directory
+    while IFS= read -r -d '' file; do
+        # Check if file is text (using 'file' command)
+        if file "$file" | grep -q "text"; then
+            files+=("$file")
+        fi
+    done < <(find "$dir" -maxdepth 1 -type f -print0)
+    
+    # Open files in micro if any were found
+    if [ ${#files[@]} -gt 0 ]; then
+        micro "${files[@]}"
+    else
+        echo "No text files found in $dir"
+    fi
+}
+
+
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/usr/bin:$PATH"
 export PATH=$PATH:$HOME/go/bin
-
-
+export "MICRO_TRUECOLOR=1"
+export RESTIC_PASSWORD="Puctrin0"
 
 alias sigma="/opt/sigma/sigma --no-sandbox"
 . "$HOME/.cargo/env"
@@ -403,3 +426,17 @@ eval "$(zoxide init bash)"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+alias config='/usr/bin/git --git-dir=/home/shayan/.cfg/ --work-tree=/home/shayan'
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+eval $(thefuck --alias)
+eval $(thefuck --alias tf)
+
+
+# See Dates in History
+export HISTTIMEFORMAT='%F %T'
