@@ -110,7 +110,7 @@ window#waybar.empty #window {
 #taskbar {
     background: @color0;
     margin: 6px 15px 6px 0px;
-    padding:0px;
+    padding: 0px;
     border-radius: 15px;
     font-weight: normal;
     font-style: normal;
@@ -125,17 +125,18 @@ window#waybar.empty #window {
 #taskbar button {
     margin: 0 3px;
     border-radius: 50%;              
-    padding: 0px 0px 0px 0px;                    /* equal padding on all sides */
-    background: transparent;
-}
+    padding: 3px 0px 3px 0px; 
+    font-size: 20px;   
+    background: transparent;}
+    
 
 #taskbar button.active {
     border: 2px solid @color7;
     border-radius: 50%;
-    background: transparent;
-    padding: 0px 0px 0px 2px;                    /* keep same padding for consistency */
+    background: @color0;
+    padding: 1px 0px 1px 5px;
+    margin: 0 3px;
 }
-
 /* -----------------------------------------------------
  * Modules
  * ----------------------------------------------------- */
@@ -425,4 +426,12 @@ label:focus {
     padding: 4px 10px 2px 10px;         /* consistent padding */
     font-weight: bold;                   /* optional: matches module emphasis */
     transition: all 0.3s ease-in-out;    /* smooth hover effect if needed */
+}
+
+#custom-tray-handle.out-of-sync {
+    color: #1AE5CC;
+}
+
+#custom-tray-handle.in-sync {
+    color: inherit;
 }

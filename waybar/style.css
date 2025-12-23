@@ -427,3 +427,22 @@ label:focus {
     font-weight: bold;                   /* optional: matches module emphasis */
     transition: all 0.3s ease-in-out;    /* smooth hover effect if needed */
 }
+
+#custom-stopwatch {
+    background-color: transparent;      /* match other modules */
+    color: @foreground;                 /* consistent text color */
+    font-size: 16px;                    /* same as clock, battery, pulseaudio */
+    border-radius: 15px;                /* same rounded corners */
+    margin: 10px 10px 10px 0px;         /* match right-margin spacing of other modules */
+    padding: 4px 10px 2px 10px;         /* consistent padding */
+    font-weight: bold;                  /* optional: matches module emphasis */
+    transition: all 0.3s ease-in-out;   /* smooth hover effect if needed */
+}
+
+#custom-tray-handle.out-of-sync {
+    color: #1AE5CC;
+}
+
+#custom-tray-handle.in-sync {
+    color: inherit;
+}

@@ -48,7 +48,11 @@
 	    },
 
 	"custom/tray-handle": {
-	        "format": " | ", 
-	        "tooltip": false
+	     "exec": "~/.config/waybar/scripts/check-config-sync.py",
+	     "return-type": "json",
+	     "interval": 1800,
+	     "format": "{}",
+	     "tooltip": true,
+	     "on-click-right": "kitty yazi ~/.mydotfiles/"
 	 },
 }
