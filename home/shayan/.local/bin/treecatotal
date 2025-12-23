@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+# treecat - pretty tree view with file contents, with optional clipboard mode
+
+show_hidden=false
+copy_mode=false
+exclude_dirs=()
+
+# Parse flags
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    -a|--all) show_hidden=true ;;
+    -c|--copy) copy_mode=true ;;
+    -x|--exclude)
+      shift
+      exclude_dirs+=("$1")
+      ;;
+    *)
+      echo "Usage: treecat [-a|--all] [-c|--copy] [-x|--exclude DIR]" >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+# Build tree command
+tree_cmd=(tree)
+$show_hidden && tree_cmd+=( -a )
+
+# Add excludes to tree (tree uses -I 'pattern')
+if (( ${#exclude_dirs[@]} > 0 )); then
+  # Join patterns with |
+  exclude_pattern=$(printf "%s|" "${exclude_dirs[@]}")
+  exclude_pattern="${exclude_pattern%|}"
+  tree_cmd+=( -I "$exclude_pattern" )
+fi
+
+# Create a temp file (only if copy mode)
+tmpfile=""
+if $copy_mode; then
+  tmpfile=$(mktemp /tmp/treecat.XXXXXX)
+fi
+
+# Main logic
+"${tree_cmd[@]}" | while IFS= read -r line; do
+  echo "$line"
+
+  # Extract the printed name from tree and strip " -> target" for symlinks
+  raw="${line##*── }"
+  [ "$raw" = "$line" ] && continue    # no '── ' in line
+  name="${raw%% -> *}"
+
+  # Build find command to detect regular files OR symlinks
+  find_cmd=(find . \( -type f -o -type l \) -name "$name")
+  for ex in "${exclude_dirs[@]}"; do
+    find_cmd+=( -not -path "./$ex/*" )
+  done
+
+  fullpath="$("${find_cmd[@]}" | head -n1)"
+
+  # Skip if nothing found
+  [ -z "$fullpath" ] && continue
+
+  # If symlink, resolve the real file
+  if [[ -L "$fullpath" ]]; then
+    target=$(readlink -f "$fullpath")
+  else
+    target="$fullpath"
+  fi
+
+  # Skip if target doesn't exist or is a directory
+  [ ! -f "$target" ] && continue
+
+  # Skip binary
+  if ! file --brief --mime "$target" | grep -q "binary"; then
+    indent=$(echo "$line" | sed 's/[^│ ]/ /g')
+    sed "s/^/${indent}    /" "$target"
+  fi
+done | if $copy_mode; then
+  tee "$tmpfile" >/dev/null
+
+  sleep 0.5
+  copied=false
+
+  # Priority: use user's alias "clip" first
+  if command -v clip &>/dev/null; then
+    clip < "$tmpfile" && copied=true
+  elif command -v wl-copy &>/dev/null; then
+    wl-copy < "$tmpfile" && copied=true
+  elif command -v copyq &>/dev/null; then
+    copyq copy - < "$tmpfile" && copied=true
+  elif command -v xclip &>/dev/null; then
+    xclip -selection clipboard < "$tmpfile" && copied=true
+  elif command -v pbcopy &>/dev/null; then
+    pbcopy < "$tmpfile" && copied=true
+  fi
+
+  sleep 0.7
+  rm -f "$tmpfile"
+
+  if $copied; then
+    echo "✅ Copied tree output to clipboard."
+  else
+    echo "❌ Could not find a clipboard utility (clip, wl-copy, copyq, xclip, pbcopy)." >&2
+  fi
+else
+  cat
+fi
