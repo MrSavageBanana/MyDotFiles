@@ -121,22 +121,21 @@ window#waybar.empty #window {
     background: transparent;
     border: none;
 }
-
 #taskbar button {
     margin: 0 3px;
     border-radius: 50%;              
-    padding: 3px 0px 3px 0px; 
+    padding: 1px 6px 1px 6px; 
     font-size: 20px;   
     background: transparent;}
     
-
 #taskbar button.active {
     border: 2px solid @color7;
     border-radius: 50%;
     background: @color0;
-    padding: 1px 0px 1px 5px;
-    margin: 0 3px;
+    padding: 1px 4px 1px 4px;
+    margin: 0px;
 }
+
 /* -----------------------------------------------------
  * Modules
  * ----------------------------------------------------- */
@@ -222,7 +221,7 @@ window#waybar.empty #window {
 #custom-tray-handle {
     padding-right: 5px;
     font-weight: bold;
-    color: @foreground; 
+    color: #c3c3c3; 
 }
 
 
@@ -444,5 +443,5 @@ label:focus {
 }
 
 #custom-tray-handle.in-sync {
-    color: inherit;
+    color: #c3c3c3;
 }
