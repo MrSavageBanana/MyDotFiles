@@ -1,6 +1,8 @@
 {
     "Alt-/": "lua:comment.comment",
     "Alt-F": "Find",
+    "Alt-H": "SelectToStartOfTextToggle",
+    "Alt-L": "SelectToEndOfLine",
     "Alt-S": "SelectLine",
     "Alt-h": "StartOfTextToggle",
     "Alt-l": "EndOfLine",
@@ -12,6 +14,5 @@
     "Ctrl-j": "CursorDown",
     "Ctrl-k": "CursorUp",
     "Ctrl-l": "CursorRight",
-    "CtrlUnderscore": "lua:comment.comment",
-    "F1": "command:cheat"
+    "CtrlUnderscore": "lua:comment.comment"
 }

@@ -63,7 +63,7 @@ pdff = [
 	{ run = 'tdf "$@"', desc = "open in tdf", block = true, for = "unix" },
 ]
 mdd = [
-	{ run = '/home/shayan/.Applications/squashfs-root/marktext "$@"', desc = "open in MarkText", block = false, for = "unix" },
+	{ run = '/home/shayan/Downloads/AppImages/squashfs-root/marktext "$@"', desc = "open in MarkText", block = false, for = "unix" },
 ]
 exif = [
 	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
