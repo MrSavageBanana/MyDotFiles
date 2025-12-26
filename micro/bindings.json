@@ -4,15 +4,15 @@
     "Alt-H": "SelectToStartOfTextToggle",
     "Alt-L": "SelectToEndOfLine",
     "Alt-S": "SelectLine",
+    "Alt-[": "JumpToMatchingBrace",
+    "Alt-]": "JumpToMatchingBrace",
     "Alt-h": "StartOfTextToggle",
     "Alt-l": "EndOfLine",
     "Alt-o": "command:urlopen",
     "Ctrl-Backspace": "DeleteWordLeft",
     "Ctrl-Delete": "DeleteWordRight",
     "Ctrl-f": "FindLiteral",
-    "Ctrl-h": "CursorLeft",
     "Ctrl-j": "CursorDown",
     "Ctrl-k": "CursorUp",
-    "Ctrl-l": "CursorRight",
     "CtrlUnderscore": "lua:comment.comment"
 }

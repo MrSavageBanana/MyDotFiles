@@ -59,7 +59,7 @@ keymap = [
 	{ on = ["R","b"], run = "plugin recycle-bin", desc = "Open Trash Menu" },
 	{ on = ["R","o"], run = "plugin recycle-bin -- open", desc = "Open Trash" },
 	{ on = ["R","R"], run = "plugin recycle-bin -- restore", desc = "Restore Trash" },
-	{ on = ["R","d"], run = "plugin recycle-bin -- delete", desc = "Restore Trash" },
+	{ on = ["R","d"], run = "plugin recycle-bin -- delete", desc = "Delete from Trash" },
 	{ on = ["<C-s>"], run = "plugin kdeconnect-send", desc = "Send Selected Files via KDE Connect" },
 	{ on = "e", run = "plugin jump-to-char", desc = "Jump to char" },
 	{ on = "E", run = "plugin simple-tag -- toggle-tag", desc = "Tag Menu" },
