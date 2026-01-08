@@ -50,7 +50,7 @@
 	"custom/tray-handle": {
 	     "exec": "~/.config/waybar/scripts/check-config-sync.py",
 	     "return-type": "json",
-	     "interval": 1800,
+	     "interval": 3600,
 	     "format": "{}",
 	     "tooltip": true,
 	     "on-click-right": "kitty yazi ~/.mydotfiles/"

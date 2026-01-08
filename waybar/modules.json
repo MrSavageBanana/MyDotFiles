@@ -43,7 +43,7 @@
     "custom/exit": {
         "format": "",
         "tooltip-format": "Powermenu",
-        "on-click-right": "wlogout",
+        "on-click-right": "hyprlock & sleep 2 && systemctl suspend",
         "on-click": "hyprlock",
         "tooltip": false
     },

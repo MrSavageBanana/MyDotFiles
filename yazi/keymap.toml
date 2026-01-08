@@ -55,6 +55,8 @@ keymap = [
 	{ on = "v", run = "visual_mode",         desc = "Enter visual mode (selection mode)" },
 	{ on = "V", run = "visual_mode --unset", desc = "Enter visual mode (unset mode)" },
 
+	# Custom
+	{ on = ["B"], run = "plugin custom-shell -- custom bash 'tailscale file get .' --orphan", desc = "Receive Tailscale in current directory" },
 	# Plugins
 	{ on = ["R","b"], run = "plugin recycle-bin", desc = "Open Trash Menu" },
 	{ on = ["R","o"], run = "plugin recycle-bin -- open", desc = "Open Trash" },
@@ -123,6 +125,8 @@ keymap = [
 	{ on = [ "M", "m" ], run = "linemode mtime",       desc = "Linemode: mtime" },
 	{ on = [ "M", "o" ], run = "linemode owner",       desc = "Linemode: owner" },
 	{ on = [ "M", "n" ], run = "linemode none",        desc = "Linemode: none" },
+	{ on = [ "M", "l" ], run = "linemode linecount",        desc = "Linemode: linecount" },
+	{ on = [ "M", "h" ], run = "linemode md5hash",        desc = "Linemode: md5hash" },
 
 	# Copy
 	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy the file path" },
@@ -286,7 +290,7 @@ keymap = [
 
 	# Word-wise movement
 	{ on = "b",     run = "backward",                    desc = "Move back to the start of the current or previous word" },
-	{ on = "B",     run = "backward --far",              desc = "Move back to the start of the current or previous WORD" },
+#	{ on = "B",     run = "backward --far",              desc = "Move back to the start of the current or previous WORD" },
 	{ on = "w",     run = "forward",                     desc = "Move forward to the start of the next word" },
 	{ on = "W",     run = "forward --far",               desc = "Move forward to the start of the next WORD" },
 	{ on = "e",     run = "forward --end-of-word",       desc = "Move forward to the end of the current or next word" },
