@@ -65,28 +65,6 @@
         "spacing": 10
     },
 
-    // Clock
-    "clock": {
-        // "timezone": "America/New_York",
-        // "format-alt": "{:%B %e}",
-        "format": "{:%I:%M}",
-        "on-click": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_timer/config -s /home/shayan/.config/waybar/additional_styles/w_timer/style.css",
-        "on-click-right": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/config -s /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/style.css",
-        "tooltip-format": "<big>{:%I %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "calendar": {
-                    "mode"          : "month",
-                    "weeks-pos"     : "left",
-                    "on-scroll"     : 1,
-                    "format": {
-//                              "months":     "<span color='#ffead3'><b>{}</b></span>",
-//                              "days":       "<span color='#ecc6d9'><b>{}</b></span>",
-//                              "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
-//                              "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
-                              "today":      "<span color='#1ae5cc'><b><u>{}</u></b></span>"
-                              }
-                    },
-    },
-
     // System
     "custom/system": {
         "format": "",
@@ -169,8 +147,8 @@
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
         "format": "{icon}  {volume}%",
-        "format-bluetooth": "{volume}% {icon} ",
-        "format-bluetooth-muted": "\ueee8  {icon} ",
+        "format-bluetooth": "{volume}%  ",
+        "format-bluetooth-muted": "\ueee8  ",
         "format-muted": "\ueee8",
         
         "format-source": "{volume}% ",

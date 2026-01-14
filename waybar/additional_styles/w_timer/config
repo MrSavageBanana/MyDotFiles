@@ -54,4 +54,20 @@
 	     "tooltip": true,
 	     "on-click-right": "kitty yazi ~/.mydotfiles/"
 	 },
+    // Clock
+    "clock": {
+        "format": "{:%I:%M}",
+        "on-click": "killall waybar && waybar -c /home/shayan/.config/waybar/config -s /home/shayan/.config/waybar/style.css",
+        "on-click-right": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/config -s /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/style.css",
+        "tooltip-format": "<big>{:%I %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "calendar": {
+                    "mode"          : "month",
+                    "weeks-pos"     : "left",
+                    "on-scroll"     : 1,
+                    "format": {
+                              "today":      "<span color='#1ae5cc'><b><u>{}</u></b></span>"
+                              }
+                    },
+    },
 }
+
