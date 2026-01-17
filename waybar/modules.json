@@ -160,7 +160,7 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["\uf026 ", "\uf027  ", "\uf028 "]
+            "default": ["\uf026   ", "\uf027  ", "\uf028 "]
         },
         "on-click": "pavucontrol"
     },

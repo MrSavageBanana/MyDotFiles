@@ -65,7 +65,6 @@ keymap = [
 	{ on = ["<C-s>"], run = "plugin kdeconnect-send", desc = "Send Selected Files via KDE Connect" },
 	{ on = "e", run = "plugin jump-to-char", desc = "Jump to char" },
 	{ on = "E", run = "plugin simple-tag -- toggle-tag", desc = "Tag Menu" },
-	{ on = ["b", "s"], run = "plugin fazif fazifrg", desc = "Find content in files with ripgrep and fzf" },
 
 	# Relative-motions
 	{ on = [ "1" ], run = "plugin relative-motions 1 ", desc = "Trigger Relative Motion" },
@@ -113,10 +112,11 @@ keymap = [
 	{ on = ":",         run = "plugin custom-shell -- auto --interactive --block", desc = "Run a shell command (block until finishes)" },
 	{ on = ".",         run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
 	{ on = "s",         run = "search --via=fd",             desc = "Search files by name via fd" },
-	{ on = "S",         run = "search --via=rg",             desc = "Search files by content via ripgrep" },
-#	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
+	# { on = "S",         run = "search --via=rg",             desc = "Search files by name via rg" },
+	{ on = "S",         run = "plugin fr rg",             desc = "Search files by name via rg" },
 	{ on = "z",         run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
 	{ on = "Z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
+#	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
 
 	# Linemode
 	{ on = [ "M", "p" ], run = "linemode permissions", desc = "Linemode: permissions" },
