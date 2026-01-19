@@ -12,7 +12,6 @@
     "Ctrl-Backspace": "DeleteWordLeft",
     "Ctrl-Delete": "DeleteWordRight",
     "Ctrl-f": "FindLiteral",
-    "Ctrl-j": "CursorDown",
     "Ctrl-k": "CursorUp",
     "CtrlUnderscore": "lua:comment.comment",
     "Enter": "lua:vi.ViEnter|InsertNewline",

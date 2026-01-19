@@ -30,9 +30,7 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 edit = [
-	{ run = 'micro "$@"', desc = "$EDITOR", block = true, for = "unix" },
-	{ run = 'code %*',    orphan = true, desc = "code",           for = "windows" },
-	{ run = 'code -w %*', block = false,  desc = "code (block)",   for = "windows" },
+	{ run = 'nvim "$@"', desc = "$EDITOR", block = true, for = "unix" },
 ]
 edit_new_window = [
     { run = '${EDITOR:-vi} "$@"', desc = "$EDITOR (new window)", block  = true, for = "unix" },
@@ -62,6 +60,9 @@ play = [
 pdff = [
 	{ run = 'fancy-cat "$@"', desc = "open in tdf", block = true, for = "unix" },
 ]
+micro= [
+	{ run = 'micro "$@"', desc = "open in micro", block = true, for = "unix" },
+]
 mdd = [
 	{ run = '/home/shayan/Downloads/AppImages/squashfs-root/marktext "$@"', desc = "open in MarkText", block = false, for = "unix" },
 ]
@@ -76,7 +77,7 @@ rules = [
 	{ mime = "text/{markdown,x-markdown}", use = [ "mdd" ] },
 	{ name = "*.md", use = [ "mdd" ] },
 	# Text
-	{ mime = "text/*", use = [ "edit", "exif", "reveal" ] },
+	{ mime = "text/*", use = [ "edit", "micro", "exif", "reveal" ] },
 	# Image
 	{ mime = "image/*", use = [ "open", "exif", "reveal" ] },
 	# Media
@@ -91,7 +92,7 @@ rules = [
 	# PDFS
 	{mime = "application/pdf", use = [ "pdff", "exif", "reveal" ] },
 	# Fallback
-	{ name = "*", use = [ "open", "exif", "reveal" ] },
+	{ name = "*", use = [ "open", "nvim", "exif", "reveal" ] },
 ]
 
 [tasks]

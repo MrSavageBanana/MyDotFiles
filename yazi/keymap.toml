@@ -65,7 +65,7 @@ keymap = [
 	{ on = ["<C-s>"], run = "plugin kdeconnect-send", desc = "Send Selected Files via KDE Connect" },
 	{ on = "e", run = "plugin jump-to-char", desc = "Jump to char" },
 	{ on = "E", run = "plugin simple-tag -- toggle-tag", desc = "Tag Menu" },
-
+	
 	# Relative-motions
 	{ on = [ "1" ], run = "plugin relative-motions 1 ", desc = "Trigger Relative Motion" },
 	{ on = [ "2" ], run = "plugin relative-motions 2 ", desc = "Trigger Relative Motion" },
