@@ -58,7 +58,7 @@ play = [
 	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
 pdff = [
-	{ run = 'fancy-cat "$@"', desc = "open in tdf", block = true, for = "unix" },
+	{ run = 'fancy-cat "$@"', desc = "open in fancy-cat", block = true, for = "unix" },
 ]
 micro= [
 	{ run = 'micro "$@"', desc = "open in micro", block = true, for = "unix" },
@@ -68,6 +68,9 @@ mdd = [
 ]
 exif = [
 	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
+]
+bulk-rename = [
+	{  run = 'micro "$@"', desc = "Use micro for bulk-rename"}
 ]
 [open]
 rules = [
@@ -92,8 +95,11 @@ rules = [
 	# PDFS
 	{mime = "application/pdf", use = [ "pdff", "exif", "reveal" ] },
 	# Fallback
-	{ name = "*", use = [ "open", "nvim", "exif", "reveal" ] },
+	{ name = "*", use = [ "edit", "open", "exif", "reveal" ] },
 ]
+[[open.prepend_rules]]
+url = "bulk-rename.txt"
+use = "micro"
 
 [tasks]
 micro_workers    = 10
@@ -172,7 +178,6 @@ preloaders = [
 #	# Fallback
 #	{ name = "*", run = "file" },
 #]
-
 [input]
 cursor_blink = false
 

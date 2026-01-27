@@ -126,8 +126,9 @@ keymap = [
 	{ on = [ "M", "o" ], run = "linemode owner",       desc = "Linemode: owner" },
 	{ on = [ "M", "n" ], run = "linemode none",        desc = "Linemode: none" },
 	{ on = [ "M", "l" ], run = "linemode linecount",        desc = "Linemode: linecount" },
-	{ on = [ "M", "h" ], run = "linemode md5hash",        desc = "Linemode: md5hash" },
-
+	{ on = [ "M", "M" ], run = "linemode md5hash",        desc = "Linemode: md5hash" },
+	{ on = [ "M", "H" ], run = "linemode sha256hash",        desc = "Linemode: sha256hash" },
+	
 	# Copy
 	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy the file path" },
 	{ on = [ "c", "d" ], run = "copy dirname",          desc = "Copy the directory path" },

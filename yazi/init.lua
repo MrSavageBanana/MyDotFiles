@@ -149,3 +149,44 @@ function Linemode:md5hash()
 	md5_cache[path] = "-"
 	return ui.Line(string.format("%8s", "-"))
 end
+-- created with Claude. Account: Milobowler
+-- SHA256 Hash Linemode - shows SHA256 hash for all files in directory (skips folders, non-recursive)
+local sha256_cache = {}
+
+function Linemode:sha256hash()
+	local file = self._file
+	local path = tostring(file.url)
+	
+	-- Skip folders
+	if file.cha.is_dir then
+		return ui.Line(string.format("%8s", "-"))
+	end
+	
+	-- Check cache for SHA256 hash
+	if sha256_cache[path] then
+		return ui.Line(string.format("%8s", sha256_cache[path]))
+	end
+	
+	-- Run sha256sum for this file
+	local handle = io.popen("sha256sum " .. ya.quote(path) .. " 2>/dev/null")
+	if not handle then
+		sha256_cache[path] = "ERR"
+		return ui.Line(string.format("%8s", "ERR"))
+	end
+	
+	local result = handle:read("*a")
+	handle:close()
+	
+	-- Parse the hash (first part before space)
+	local hash = result:match("^(%x+)")
+	if hash then
+		-- Truncate hash to first 8 characters for display
+		local short_hash = hash:sub(1, 32)
+		sha256_cache[path] = short_hash
+		return ui.Line(string.format("%8s", short_hash))
+	end
+	
+	-- If sha256sum fails, show a dash
+	sha256_cache[path] = "-"
+	return ui.Line(string.format("%8s", "-"))
+end

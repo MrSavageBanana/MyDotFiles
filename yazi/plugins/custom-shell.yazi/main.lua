@@ -114,7 +114,7 @@ local function history_prev(history_path)
 	for i, cmd in ipairs(history_cmds) do
 		history_cmds[i] = cmd:gsub("'", "'\\''") -- Escape single quotes
 	end
-	local permit = ya.hide()
+	local permit = ui.hide()
 
 	local cmd = string.format('%s < "%s"', "fzf", history_path)
 	local handle = io.popen(cmd, "r")
@@ -131,7 +131,7 @@ local function history_prev(history_path)
 end
 
 local function entry(_, job)
-	local shell_env = os.getenv("SHELL"):match(".*/(.*)")
+	local shell_env = os.getenv("SHELL"):match(".*[/\\]([^%.]+)")
 	local shell_value, cmd, custom_shell_cmd = "", "", ""
 
 	local history_path, save_history = state_option("history_path"), state_option("save_history")
@@ -177,7 +177,7 @@ local function entry(_, job)
 	if job.args[1] ~= "custom" and job.args[1] ~= "history" then
 		cmd, event = ya.input({
 			title = input_title,
-			position = { "top-center", y = 3, w = 40 },
+			pos = { "top-center", y = 3, w = 40 },
 		})
 	end
 
@@ -186,7 +186,7 @@ local function entry(_, job)
 		-- for history also, this will be added.
 		custom_shell_cmd = shell_val .. " " .. supp .. " " .. ya.quote(cmd .. after_cmd)
 
-		ya.manager_emit("shell", {
+		ya.emit("shell", {
 			custom_shell_cmd,
 			block = block,
 			interactive = interactive,
