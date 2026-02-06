@@ -8,40 +8,40 @@ require("relative-motions"):setup({
   show_motion  = true,        
   enter_mode   = "first"      
 })
-require("simple-tag"):setup({
-  ui_mode = "icon",
-  hints_disabled = false,
-  linemode_order = 1000,
-
-  tag_order = { "r", "o", "y", "g", "b", "p" },  -- Add this line!
-
-  colors = {
-    ["r"] = "#F85B52",
-    ["o"] = "#F6A137",   
-    ["y"] = "#F5CE35",   
-    ["g"] = "#4ECF64",   
-    ["b"] = "#378CF8",   
-    ["p"] = "#B46FD4",   
-  },
-
-  icons = {
-    default = "●",
-    ["r"] = "●",
-    ["o"] = "●",
-    ["y"] = "●",
-    ["g"] = "●",
-    ["b"] = "●",
-    ["p"] = "●",
-  },
-})
-Status:children_add(function(self)
-	local h = self._current.hovered
-	if h and h.link_to then
-		return " -> " .. tostring(h.link_to)
-	else
-		return ""
-	end
-end, 3300, Status.LEFT)
+-- require("simple-tag"):setup({
+--   ui_mode = "icon",
+--   hints_disabled = false,
+--   linemode_order = 1000,
+-- 
+--   tag_order = { "r", "o", "y", "g", "b", "p" },  -- Add this line!
+-- 
+--   colors = {
+--     ["r"] = "#F85B52",
+--     ["o"] = "#F6A137",   
+--     ["y"] = "#F5CE35",   
+--     ["g"] = "#4ECF64",   
+--     ["b"] = "#378CF8",   
+--     ["p"] = "#B46FD4",   
+--   },
+-- 
+--   icons = {
+--     default = "●",
+--     ["r"] = "●",
+--     ["o"] = "●",
+--     ["y"] = "●",
+--     ["g"] = "●",
+--     ["b"] = "●",
+--     ["p"] = "●",
+--   },
+-- })
+-- Status:children_add(function(self)
+-- 	local h = self._current.hovered
+-- 	if h and h.link_to then
+-- 		return " -> " .. tostring(h.link_to)
+-- 	else
+-- 		return ""
+-- 	end
+-- end, 3300, Status.LEFT)
 -- Add this to your ~/.config/yazi/init.lua file # Claude Pics. title: Yazi Pllugin for file line numbers
 
 -- Cache for line counts and binary status to avoid re-running commands

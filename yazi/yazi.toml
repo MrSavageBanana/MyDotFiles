@@ -178,6 +178,7 @@ preloaders = [
 #	# Fallback
 #	{ name = "*", run = "file" },
 #]
+
 [input]
 cursor_blink = false
 
