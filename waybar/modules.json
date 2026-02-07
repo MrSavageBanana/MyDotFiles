@@ -148,11 +148,11 @@
         // "scroll-step": 1, // %, can be a float
         "format": "{icon}  {volume}%",
         "format-bluetooth": "{volume}%  ",
-        "format-bluetooth-muted": "\ueee8  ",
-        "format-muted": "\ueee8",
+        "format-bluetooth-muted": "\ueee8  ", //muted with blueooth
+        "format-muted": "\ueee8", // muted
         
         "format-source": "{volume}% ",
-        "format-source-muted": "\uf131",
+        "format-source-muted": "\uf131", // mic muted
         "format-icons": {
             "headphone": "",
             "hands-free": "",
@@ -160,7 +160,7 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["\uf026   ", "\uf027  ", "\uf028 "]
+            "default": ["\uf026   ", "\uf027  ", "\uf028 "] // 0-35%, 35%-70%, 
         },
         "on-click": "pavucontrol"
     },
@@ -210,9 +210,9 @@
 	    "return-type": "json",
 	    "format": "{icon} {0}",
 	    "format-icons": {
-	        "standby": "\uf254  ",
-	        "running": "\uf253  ",
-	        "paused": "\uf04c + \uf253  "
+	        "standby": "\uf254  ", // timer with
+	        "running": "\uf253  ", // Timer with bottom half full
+	        "paused": "\uf04c + \uf253  " // timer with paused symbol
 	    },
 	    "on-click": "/home/shayan/.config/waybar/scripts/waybar_timer togglepause",
 	    "on-click-middle": "/home/shayan/.config/waybar/scripts/waybar_timer cancel",
