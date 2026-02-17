@@ -58,8 +58,8 @@
     // Clock
     "clock": {
         "format": "{:%I:%M}",
-        "on-click": "killall waybar && waybar -c /home/shayan/.config/waybar/config -s /home/shayan/.config/waybar/style.css",
-        "on-click-right": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_timer/config -s /home/shayan/.config/waybar/additional_styles/w_timer/style.css",
+        "on-click": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_timer/config -s /home/shayan/.config/waybar/additional_styles/w_timer/style.css",
+        "on-click-right": "killall waybar && waybar -c /home/shayan/.config/waybar/config -s /home/shayan/.config/waybar/style.css",
         "tooltip-format": "<big>{:%I %B}</big>\n<tt><small>{calendar}</small></tt>",
         "calendar": {
                     "mode"          : "month",
