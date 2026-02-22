@@ -31,21 +31,19 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 [opener]
 edit = [
 	{ run = 'nvim "$@"', desc = "$EDITOR", block = true, for = "unix" },
+	{ run = 'nvim "%*"', desc = "$EDITOR", block = true, for = "windows" },
 ]
 edit_new_window = [
     { run = '${EDITOR:-vi} "$@"', desc = "$EDITOR (new window)", block  = true, for = "unix" },
+    { run = 'nvim "%*"', desc = "$EDITOR (new window)", block  = true, for = "windows" },
 ]
 open = [
 	{ run = 'xdg-open "$1"',                desc = "Open", for = "linux" },
-	{ run = 'open "$@"',                    desc = "Open", for = "macos" },
 	{ run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" },
-	{ run = 'termux-open "$1"',             desc = "Open", for = "android" },
 ]
 reveal = [
 	{ run = 'kitty yazi "$(dirname "$1")" &',           desc = "Reveal", for = "linux" },
-	{ run = 'open -R "$1"',                         desc = "Reveal", for = "macos" },
 	{ run = 'explorer /select,"%1"', orphan = true, desc = "Reveal", for = "windows" },
-	{ run = 'termux-open "$(dirname "$1")"',        desc = "Reveal", for = "android" },
 	# { run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
 ]
 extract = [
@@ -62,23 +60,25 @@ pdff = [
 ]
 micro= [
 	{ run = 'micro "$@"', desc = "open in micro", block = true, for = "unix" },
+	{ run = 'micro "%*"', desc = "open in micro", block = true, for = "windows" },
 ]
-mdd = [
-	{ run = '/home/shayan/Downloads/AppImages/squashfs-root/marktext "$@"', desc = "open in MarkText", block = false, for = "unix" },
-]
+# mdd = [
+# 	{ run = '/home/shayan/Downloads/AppImages/squashfs-root/marktext "$@"', desc = "open in MarkText", block = false, for = "unix" },
+# ]
 exif = [
 	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
 ]
 bulk-rename = [
-	{  run = 'micro "$@"', desc = "Use micro for bulk-rename"}
+	{  run = 'micro "$@"', desc = "Use micro for bulk-rename", for = "unix" },
+	{  run = 'micro "%*"', desc = "Use micro for bulk-rename", for = "windows" }
 ]
 [open]
 rules = [
 	# Folder
 	{ name = "*/", use = [ "open", "exif", "reveal" ] },
 	# Markdown	
-	{ mime = "text/{markdown,x-markdown}", use = [ "mdd" ] },
-	{ name = "*.md", use = [ "mdd" ] },
+	# { mime = "text/{markdown,x-markdown}", use = [ "mdd" ] },
+	# { name = "*.md", use = [ "mdd" ] },
 	# Text
 	{ mime = "text/*", use = [ "edit", "micro", "exif", "reveal" ] },
 	# Image
