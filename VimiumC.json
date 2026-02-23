@@ -1,0 +1,100 @@
+{
+	"name": "Vimium C",
+	"@time": "2/23/2026, 4:05:56 PM",
+	"time": 1771887956649,
+	"environment": {
+		"extension": "2.12.2",
+		"platform": "linux",
+		"chromium": 142
+	},
+	"exclusionRules": [
+		{
+			"passKeys": ", N f ",
+			"pattern": "^https://www\\.youtube\\.com/watch"
+		},
+		{
+			"passKeys": "A l l ",
+			"pattern": "^https?://[^/]*remotedesktop"
+		},
+		{
+			"passKeys": "$ ",
+			"pattern": "^https://app\\.todoist\\.com/"
+		}
+	],
+	"keyLayout": 2,
+	"keyMappings": [
+		"#!no-check",
+		"# start fresh",
+		"unmapAll",
+		"map <a-space> LinkHints.activate",
+		"map f LinkHints.activate",
+		"map F LinkHints.activateOpenInNewTab",
+		"map q LinkHints.activateWithQueue",
+		"",
+		"# find tool",
+		"map / enterFindMode",
+		"map n performFind",
+		"map N performBackwardsFind",
+		"",
+		"# scrolling",
+		"map gg scrollToTop",
+		"map gj scrollDown",
+		"map gk scrollUp",
+		"map gG scrollToBottom",
+		"",
+		"#marks",
+		"map m Marks.activateCreateMode",
+		"map M Marks.activateGotoMode",
+		"",
+		"# history",
+		"map H goBack",
+		"map L goForward",
+		"",
+		"# zoom",
+		"map o zoomIn",
+		"map O zoomOut",
+		"map go zoomReset",
+		""
+	],
+	"linkHintCharacters": "azsxdcfv",
+	"searchEngines": [
+		"gh|github: https://github.com/search?q=$s \\",
+		"  blank=https://github.com/ GitHub Repo",
+		""
+	],
+	"searchUrl": "https://www.google.com/search?q=$s Google",
+	"userDefinedCss": [
+		"/* #ui */",
+		".LH {",
+		"  background: #1d1e21 !important;      ",
+		"  border: 1px solid #c3c3c3 !important; ",
+		"  border-radius: 14px !important;",
+		"  padding: 3px 6px !important;",
+		"  box-shadow:",
+		"    0 0 0 1px rgba(101,144,253,0.35),",
+		"    0 6px 14px rgba(0,0,0,0.55) !important;",
+		"  color: #ffffff !important;",
+		"}",
+		".LH > span {",
+		"  color: #d3d9e3 !important;           ",
+		"  font-family: ui-monospace, monospace !important;",
+		"  font-size: 13px !important;",
+		"  font-weight: 600 !important;",
+		"  text-shadow: none !important;",
+		"}",
+		".LH * {",
+		"  color: #d3d9e3 !important;",
+		"  text-shadow: none !important;",
+		"}",
+		".LH, .LH span, .LH div, .LH b, .LH s {",
+		"  color: #d3d9e3 !important;",
+		"}",
+		"/* Already typed letters = cyan */",
+		".LH > .MC {",
+		"  color: #707172 !important;           ",
+		"  font-weight: bold !important;",
+		"}",
+		""
+	],
+	"vimSync": true
+}

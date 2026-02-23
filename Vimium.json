@@ -1,0 +1,12 @@
+{
+  "exclusionRules": [
+    {},
+    {},
+    {}
+  ],
+  "keyMappings": "# start fresh\nunmapAll\nmap <A-space> LinkHints.activateMode\nmap f LinkHints.activateMode\nmap F LinkHints.activateModeToOpenInNewTab\nmap q LinkHints.activateModeWithQueue\n\n# find tool\nmap / enterFindMode\nmap n performFind\nmap N performBackwardsFind\n\n# scrolling\nmap gg scrollToTop\nmap gj scrollDown\nmap gk scrollUp\nmap gG scrollToBottom\n\n#marks\nmap m Marks.activateCreateMode\nmap M Marks.activateGotoMode\n\n# history\nmap H goBack\nmap L goForward\n\n# zoom\nmap o zoomIn\nmap O zoomOut\nmap go zoomReset",
+  "linkHintCharacters": "azsxdcfv",
+  "scrollStepSize": 100,
+  "settingsVersion": "2.4.0",
+  "userDefinedLinkHintCss": "/* Vimium hint container */\n.vimiumHintMarker {\n  background: #1d1e21 !important;      /* accent */\n  border: 1px solid #c3c3c3 !important; /* highlight */\n  border-radius: 14px !important;\n  padding: 3px 6px !important;\n\n  box-shadow:\n    0 0 0 1px rgba(101,144,253,0.35),\n    0 6px 14px rgba(0,0,0,0.55) !important;\n}\n\n/* Hint text */\n.vimiumHintMarker span {\n  color: #d3d9e3 !important;           /* foreground */\n  font-family: ui-monospace, monospace !important;\n  font-size: 13px !important;\n  font-weight: 600 !important;\n}"
+}
