@@ -1,0 +1,107 @@
+{
+    "gnomeShellVersion": "48",
+    "extensions": [
+        {
+            "uuid": "lockscreen-extension@pratap.fastmail.fm",
+            "version": 14,
+            "dconfPath": "/org/gnome/shell/extensions/lockscreen-extension/",
+            "prefs": "[/]\nhide-lockscreen-extension-button=true\n"
+        },
+        {
+            "uuid": "windowgestures@extension.amarullz.com",
+            "version": 9,
+            "dconfPath": "/org/gnome/shell/extensions/windowgestures/",
+            "prefs": "[/]\nedge-size=32\ngesture-acceleration=25\ngesture-threshold=16\nswipe3-down=1\nswipe3-downup=2\nswipe3-left=2\nswipe3-right=2\nswipe4-left=7\nswipe4-right=6\ntaphold-move=false\nui-theme=2\nwinswitch-position=1\n"
+        },
+        {
+            "uuid": "app-hider@lynith.dev",
+            "version": 25,
+            "dconfPath": "/org/gnome/shell/extensions/app-hider/",
+            "prefs": "[/]\nhidden-apps=['org.gtk.gtk4.NodeEditor.desktop', 'org.gtk.WidgetFactory4.desktop', 'org.gtk.PrintEditor4.desktop', 'org.gnome.tweaks.desktop', 'org.gtk.Demo4.desktop', 'parsecd.desktop', 'org.remmina.Remmina.desktop', 'kitty.desktop', 'org.gnome.Terminal.desktop', 'toxic.desktop', 'nm-connection-editor.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.Sysprof.desktop', 'org.gnome.Settings.desktop', 'org.gnome.font-viewer.desktop', 'org.gnome.seahorse.Application.desktop', 'libreoffice-startcenter.desktop', 'libreoffice-math.desktop', 'yelp.desktop', 'org.gnome.PowerStats.desktop', 'scrcpy-console.desktop', 'org.gnome.Papers.desktop', 'display-im7.q16.desktop', 'scrcpy.desktop', 'org.gnome.clocks.desktop', 'idle-python3.13.desktop', 'snap-store_snap-store.desktop', 'gnome-language-selector.desktop', 'update-manager.desktop', 'software-properties-gtk.desktop', 'org.gnome.Characters.desktop', 'software-properties-drivers.desktop', 'idle.desktop', 'firmware-updater_firmware-updater.desktop', 'gnome-session-properties.desktop', 'org.gnome.Software.desktop', 'org.gnome.SystemMonitor.desktop', 'org.gnome.eog.desktop', 'org.gnome.Calculator.desktop', 'desktop-security-center_desktop-security-center.desktop', 'libreoffice-writer.desktop', 'micro.desktop', 'lstopo.desktop', 'org.kde.ghostwriter.desktop', 'vlc.desktop', 'io.github.realmazharhussain.GdmSettings.desktop']\n"
+        },
+        {
+            "uuid": "caffeine@patapon.info",
+            "version": 59,
+            "dconfPath": "/org/gnome/shell/extensions/caffeine/",
+            "prefs": "[/]\ncli-toggle=false\ncountdown-timer=4800\nduration-timer=4\nduration-timer-list=[600, 1200, 4800]\nindicator-position=0\nindicator-position-index=0\nindicator-position-max=4\ninhibit-apps=['org.gnome.Papers.desktop']\ntrigger-apps-mode='on-active-workspace'\nuse-custom-duration=true\nuser-enabled=true\n"
+        },
+        {
+            "uuid": "compiz-alike-magic-lamp-effect@hermes83.github.com",
+            "version": 22,
+            "dconfPath": "/org/gnome/shell/extensions/ncom/github/hermes83/compiz-alike-magic-lamp-effect/",
+            "prefs": "[/]\neffect='sine'\n"
+        },
+        {
+            "uuid": "custom-command-toggle@storageb.github.com",
+            "version": 12,
+            "dconfPath": "/org/gnome/shell/extensions/custom-command-toggle/",
+            "prefs": "[/]\ncheckcommandinterval1-setting=60\ncheckcommandsync1-setting=true\ndelaytime1-setting=10\nentryrow1-setting='gnome-extensions enable stopwatch@aliakseiz.github.com && gnome-extensions enable timer@lbgracioso.net'\nentryrow2-setting='gnome-extensions disable stopwatch@aliakseiz.github.com && gnome-extensions disable timer@lbgracioso.net'\nentryrow3-setting='Timer & Stopwatch'\nentryrow4-setting='preferences-system-time-symbolic'\nruncommandatboot1-setting=true\ntogglestate1-setting=false\n"
+        },
+        {
+            "uuid": "gsconnect@andyholmes.github.io",
+            "version": 71,
+            "dconfPath": "/org/gnome/shell/extensions/gsconnect/",
+            "prefs": "[/]\ndevices=['1b8272b15d2442eb9f597615462ff141', '_76d034f0_1b62_4e26_b5ad_add435de871b_']\nenabled=true\nmissing-openssl=false\nname='Latitude-E5470'\n\n[device/1b8272b15d2442eb9f597615462ff141]\ncertificate-pem='-----BEGIN CERTIFICATE-----\\nMIIBizCCATGgAwIBAgIBATAKBggqhkjOPQQDBDBPMSkwJwYDVQQDDCAxYjgyNzJi\\nMTVkMjQ0MmViOWY1OTc2MTU0NjJmZjE0MTEUMBIGA1UECwwLS0RFIENvbm5lY3Qx\\nDDAKBgNVBAoMA0tERTAeFw0yNDA5MDQwNjAwMDBaFw0zNTA5MDQwNjAwMDBaME8x\\nKTAnBgNVBAMMIDFiODI3MmIxNWQyNDQyZWI5ZjU5NzYxNTQ2MmZmMTQxMRQwEgYD\\nVQQLDAtLREUgQ29ubmVjdDEMMAoGA1UECgwDS0RFMFkwEwYHKoZIzj0CAQYIKoZI\\nzj0DAQcDQgAEl+Vd0Ck4fF7Nlgz0jbg3OhORqL0rE3OBsDnJAfQwBoeeuSt0Pjgj\\nqI8wgnHzUFEwF9OtVKpb0Fz+KK9scBXGdjAKBggqhkjOPQQDBANIADBFAiEA2rhI\\neNBXC58lJlBZM6/BmUi8HLo19pC+5d9Mb4Sn84kCICaCVeJog7BbgryK/law6QyD\\nvKqw4xvhkM7J2KQJkcQR\\n-----END CERTIFICATE-----\\n'\ndisabled-plugins=['systemvolume']\nincoming-capabilities=['kdeconnect.battery', 'kdeconnect.clipboard', 'kdeconnect.clipboard.connect', 'kdeconnect.contacts.request_all_uids_timestamps', 'kdeconnect.contacts.request_vcards_by_uid', 'kdeconnect.findmyphone.request', 'kdeconnect.mousepad.keyboardstate', 'kdeconnect.mousepad.request', 'kdeconnect.mpris', 'kdeconnect.mpris.request', 'kdeconnect.notification', 'kdeconnect.notification.action', 'kdeconnect.notification.reply', 'kdeconnect.notification.request', 'kdeconnect.ping', 'kdeconnect.runcommand', 'kdeconnect.sftp.request', 'kdeconnect.share.request', 'kdeconnect.share.request.update', 'kdeconnect.sms.request', 'kdeconnect.sms.request_attachment', 'kdeconnect.sms.request_conversation', 'kdeconnect.sms.request_conversations', 'kdeconnect.systemvolume', 'kdeconnect.telephony.request_mute']\nkeybindings=@a{ss} {}\nlast-connection='lan://192.168.68.153:1716'\nname='phone'\noutgoing-capabilities=['kdeconnect.battery', 'kdeconnect.clipboard', 'kdeconnect.clipboard.connect', 'kdeconnect.connectivity_report', 'kdeconnect.contacts.response_uids_timestamps', 'kdeconnect.contacts.response_vcards', 'kdeconnect.findmyphone.request', 'kdeconnect.mousepad.echo', 'kdeconnect.mousepad.keyboardstate', 'kdeconnect.mousepad.request', 'kdeconnect.mpris', 'kdeconnect.mpris.request', 'kdeconnect.notification', 'kdeconnect.notification.request', 'kdeconnect.ping', 'kdeconnect.presenter', 'kdeconnect.runcommand.request', 'kdeconnect.sftp', 'kdeconnect.share.request', 'kdeconnect.sms.attachment_file', 'kdeconnect.sms.messages', 'kdeconnect.systemvolume.request', 'kdeconnect.telephony']\npaired=true\nsupported-plugins=['battery', 'clipboard', 'connectivity_report', 'contacts', 'findmyphone', 'mousepad', 'mpris', 'notification', 'ping', 'presenter', 'runcommand', 'sftp', 'share', 'sms', 'systemvolume', 'telephony']\ntype='phone'\n\n[device/1b8272b15d2442eb9f597615462ff141/plugin/battery]\ncustom-battery-notification=true\ncustom-battery-notification-value=uint32 80\nfull-battery-notification=true\n\n[device/1b8272b15d2442eb9f597615462ff141/plugin/clipboard]\nreceive-content=true\nsend-content=true\n\n[device/1b8272b15d2442eb9f597615462ff141/plugin/mpris]\nshare-players=true\n\n[device/1b8272b15d2442eb9f597615462ff141/plugin/notification]\napplications='{\"Power\":{\"iconName\":\"org.gnome.Settings-power-symbolic\",\"enabled\":true},\"Clocks\":{\"iconName\":\"org.gnome.clocks\",\"enabled\":true},\"Color Management\":{\"iconName\":\"org.gnome.Settings-color-symbolic\",\"enabled\":true},\"Printers\":{\"iconName\":\"org.gnome.Settings-printers-symbolic\",\"enabled\":false},\"Disk Usage Analyzer\":{\"iconName\":\"org.gnome.baobab\",\"enabled\":true},\"Files\":{\"iconName\":\"org.gnome.Nautilus\",\"enabled\":true},\"Disks\":{\"iconName\":\"org.gnome.DiskUtility\",\"enabled\":true},\"Events and Tasks Reminders\":{\"iconName\":\"org.gnome.Evolution-alarm-notify\",\"enabled\":true},\"Date & Time\":{\"iconName\":\"org.gnome.Settings-time-symbolic\",\"enabled\":true},\"Zenity\":{\"iconName\":\"application-x-executable\",\"enabled\":true},\"Snapd User Session Agent\":{\"iconName\":\"/usr/share/snapd/snapcraft-logo-bird.svg\",\"enabled\":true},\"Software\":{\"iconName\":\"org.gnome.Software\",\"enabled\":true},\"Kasasa\":{\"iconName\":\"io.github.kelvinnovais.Kasasa\",\"enabled\":true},\"notify-send\":{\"iconName\":\"\",\"enabled\":true},\"Test Application Name\":{\"iconName\":\"\",\"enabled\":true},\"Characters\":{\"iconName\":\"org.gnome.Characters\",\"enabled\":true},\"Timeshift\":{\"iconName\":\"timeshift\",\"enabled\":true},\"Vivaldi\":{\"iconName\":\"file:///tmp/..com.vivaldi.Vivaldi.lAXZox/logo.png\",\"enabled\":true},\"DigitalZen\":{\"iconName\":\"\",\"enabled\":true}}'\n\n[device/1b8272b15d2442eb9f597615462ff141/plugin/runcommand]\ncommand-list={'lock': <{'name': 'Lock', 'command': 'xdg-screensaver lock'}>, 'poweroff': <{'name': 'Power Off', 'command': 'systemctl poweroff'}>, 'suspend': <{'name': 'Suspend', 'command': 'systemctl suspend'}>}\n\n[device/1b8272b15d2442eb9f597615462ff141/plugin/sftp]\nautomount=false\n\n[device/1b8272b15d2442eb9f597615462ff141/plugin/share]\nlaunch-urls=true\nreceive-directory='/home/shayan/Downloads'\n\n[device/1b8272b15d2442eb9f597615462ff141/plugin/systemvolume]\nshare-sinks=false\n\n[device/1b8272b15d2442eb9f597615462ff141/plugin/telephony]\nringing-pause=true\n\n[device/_76d034f0_1b62_4e26_b5ad_add435de871b_]\ncertificate-pem='-----BEGIN CERTIFICATE-----\\nMIIBqjCCAVCgAwIBAgIUXHYc3K/qUAS9lup8GcsF40thVj8wCgYIKoZIzj0EAwQw\\nVTEvMC0GA1UEAwwmXzc2ZDAzNGYwXzFiNjJfNGUyNl9iNWFkX2FkZDQzNWRlODcx\\nYl8xDDAKBgNVBAoMA0tERTEUMBIGA1UECwwLS0RFIENvbm5lY3QwHhcNMjQwOTE0\\nMDA0NTI3WhcNMzUwNjA1MDA0NTI3WjBVMS8wLQYDVQQDDCZfNzZkMDM0ZjBfMWI2\\nMl80ZTI2X2I1YWRfYWRkNDM1ZGU4NzFiXzEMMAoGA1UECgwDS0RFMRQwEgYDVQQL\\nDAtLREUgQ29ubmVjdDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABLTSJWUkgWHF\\ntESgf4Bsurq4U9lqsqRPevoRop6tDCAK/9FgoCGYHuXI+voj2k+F4vzZFjxsLsHX\\nVpwvmaL5fyAwCgYIKoZIzj0EAwQDSAAwRQIgDO+oCxufAEQ5Ah9vMnWfbOJUYpM1\\njdhtM8LKNmXqAqYCIQCj57mlqSXe20HMGmjC/+ZSwTqB39NYr3dXUHy22lcsJA==\\n-----END CERTIFICATE-----\\n'\nincoming-capabilities=['kdeconnect.clipboard', 'kdeconnect.clipboard.connect', 'kdeconnect.connectivity_report', 'kdeconnect.contacts.response_uids_timestamps', 'kdeconnect.contacts.response_vcards', 'kdeconnect.findmyphone.request', 'kdeconnect.lock', 'kdeconnect.lock.request', 'kdeconnect.mousepad.echo', 'kdeconnect.mousepad.keyboardstate', 'kdeconnect.mousepad.request', 'kdeconnect.mpris', 'kdeconnect.mpris.request', 'kdeconnect.notification', 'kdeconnect.notification.request', 'kdeconnect.ping', 'kdeconnect.presenter', 'kdeconnect.runcommand', 'kdeconnect.runcommand.request', 'kdeconnect.sftp', 'kdeconnect.share.request', 'kdeconnect.sms.attachment_file', 'kdeconnect.sms.messages', 'kdeconnect.systemvolume', 'kdeconnect.systemvolume.request', 'kdeconnect.telephony', 'kdeconnect.virtualmonitor', 'kdeconnect.virtualmonitor.request']\nlast-connection='lan://192.168.68.118:1716'\nname='Shayans-Desktop'\noutgoing-capabilities=['kdeconnect.clipboard', 'kdeconnect.clipboard.connect', 'kdeconnect.contacts.request_all_uids_timestamps', 'kdeconnect.contacts.request_vcards_by_uid', 'kdeconnect.findmyphone.request', 'kdeconnect.lock', 'kdeconnect.lock.request', 'kdeconnect.mousepad.keyboardstate', 'kdeconnect.mousepad.request', 'kdeconnect.mpris', 'kdeconnect.mpris.request', 'kdeconnect.notification', 'kdeconnect.notification.action', 'kdeconnect.notification.reply', 'kdeconnect.notification.request', 'kdeconnect.ping', 'kdeconnect.runcommand', 'kdeconnect.runcommand.request', 'kdeconnect.sftp.request', 'kdeconnect.share.request', 'kdeconnect.share.request.update', 'kdeconnect.sms.request', 'kdeconnect.sms.request_attachment', 'kdeconnect.sms.request_conversation', 'kdeconnect.sms.request_conversations', 'kdeconnect.systemvolume', 'kdeconnect.systemvolume.request', 'kdeconnect.telephony.request_mute', 'kdeconnect.virtualmonitor', 'kdeconnect.virtualmonitor.request']\npaired=true\nsupported-plugins=['clipboard', 'findmyphone', 'mousepad', 'mpris', 'notification', 'ping', 'runcommand', 'share', 'systemvolume']\ntype='desktop'\n\n[device/_76d034f0_1b62_4e26_b5ad_add435de871b_/plugin/notification]\napplications='{\"Vivaldi\":{\"iconName\":\"file:///tmp/..com.vivaldi.Vivaldi.lAXZox/logo.png\",\"enabled\":true},\"Software\":{\"iconName\":\"org.gnome.Software\",\"enabled\":true},\"Power\":{\"iconName\":\"\",\"enabled\":true},\"notify-send\":{\"iconName\":\"\",\"enabled\":true},\"Characters\":{\"iconName\":\"org.gnome.Characters\",\"enabled\":true},\"DigitalZen\":{\"iconName\":\"\",\"enabled\":true}}'\n\n[messaging]\nwindow-maximized=false\nwindow-size=(648, 681)\n\n[preferences]\nwindow-maximized=false\nwindow-size=(767, 685)\n"
+        },
+        {
+            "uuid": "notification-configurator@exposedcat",
+            "version": 15,
+            "dconfPath": "/org/gnome/shell/extensions/notification-configurator/",
+            "prefs": "[/]\nblock-list='[{\"title\":\"/^(?!.*Messages).+$/gm\\\\n\",\"body\":\"\",\"appName\":\"GSConnect\",\"action\":\"close\"},{\"title\":\"\",\"body\":\"\",\"appName\":\"Characters\",\"action\":\"close\"},{\"title\":\"\",\"body\":\".*is ready.*\\\\n\",\"appName\":\"\",\"action\":\"close\"}]'\nenable-fullscreen=true\nenable-rate-limiting=true\nnotification-position='center'\n"
+        },
+        {
+            "uuid": "quick-settings-tweaks@qwreey",
+            "version": 30,
+            "dconfPath": "/org/gnome/shell/extensions/quick-settings-tweaks/",
+            "prefs": "[/]\ndnd-quick-toggle-enabled=true\nmenu-animation-enabled=true\noverlay-menu-animate-style='dialog'\noverlay-menu-enabled=true\ntoggles-layout-enabled=true\ntoggles-layout-order=[{'hide': <<true>>, 'isSystem': <<true>>, 'constructorName': <<'NMWiredToggle'>>}, {'hide': <<false>>, 'isSystem': <<true>>, 'constructorName': <<'NMWirelessToggle'>>}, {'hide': <<true>>, 'isSystem': <<true>>, 'constructorName': <<'NMModemToggle'>>}, {'hide': <<true>>, 'isSystem': <<true>>, 'constructorName': <<'NMBluetoothToggle'>>}, {'hide': <<true>>, 'isSystem': <<true>>, 'constructorName': <<'NMVpnToggle'>>}, {'hide': <<false>>, 'isSystem': <<true>>, 'constructorName': <<'BluetoothToggle'>>}, {'hide': <<true>>, 'isSystem': <<true>>, 'constructorName': <<'PowerProfilesToggle'>>}, {'hide': <<true>>, 'isSystem': <<true>>, 'constructorName': <<'NightLightToggle'>>}, {'hide': <<false>>, 'isSystem': <<true>>, 'constructorName': <<'DarkModeToggle'>>}, {'hide': <<true>>, 'isSystem': <<true>>, 'constructorName': <<'KeyboardBrightnessToggle'>>}, {'hide': <<true>>, 'isSystem': <<true>>, 'constructorName': <<'RfkillToggle'>>}, {'hide': <<true>>, 'isSystem': <<true>>, 'constructorName': <<'RotationToggle'>>}, {'hide': <<false>>, 'isSystem': <<true>>, 'constructorName': <<'DndQuickToggle'>>}, {'hide': <<false>>, 'isSystem': <<true>>, 'constructorName': <<'UnsafeQuickToggle'>>}, {'nonOrdered': <<true>>, 'hide': <<false>>}]\n"
+        },
+        {
+            "uuid": "search-light@icedman.github.com",
+            "version": 42,
+            "dconfPath": "/org/gnome/shell/extensions/search-light/",
+            "prefs": "[/]\nanimation-speed=10.0\nblur-background=false\nblur-brightness=0.59999999999999998\nblur-sigma=30.0\nborder-radius=7.0\nentry-font-size=1\nmonitor-count=1\npopup-at-cursor-monitor=true\npreferred-monitor=0\nscale-height=0.0\nscale-width=0.0\nsecondary-shortcut-search=@as []\nshortcut-search=['<Alt>space']\nshow-panel-icon=false\nuse-animations=true\n"
+        },
+        {
+            "uuid": "todoit@wassimbj.github.io",
+            "version": 6,
+            "dconfPath": "/org/gnome/shell/extensions/todoit/",
+            "prefs": "[/]\ntodos=[\"{\\n  \\\"name\\\": \\\"Croc Send Baba's Files t his computer\\\",\\n  \\\"isDone\\\": false,\\n  \\\"isFocused\\\": false\\n}\", '{\"name\":\"Find out ideas on how to do these large calculations\",\"isDone\":false}', '{\"name\":\"Call Costco about my Laptop\",\"isDone\":false}', '{\"name\":\"Finish all Math homework from functions except for unit review.\",\"isDone\":false}', '{\"name\":\"Ripgrep \\\\\"GDM\\\\\" in that MacOS to get a fire GDM\",\"isDone\":false}']\n"
+        },
+        {
+            "uuid": "windowIsReady_Remover@nunofarruca@gmail.com",
+            "version": 27,
+            "dconfPath": null,
+            "prefs": ""
+        },
+        {
+            "uuid": "rounded-window-corners@fxgn",
+            "version": 13,
+            "dconfPath": "/org/gnome/shell/extensions/rounded-window-corners-reborn/",
+            "prefs": "[/]\nsettings-version=uint32 7\n"
+        },
+        {
+            "uuid": "impatience@gfxmonk.net",
+            "version": 29,
+            "dconfPath": "/org/gnome/shell/extensions/net/gfxmonk/impatience/",
+            "prefs": ""
+        },
+        {
+            "uuid": "window-calls@domandoman.xyz",
+            "version": 20,
+            "dconfPath": null,
+            "prefs": ""
+        },
+        {
+            "uuid": "burn-my-windows@schneegans.github.com",
+            "version": 47,
+            "dconfPath": "/org/gnome/shell/extensions/burn-my-windows/",
+            "prefs": "[/]\nactive-profile='/home/shayan/.config/burn-my-windows/profiles/1759268222716750.conf'\nlast-extension-version=47\nlast-prefs-version=47\nprefs-open-count=10\nshow-support-dialog=false\n"
+        },
+        {
+            "uuid": "desktop-cube@schneegans.github.com",
+            "version": 30,
+            "dconfPath": "/org/gnome/shell/extensions/desktop-cube/",
+            "prefs": ""
+        }
+    ]
+}

@@ -5,7 +5,7 @@ enabled_layouts fat,grid,horizontal,splits,stack,tall,vertical
 set_layout_state {"biased_cols": {}, "biased_rows": {"1": -0.23162134944612284, "0": 0.23162134944612284}, "opts": {}, "class": "Grid", "all_windows": {"active_group_idx": 1, "active_group_history": [1, 2, 3], "window_groups": [{"id": 1, "window_ids": [1]}, {"id": 2, "window_ids": [2]}, {"id": 3, "window_ids": [3]}]}}
 cd ../../../../..
 
-launch 'kitty-unserialize-data={"id": 1, "cmd_at_shell_startup": "btm"}'
+launch 'kitty-unserialize-data={"id": 1, "cmd_at_shell_startup": "btop"}'
 launch 'kitty-unserialize-data={"id": 2, "cmd_at_shell_startup": "rmpc"}'
 focus
 launch 'kitty-unserialize-data={"id": 3, "cmd_at_shell_startup": "archmode && kitten @ set-font-size -- -2 && unalias x"}'
