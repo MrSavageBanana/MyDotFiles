@@ -65,6 +65,9 @@ micro= [
 # mdd = [
 # 	{ run = '/home/shayan/Downloads/AppImages/squashfs-root/marktext "$@"', desc = "open in MarkText", block = false, for = "unix" },
 # ]
+eog = [
+	{run = 'eog "$@"', desc = "open in Eye of GNOME", block = false, orphan = true, for = "unix"}
+]
 exif = [
 	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
 ]
@@ -82,7 +85,7 @@ rules = [
 	# Text
 	{ mime = "text/*", use = [ "edit", "micro", "exif", "reveal" ] },
 	# Image
-	{ mime = "image/*", use = [ "open", "exif", "reveal" ] },
+	{ mime = "image/*", use = [ "eog", "open", "exif", "reveal" ] },
 	# Media
 	{ mime = "{audio,video}/*", use = [ "play", "exif", "reveal" ] },
 	# Archive
