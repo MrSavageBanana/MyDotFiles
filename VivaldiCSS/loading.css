@@ -1,0 +1,12 @@
+#loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    /* You can change the thickness of the bar */
+    width: 10;
+	background: linear-gradient(to right, #47484a, #707172, #c3c3c3);
+    transition: width 0.1s ease;
+    z-index: 9999;
+}
+

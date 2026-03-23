@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- created with Claude. Account: Milobowler -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /*
+             * Background properties are controlled entirely via JavaScript (body.style.*)
+             * rather than CSS variables. This avoids the "invalid initial value" problem
+             * where background-size / background-position would be broken before the first
+             * successful fetch sets the variables.
+             */
+            background-color: #1a1a1a;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        }
+
+        .speed-dial-container {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .speed-dial-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .speed-dial-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #0f0;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="debug-info" id="debugInfo">Initializing Bridge...</div>
+
+    <script>
+        const CONFIG = {
+            wallpaperUrl: 'file:///home/shayan/.mydotfiles/com.ml4w.hyprlandstarter/.config/ml4w/wallpapers/wallpaper.jpg',
+            showDebug: true,
+            // How often to poll the Python bridge (ms). 50ms = 20fps, smooth enough.
+            // requestAnimationFrame was previously used here but it fires 60-144x/sec
+            // which is unnecessarily heavy for network requests.
+            pollInterval: 16
+        };
+
+        const debugEl = document.getElementById('debugInfo');
+        if (!CONFIG.showDebug) debugEl.style.display = 'none';
+
+        // Apply the wallpaper immediately and directly on body.style so it shows
+        // right away — before the first bridge response — at its natural size.
+        // This means the user sees *something* from the very first paint.
+        document.body.style.backgroundImage = `url("${CONFIG.wallpaperUrl}")`;
+
+        // Track whether we've ever received a good response so we can show
+        // a more helpful "waiting" message on first load vs. a reconnect.
+        let hasConnected = false;
+
+        async function updatePosition() {
+            try {
+                const res = await fetch('http://localhost:12345/pos');
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const { bgX, bgY, monW, monH } = await res.json();
+
+                // Set all three background properties directly — no CSS variables.
+                // This is the most reliable path across Vivaldi's page contexts.
+                document.body.style.backgroundSize     = `${monW}px ${monH}px`;
+                document.body.style.backgroundPosition = `-${Math.round(bgX)}px -${Math.round(bgY)}px`;
+
+                hasConnected = true;
+
+                if (CONFIG.showDebug) {
+                    debugEl.textContent =
+                        `Screen Offset : (${Math.round(bgX)}, ${Math.round(bgY)})\n` +
+                        `Monitor Size  : ${monW}x${monH}`;
+                }
+            } catch (err) {
+                if (CONFIG.showDebug) {
+                    debugEl.textContent = hasConnected
+                        ? `Bridge disconnected — retrying…`
+                        : `Waiting for Python Bridge…\n(run hypr_pos.py)`;
+                }
+            }
+        }
+
+        // Poll on a fixed interval instead of requestAnimationFrame.
+        // rAF is designed for rendering logic that runs in sync with the GPU;
+        // using it to drive async network calls causes unnecessary request storms.
+        updatePosition(); // fire immediately on load
+        setInterval(updatePosition, CONFIG.pollInterval);
+    </script>
+</body>
+</html>

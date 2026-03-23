@@ -1,0 +1,16 @@
+/* Vivaldi Custom CSS - Hide Menu Bar */
+
+/* Hide the horizontal menu (File, Edit, View, etc.) */
+.topmenu {
+    display: none !important;
+}
+
+/* Also hide it when in native or maximized mode */
+:-webkit-any(.native, .maximized)#browser .topmenu {
+    display: none !important;
+}
+
+/* Hide the Vivaldi menu button (hamburger icon) if present */
+.vivaldi {
+    display: none !important;
+}

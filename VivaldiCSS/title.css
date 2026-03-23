@@ -1,0 +1,4 @@
+/* Aggressively hide the entire top title bar element */
+#titlebar, #header {
+    display: none !important;
+}

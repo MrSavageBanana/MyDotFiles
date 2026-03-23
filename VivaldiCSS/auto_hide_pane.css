@@ -1,0 +1,11 @@
+/* created with Claude. Account: Milobowler */
+
+#panels-container.overlay, #panels-container.icons {width:0 !important;}
+#panels {overflow:visible; padding:0 !important;}
+:not(.resizing)#panels-container.overlay .panel-group {transition: width .1s linear !important;}
+#panels-container.right.overlay > .SlideBar--FullHeight.alternate {margin-left:-35px;}
+#panels-container.overlay #switch, #panels-container:not(.overlay).icons #switch {background-color: var(--colorBgAlphaBlur);}
+#panels-container #switch {height:100%; max-width:35px; visibility:visible !important; z-index:1; background-color:var(--colorBg); flex: 0 0 35px !important;}
+
+/* JS will add this class to trigger hide */
+#panels-container.autohide #switch {height: 50px; flex-basis: 5px; opacity: 0; margin: 0 2px; transition: .1s, background-color 0s, opacity 0s !important;}

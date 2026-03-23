@@ -1,0 +1,26 @@
+/* Custom CSS for Vivaldi tabs: Pink highlight (background), pink outline (using box-shadow for no size increase), and adjustable padding */
+/* Targets all tabs */
+.tab-strip .tab-position .tab {
+    background-color: #1d1e21 !important;
+    box-shadow: 0 0 0 0px #1d1e21 !important;
+    padding: 0 !important;
+    margin: 2px !important;
+    height: 29px !important;
+}
+
+/* Optional: Style for the active (selected) tab */
+.tab-strip .tab-position .tab.active {
+    background-color: #1d1e21 !important;
+    box-shadow: 0 0 0 2px #c3c3c3 !important; 
+    padding: 0 !important; 
+    height: 29px !important;
+}
+
+/* Optional: Ensure titles don't truncate prematurely 
+.tab-strip .tab-position .tab .title {
+    white-space: nowrap !important; /* Prevent wrapping; use ellipsis if too long
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+*/
+/* created with Claude. Account: Milobowler */

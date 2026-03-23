@@ -1,0 +1,10 @@
+Hyprland Bridge running on http://localhost:12345 ...
+Traceback (most recent call last):
+  File "/home/shayan/Downloads/VivaldiCSS/hypr_pos.py", line 140, in <module>
+    http.server.HTTPServer(('localhost', 12345), Handler).serve_forever()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.2/lib/python3.14/socketserver.py", line 235, in serve_forever
+    ready = selector.select(poll_interval)
+  File "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.2/lib/python3.14/selectors.py", line 398, in select
+    fd_event_list = self._selector.poll(timeout)
+KeyboardInterrupt
