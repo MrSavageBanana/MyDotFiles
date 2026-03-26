@@ -33,7 +33,7 @@ setTimeout(() => {
     async function updateWallpaper() {
         const internalPage = getStartPage();
 
-	console.log('[wallpaper] internal-page found:', !!internalPage, internalPage);  
+	// console.log('[wallpaper] internal-page found:', !!internalPage, internalPage);  
         // Only run on the start page
         if (!internalPage) return;
 
