@@ -1,0 +1,80 @@
+/* ─── Tree Style Tabs ────────────────────────────────────────────────────── */
+
+:root {
+  --tree-indent:     14px;
+  --tree-line-color: rgba(255, 255, 255, 0.2);
+  --favicon-tab-width: 34px; /* tweak if needed */
+}
+
+/* ── Favicon-only tabs ───────────────────────────────────────────────────── */
+
+/* Hide title and close button — favicon is all we need */
+.tab .tab-header .title,
+.tab .tab-header .close {
+  display: none !important;
+}
+
+/* Keep the favicon centered and the tab row tight */
+.tab .tab-header {
+  justify-content: center !important;
+  padding: 0 4px !important;
+}
+
+/* The tab bar column itself — narrow to just favicon + max expected indent.
+   Adjust --favicon-tab-width if deep trees get clipped. */
+#tabs-container {
+  width: calc(var(--favicon-tab-width) + 6 * var(--tree-indent)) !important;
+  min-width: unset !important;
+}
+
+/* ── Indentation ─────────────────────────────────────────────────────────── */
+
+.tab-position[data-parent-id] .tab-wrapper {
+  position:    relative;
+  box-sizing:  border-box;
+  margin-left: calc(var(--tab-depth, 1) * var(--tree-indent));
+  width:       calc(100% - var(--tab-depth, 1) * var(--tree-indent));
+}
+
+/* ── Branch lines ────────────────────────────────────────────────────────── */
+
+.tab-position[data-depth] {
+  overflow: visible !important;
+}
+
+/* ├ vertical spine (non-last child) */
+.tab-position[data-parent-id][data-last-child="false"] .tab-wrapper::before {
+  content:    '';
+  position:   absolute;
+  left:       calc(var(--tree-indent) * -0.5);
+  top:        0;
+  bottom:     0;
+  width:      1px;
+  background: var(--tree-line-color);
+  pointer-events: none;
+}
+
+/* ├ horizontal stub */
+.tab-position[data-parent-id][data-last-child="false"] .tab-wrapper::after {
+  content:    '';
+  position:   absolute;
+  left:       calc(var(--tree-indent) * -0.5);
+  top:        50%;
+  width:      calc(var(--tree-indent) * 0.5);
+  height:     1px;
+  background: var(--tree-line-color);
+  pointer-events: none;
+}
+
+/* └ L-corner (last child) */
+.tab-position[data-parent-id][data-last-child="true"] .tab-wrapper::before {
+  content:       '';
+  position:      absolute;
+  left:          calc(var(--tree-indent) * -0.5);
+  top:           0;
+  bottom:        50%;
+  width:         calc(var(--tree-indent) * 0.5 - 1px);
+  border-left:   1px solid var(--tree-line-color);
+  border-bottom: 1px solid var(--tree-line-color);
+  pointer-events: none;
+}
