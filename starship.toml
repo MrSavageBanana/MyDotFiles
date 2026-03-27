@@ -1,0 +1,32 @@
+# 1. This is the master switch. If it's not in this string, it won't show up.
+format = """
+$directory
+$character
+"""
+
+# 2. Prevent Starship from adding a blank line every time you hit enter
+add_newline = true
+
+[character]
+# The symbol when the last command was successful
+success_symbol = '[  ❯ ](#dedede)'
+# The symbol when the last command failed (changes color to red)
+error_symbol = "[  ❯ ](#dedede)"
+
+[directory]
+style = "#dedede"
+
+truncation_symbol = "…/"
+read_only = ""
+# If you still see a box, add this line:
+# repo_root_style = "none"
+
+# 4. Silence everything else globally
+[git_branch]
+disabled = true
+
+[git_status]
+disabled = true
+
+[package]
+disabled = true

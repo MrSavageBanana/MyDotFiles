@@ -1,3 +1,4 @@
+-- Claude Shayan Fixed the LSP here and lsp.lua on 2026-03-26
 return {
 	-- Bottom statusline (the line everyone has on YouTube)
 	{
@@ -32,9 +33,9 @@ return {
 		"folke/which-key.nvim",
 		event = "VeryLazy",
 		config = function()
-			vim.o.timeout = true
-			vim.o.timeoutlen = 300
-			require("which-key").setup()
+			require("which-key").setup({
+				preset = "classic",
+			})
 		end,
 	},
 
