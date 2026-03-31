@@ -73,51 +73,42 @@ xterm*|rxvt*)
 esac
 
 # enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+source ~/.dircolors_cache # run the following to get the file: dircolors -b > ~/.dircolors_cache
+# alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
 
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
-fi
 
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+# alias ll='ls -alF'
+# alias la='ls -A'
+# alias l='ls -CF'
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
+# if [ -f ~/.bash_aliases ]; then
+#     . ~/.bash_aliases
+# fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-export PATH=$PATH:$HOME/go/bin
+# if ! shopt -oq posix; then
+#   if [ -f /usr/share/bash-completion/bash_completion ]; then
+#     . /usr/share/bash-completion/bash_completion
+#   elif [ -f /etc/bash_completion ]; then
+#     . /etc/bash_completion
+#   fi
+# fi
 
+# End of ML4W presetup
 
+export PATH="$HOME/.local/bin:$PATH"
 # created with Claude. Account: Milobowler
 fix() {
 if [ $# -eq 1 ]; then
@@ -133,249 +124,35 @@ echo "Usage: fix <correct-command>"
 fi
 }
 
-# created with Claude. Account: Milobowler
-# Replace first N words of last command
-# Usage: / <replacement words>
-# Examples:
-#   After "npm install lodash":
-#   / yarn add        → runs: yarn add lodash
-#   / pnpm            → runs: pnpm install lodash
-#   /yarn add         → runs: yarn add lodash (no space needed)
-/() {
-if [ $# -ge 1 ]; then
-local last_cmd=$(fc -ln -1)
-last_cmd=$(echo "$last_cmd" | sed 's/^[[:space:]]*//')
-
-# Split last command into array
-local -a last_words=($last_cmd)
-
-# Get number of replacement words provided
-local replace_count=$#
-
-# Build new command: replacement words + remaining words from old command
-local new_cmd="$@"
-for ((i=replace_count; i<${#last_words[@]}; i++)); do
-new_cmd="$new_cmd ${last_words[$i]}"
-done
-
-eval "$new_cmd"
-else
-echo "Usage: / <replacement-words>"
-fi
-}
-
 # Windows Command Shortcuts
 alias clip='wl-copy'
 alias findstr='grep'
 alias cls='clear'
 alias del='rm'
 alias ipconfig='ifconfig'
-alias explorer='nautilus'
+alias explorer='thunar'
+alias hotspot='hotspot && clear'
 alias buds='bluetoothctl connect A4:77:58:32:0C:74'
 alias bose='bluetoothctl connect 78:2B:64:D1:7C:DD'
 alias lock='hyprlock &'
 alias nano='micro'
 alias pwd='pwd | tee /dev/tty | wl-copy'
-alias on='/home/shayan/Downloads/smartthings devices:commands cf93efd0-639d-4dff-a805-36405e9397ef switch:on'
-alias off='/home/shayan/Downloads/smartthings devices:commands cf93efd0-639d-4dff-a805-36405e9397ef switch:off'
 alias x='exit'
-alias q='systemctl suspend'
 alias ls='eza --grid --color=always --icons=always --no-user'
+alias lsl='eza --long --color=always --icons=always --no-user'
 alias cat='bat --theme="Monokai Extended Origin" --paging=never'
 alias bat='bat --theme="Monokai Extended Origin"'
+alias hg="kitten hyperlinked-grep"
+alias diff="kitten diff "
+alias m="micro"
+alias nv="nvim"
+alias vi="nvim"
+alias clipo="tee /dev/tty | wl-copy"
+
 # Notify me on long commands
 # created with Claude. Account: Milobowler
-# Notify me on long commands
-# created with Claude. Account: Milobowler
-n() {
+nt() {
 	notify-send "Command completed" "Previous command finished"
-}
-
-# Notify when an already-running process completes (FOREGROUND version)
-# workflow example
-#sleep 1000		# Start Command
-# ^z 			# pause (Ctrl + z)
-# notif 		# resume with notification
-# ^z 			# change your mind, pause again
-# notif-cancel # cancels notifications AND automatically resumes with fg!
-
-ntfy-pid() {
-    local pid=$1
-    if [ -z "$pid" ]; then
-        echo "Error: No PID provided"
-        return 1
-    fi
-
-    local process_name
-    process_name=$(ps -p "$pid" -o comm= 2>/dev/null)
-    if [ -z "$process_name" ]; then
-        echo "Error: Process $pid not found"
-        return 1
-    fi
-
-    # choose terminal emulator; if none found, print verbose error
-    if command -v gnome-terminal &>/dev/null; then
-        term_cmd="gnome-terminal -- bash -c"
-    elif command -v xterm &>/dev/null; then
-        term_cmd="xterm -e bash -c"
-    else
-        echo "Error: No supported terminal emulator found (gnome-terminal, xterm)"
-        return 1
-    fi
-
-    local watcher_pid_file="/tmp/ntfy_watcher_$pid"
-
-    # Launch a new terminal that watches the PID (keeps messages inside that window)
-    $term_cmd "
-        echo \$$ > '$watcher_pid_file'
-        echo 'Watching PID $pid ($process_name)...'
-        echo 'This window will close when the process completes.'
-        echo ''
-        while kill -0 $pid 2>/dev/null; do sleep 1; done
-        # small delay to let process fully exit
-        sleep 0.5
-        # notify user (no exit-code introspection here)
-        notify-send 'Process Completed' '$process_name (PID: $pid) finished'
-        rm -f '$watcher_pid_file'
-        echo ''
-        echo 'Process completed. Press Enter to close...'
-        read
-    " &
-
-    return 0
-}
-
-# Easy notification - resume in foreground; minimal output
-notif() {
-    # get most recent stopped job line
-    local stopped_line
-    stopped_line=$(jobs -l | awk '/Stopped/ {line=$0} END{print line}')
-
-    if [ -z "$stopped_line" ]; then
-        echo "Error: No stopped job found"
-        return 1
-    fi
-
-    local pid cmd watcher_pid_file existing_count
-    pid=$(printf '%s' "$stopped_line" | awk '{print $2}')
-    cmd=$(printf '%s' "$stopped_line" | awk '{for(i=4;i<=NF;i++) printf "%s ", $i; print ""}' | sed 's/[[:space:]]*$//')
-
-    watcher_pid_file="/tmp/ntfy_watcher_$pid"
-
-    # count existing watchers
-    set -- /tmp/ntfy_watcher_*
-    if [ -e "$1" ]; then
-        existing_count=$#
-    else
-        existing_count=0
-    fi
-
-    # set up background watcher only if we have a valid PID
-    (
-        echo $$ > "$watcher_pid_file"
-
-        # Wait until the process is gone
-        while kill -0 "$pid" 2>/dev/null; do
-            sleep 1
-        done
-        sleep 0.2
-
-        # Detect if process exited normally
-        # If process is gone because of Ctrl+C or kill, its exit status >128 (signal)
-        local exit_code
-        exit_code=$(ps -o stat= -p "$pid" 2>/dev/null | grep -q 'Z' && echo 0 || echo $?)
-        # Skip notification if process was interrupted (nonzero exit code)
-        if ! ps -p "$pid" &>/dev/null; then
-            # double-check it's really gone, then skip notifying if user interrupted it
-            # Only notify if the process completed naturally (SIG0 -> gone cleanly)
-            if [ "$exit_code" -eq 0 ]; then
-                notify-send "Command Completed" "Command finished: $cmd"
-            fi
-        fi
-
-        rm -f "$watcher_pid_file"
-    ) & disown   # disown to stop "[N]+ Done" messages
-
-    # Minimal success message
-    if [ "$existing_count" -ge 1 ]; then
-        echo "You'll be notified when this command is complete. PID: $pid"
-    else
-        echo "You'll be notified when this command is complete"
-    fi
-
-    # resume job in foreground
-    fg
-}
-
-# Cancel all active notification watchers and optionally resume any stopped job
-notif-cancel() {
-    # make globbing safe
-    shopt -s nullglob
-    local files=(/tmp/ntfy_watcher_*)
-    if [ ${#files[@]} -eq 0 ]; then
-        shopt -u nullglob
-        echo "No active notification watchers found"
-        return 0
-    fi
-
-    local watcher_pid watched_pid count=0
-    for watcher_file in "${files[@]}"; do
-        if [ -f "$watcher_file" ]; then
-            watcher_pid=$(cat "$watcher_file" 2>/dev/null || true)
-            watched_pid=$(echo "$watcher_file" | grep -oP '\d+$')
-            if [ -n "$watcher_pid" ] && kill -0 "$watcher_pid" 2>/dev/null; then
-                kill "$watcher_pid" 2>/dev/null || true
-            fi
-            rm -f "$watcher_file"
-            count=$((count+1))
-        fi
-    done
-    shopt -u nullglob
-
-    # minimal cancel message
-    if [ $count -gt 0 ]; then
-        echo "You'll no longer be notified when this command is complete"
-    else
-        echo "No active notification watchers found"
-    fi
-
-    # if there's a stopped job, resume it silently (fg will take over the terminal)
-    local stopped_line
-    stopped_line=$(jobs -l | awk '/Stopped/ {line=$0} END{print line}')
-    if [ -n "$stopped_line" ]; then
-        fg
-    fi
-}
-
-# Cancel a specific notification watcher (by watched PID)
-notif-cancel-pid() {
-    local pid=$1
-    if [ -z "$pid" ]; then
-        echo "Error: No PID provided"
-        return 1
-    fi
-
-    local watcher_file="/tmp/ntfy_watcher_$pid"
-    if [ ! -f "$watcher_file" ]; then
-        echo "Error: No notification watcher found for PID $pid"
-        return 1
-    fi
-
-    local watcher_pid
-    watcher_pid=$(cat "$watcher_file" 2>/dev/null || true)
-    if [ -n "$watcher_pid" ] && kill -0 "$watcher_pid" 2>/dev/null; then
-        kill "$watcher_pid" 2>/dev/null || true
-    fi
-    rm -f "$watcher_file"
-
-    echo "You'll no longer be notified when this command is complete"
-
-    # resume stopped job if that PID corresponds to a stopped job
-    local job_info
-    job_info=$(jobs -l | grep "Stopped" | grep -F "$pid")
-    if [ -n "$job_info" ]; then
-        fg
-    fi
 }
 
 # created with Claude. Account: Milobowler. Title: filtering directories and binary files from micro wildcard
@@ -400,17 +177,10 @@ microall() {
 }
 
 
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="/usr/bin:$PATH"
-export PATH=$PATH:$HOME/go/bin
 export "MICRO_TRUECOLOR=1"
-export RESTIC_PASSWORD="Puctrin0"
 
-alias sigma="/opt/sigma/sigma --no-sandbox"
-. "$HOME/.cargo/env"
 # --- Yazi Setup ---
-export EDITOR="kitty micro"
+export EDITOR="kitty nvim"
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -421,22 +191,56 @@ function y() {
 }
 
 # --- Zoxide Setup ---
-eval "$(zoxide init bash)"
+source ~/.zoxide-init.bash # run this command to create the file: "zoxide init bash > ~/.zoxide-init.bash"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
 alias config='/usr/bin/git --git-dir=/home/shayan/.cfg/ --work-tree=/home/shayan'
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# brew shellenv replacement. Run the following to get below: "/home/linuxbrew/.linuxbrew/bin/brew shellenv | clip"
+export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
+export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar";
+export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew";
+export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin${PATH+:$PATH}";
+[ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}";
+export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
 
-eval $(thefuck --alias)
-eval $(thefuck --alias tf)
-
+function fuck () {
+    TF_PYTHONIOENCODING=$PYTHONIOENCODING;
+    export TF_SHELL=bash;
+    export TF_ALIAS=fuck;
+    export TF_SHELL_ALIASES=$(alias);
+    export TF_HISTORY=$(fc -ln -10);
+    export PYTHONIOENCODING=utf-8;
+    TF_CMD=$(
+        thefuck THEFUCK_ARGUMENT_PLACEHOLDER "$@"
+    ) && eval "$TF_CMD";
+    unset TF_HISTORY;
+    export PYTHONIOENCODING=$TF_PYTHONIOENCODING;
+    history -s $TF_CMD;
+}
 
 # See Dates in History
-export HISTTIMEFORMAT='%F %T'
+export HISTTIMEFORMAT='%F %T '
+. "$HOME/.cargo/env"
+
+#export GTK_THEME=Adwaita-dark
+
+#use fzf for my ctrl + r
+#  [ -f /usr/share/fzf/key-bindings.bash ] # && source /usr/share/fzf/key-bindings.bash
+# source /usr/share/fzf/completion.bash
+source ~/.fzf_static.bash
+# Shellfirm
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+[[ -f /home/shayan/Downloads/Git_Cloned/shellfirm/shell-plugins/shellfirm.plugin.sh ]] && source /home/shayan/Downloads/Git_Cloned/shellfirm/shell-plugins/shellfirm.plugin.sh
+
+if [ "$TERM" = "linux" ]; then
+  # TTY detected - use simplified config
+  export STARSHIP_CONFIG=~/.config/starship-tty.toml
+else
+  # GUI Terminal - use default config
+  export STARSHIP_CONFIG=~/.config/starship.toml
+fi
+eval "$(starship init bash)"
