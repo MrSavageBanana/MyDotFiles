@@ -1,29 +1,41 @@
 require("recycle-bin"):setup()
 
 require("kdeconnect-send"):setup({
-    auto_select_single = false,
+	auto_select_single = false,
 })
 require("relative-motions"):setup({
-  show_numbers = "relative_absolute",  
-  show_motion  = true,        
-  enter_mode   = "first"      
+	show_numbers = "relative_absolute",
+	show_motion = false,
+	line_numbers_styles = {
+		hovered = ui.Style():bold():fg("#bcc3cd"):reverse(true),
+		normal = ui.Style():fg("#66717d"),
+	},
 })
+--		hovered = ui.Style():bold():fg("#555c66"):reverse(true),
+--		normal = ui.Style():fg("#474747"),
+
+-- This is the old config for the old relative motions
+-- require("relative-motions"):setup({
+--   show_numbers = "relative_absolute",
+--   show_motion  = true,
+--   enter_mode   = "first"
+-- })
 -- require("simple-tag"):setup({
 --   ui_mode = "icon",
 --   hints_disabled = false,
 --   linemode_order = 1000,
--- 
+--
 --   tag_order = { "r", "o", "y", "g", "b", "p" },  -- Add this line!
--- 
+--
 --   colors = {
 --     ["r"] = "#F85B52",
---     ["o"] = "#F6A137",   
---     ["y"] = "#F5CE35",   
---     ["g"] = "#4ECF64",   
---     ["b"] = "#378CF8",   
---     ["p"] = "#B46FD4",   
+--     ["o"] = "#F6A137",
+--     ["y"] = "#F5CE35",
+--     ["g"] = "#4ECF64",
+--     ["b"] = "#378CF8",
+--     ["p"] = "#B46FD4",
 --   },
--- 
+--
 --   icons = {
 --     default = "●",
 --     ["r"] = "●",
@@ -54,55 +66,55 @@ local function is_binary(path)
 	if binary_cache[path] ~= nil then
 		return binary_cache[path]
 	end
-	
+
 	-- Run file command to check mime type
 	local cmd = string.format("file --brief --mime %s 2>/dev/null | grep -q binary", ya.quote(path))
 	local result = os.execute(cmd)
-	
+
 	-- In Lua, os.execute returns 0 for success (grep found "binary")
 	local is_bin = (result == 0 or result == true)
 	binary_cache[path] = is_bin
-	
+
 	return is_bin
 end
 
 function Linemode:linecount()
 	local path = tostring(self._file.url)
-	
+
 	-- Check if it's a binary file first
 	if is_binary(path) then
 		return ui.Line(string.format("%6s", "-"))
 	end
-	
+
 	-- Check cache for line count
 	if linecount_cache[path] then
 		return ui.Line(string.format("%6s", linecount_cache[path]))
 	end
-	
+
 	-- Only calculate for the hovered file to reduce load
 	local hovered = cx.active.current.hovered
 	if not hovered or tostring(hovered.url) ~= path then
 		-- Not hovered, show placeholder
 		return ui.Line(string.format("%6s", ""))
 	end
-	
+
 	-- Run wc -l only on hovered file
 	local handle = io.popen("wc -l < " .. ya.quote(path) .. " 2>/dev/null")
 	if not handle then
 		linecount_cache[path] = "ERR"
 		return ui.Line(string.format("%6s", "ERR"))
 	end
-	
+
 	local result = handle:read("*a")
 	handle:close()
-	
+
 	-- Parse the number
 	local count = tonumber(result:match("%d+"))
 	if count and count > 0 then
 		linecount_cache[path] = tostring(count)
 		return ui.Line(string.format("%6s", tostring(count)))
 	end
-	
+
 	-- If wc -l fails or is 0, show a dash
 	linecount_cache[path] = "-"
 	return ui.Line(string.format("%6s", "-"))
@@ -115,27 +127,27 @@ local md5_cache = {}
 function Linemode:md5hash()
 	local file = self._file
 	local path = tostring(file.url)
-	
+
 	-- Skip folders
 	if file.cha.is_dir then
 		return ui.Line(string.format("%8s", "-"))
 	end
-	
+
 	-- Check cache for MD5 hash
 	if md5_cache[path] then
 		return ui.Line(string.format("%8s", md5_cache[path]))
 	end
-	
+
 	-- Run md5sum for this file
 	local handle = io.popen("md5sum " .. ya.quote(path) .. " 2>/dev/null")
 	if not handle then
 		md5_cache[path] = "ERR"
 		return ui.Line(string.format("%8s", "ERR"))
 	end
-	
+
 	local result = handle:read("*a")
 	handle:close()
-	
+
 	-- Parse the hash (first part before space)
 	local hash = result:match("^(%x+)")
 	if hash then
@@ -144,7 +156,7 @@ function Linemode:md5hash()
 		md5_cache[path] = short_hash
 		return ui.Line(string.format("%8s", short_hash))
 	end
-	
+
 	-- If md5sum fails, show a dash
 	md5_cache[path] = "-"
 	return ui.Line(string.format("%8s", "-"))
@@ -156,27 +168,27 @@ local sha256_cache = {}
 function Linemode:sha256hash()
 	local file = self._file
 	local path = tostring(file.url)
-	
+
 	-- Skip folders
 	if file.cha.is_dir then
 		return ui.Line(string.format("%8s", "-"))
 	end
-	
+
 	-- Check cache for SHA256 hash
 	if sha256_cache[path] then
 		return ui.Line(string.format("%8s", sha256_cache[path]))
 	end
-	
+
 	-- Run sha256sum for this file
 	local handle = io.popen("sha256sum " .. ya.quote(path) .. " 2>/dev/null")
 	if not handle then
 		sha256_cache[path] = "ERR"
 		return ui.Line(string.format("%8s", "ERR"))
 	end
-	
+
 	local result = handle:read("*a")
 	handle:close()
-	
+
 	-- Parse the hash (first part before space)
 	local hash = result:match("^(%x+)")
 	if hash then
@@ -185,7 +197,7 @@ function Linemode:sha256hash()
 		sha256_cache[path] = short_hash
 		return ui.Line(string.format("%8s", short_hash))
 	end
-	
+
 	-- If sha256sum fails, show a dash
 	sha256_cache[path] = "-"
 	return ui.Line(string.format("%8s", "-"))

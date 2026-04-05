@@ -64,7 +64,8 @@ keymap = [
 	{ on = ["R","d"], run = "plugin recycle-bin -- delete", desc = "Delete from Trash" },
 	{ on = ["<C-s>"], run = "plugin kdeconnect-send", desc = "Send Selected Files via KDE Connect" },
 	{ on = "e", run = "plugin jump-to-char", desc = "Jump to char" },
-	{ on = "E", run = "plugin simple-tag -- toggle-tag", desc = "Tag Menu" },
+	# { on = "E", run = "plugin simple-tag -- toggle-tag", desc = "Tag Menu" },
+	# { on = [ "E" ], run = "plugin eza-preview",  desc = "Toggle tree/list dir preview" },
 	{ on = ["P","s"], run = "plugin pdfseparate", desc = "Split PDF pages (extract page range)" },
 	{ on = ["P","u"], run = "plugin pdfunite", desc = "Unite PDF files (merge selected PDFs)" },
 	

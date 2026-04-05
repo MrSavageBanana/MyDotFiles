@@ -58,5 +58,10 @@ use = "boydaihungst/simple-tag"
 rev = "a971d5a"
 hash = "bd921661ea2be141a1ff182ed81d7012"
 
+[[plugin.deps]]
+use = "boydaihungst/relative-motions"
+rev = "d720b1c"
+hash = "cb389a36241ada4893796d89dd5da7a0"
+
 [flavor]
 deps = []
