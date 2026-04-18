@@ -442,5 +442,18 @@ label:focus {
 }
 
 #custom-tray-handle.in-sync {
-    color: #c3c3c3;
+	color: #c3c3c3;
+}
+
+#submap {
+	background-color: transparent;
+	font-size: 16px;
+	color: @foreground;
+	border-radius: 15px;
+	font-weight: bold;
+}
+
+#submap.resize {
+	color: @color7;
+	/* or any accent color you like */
 }

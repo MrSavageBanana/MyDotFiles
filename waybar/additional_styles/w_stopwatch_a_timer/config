@@ -16,7 +16,8 @@
 		"wlr/taskbar",
         "group/quicklinks",
 //        "hyprland/window"
-		"custom/rofi-status"
+		"custom/rofi-status",
+		"hyprland/submap"
     ],
     "modules-center": [
         "hyprland/workspaces"

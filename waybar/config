@@ -16,7 +16,8 @@
 		"wlr/taskbar",
         "group/quicklinks",
 //        "hyprland/window"
-		"custom/rofi-status"
+		"custom/rofi-status",
+		"hyprland/submap"
     ],
     "modules-center": [
         "hyprland/workspaces"
@@ -49,7 +50,7 @@
 	"custom/tray-handle": {
 	     "exec": "~/.config/waybar/scripts/check-config-sync.py",
 	     "return-type": "json",
-	     "interval": 21600, 
+	     "interval": 21600,
 	     "format": "{}",
 	     "tooltip": true,
 	     "on-click-right": "kitty yazi ~/.mydotfiles/"
