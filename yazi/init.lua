@@ -202,3 +202,49 @@ function Linemode:sha256hash()
 	sha256_cache[path] = "-"
 	return ui.Line(string.format("%8s", "-"))
 end
+local pagecount_cache = {}
+
+function Linemode:pagecount()
+	local file = self._file
+	local path = tostring(file.url)
+
+	-- Skip directories
+	if file.cha.is_dir then
+		return ui.Line(string.format("%6s", "-"))
+	end
+
+	-- Only process PDF files (case-insensitive extension check)
+	if not path:lower():match("%.pdf$") then
+		return ui.Line(string.format("%6s", "-"))
+	end
+
+	-- Check cache
+	if pagecount_cache[path] then
+		return ui.Line(string.format("%6s", pagecount_cache[path]))
+	end
+
+	-- Only calculate for the hovered file to reduce load
+	local hovered = cx.active.current.hovered
+	if not hovered or tostring(hovered.url) ~= path then
+		return ui.Line(string.format("%6s", ""))
+	end
+
+	-- pdfinfo takes a filename argument; pipe to grep+awk inside the shell string
+	local handle = io.popen("pdfinfo " .. ya.quote(path) .. " 2>/dev/null | grep '^Pages:' | awk '{print $2}'")
+	if not handle then
+		pagecount_cache[path] = "ERR"
+		return ui.Line(string.format("%6s", "ERR"))
+	end
+
+	local result = handle:read("*a")
+	handle:close()
+
+	local count = tonumber(result:match("%d+"))
+	if count and count > 0 then
+		pagecount_cache[path] = tostring(count)
+		return ui.Line(string.format("%6s", tostring(count)))
+	end
+
+	pagecount_cache[path] = "-"
+	return ui.Line(string.format("%6s", "-"))
+end

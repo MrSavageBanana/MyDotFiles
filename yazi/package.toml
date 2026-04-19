@@ -63,5 +63,10 @@ use = "boydaihungst/relative-motions"
 rev = "d720b1c"
 hash = "cb389a36241ada4893796d89dd5da7a0"
 
+[[plugin.deps]]
+use = "pirafrank/what-size"
+rev = "179ebf6"
+hash = "57056b9728006881d580ccabe8154a9c"
+
 [flavor]
 deps = []

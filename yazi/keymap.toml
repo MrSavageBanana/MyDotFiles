@@ -38,7 +38,10 @@ keymap = [
 
 	# Navigation
 	{ on = "h", run = "leave", desc = "Back to the parent directory" },
-	{ on = "l", run = "plugin bypass smart-enter", desc = "Enter the child directory" },
+	#{ on = "l", run = "plugin bypass smart-enter", desc = "Enter the child directory" },
+	#{ on = "l", run = "plugin bypass", desc = "Enter the child directory" },
+	{ on = "l", run = "plugin smart-enter", desc = "Enter the child directory" },
+	#{ on = "l", run = "enter", desc = "Enter the child directory" },
 
 	{ on = "<Left>",  run = "leave", desc = "Back to the parent directory" },
 	{ on = "<Right>", run = "enter", desc = "Enter the child directory" },
@@ -68,6 +71,7 @@ keymap = [
 	# { on = [ "E" ], run = "plugin eza-preview",  desc = "Toggle tree/list dir preview" },
 	{ on = ["P","s"], run = "plugin pdfseparate", desc = "Split PDF pages (extract page range)" },
 	{ on = ["P","u"], run = "plugin pdfunite", desc = "Unite PDF files (merge selected PDFs)" },
+	{ on = ["P","u"], run = "plugin what-size", desc = "Calculate size of selected" },
 	
 	# Relative-motions
 	{ on = [ "1" ], run = "plugin relative-motions 1 ", desc = "Trigger Relative Motion" },
@@ -131,6 +135,7 @@ keymap = [
 	{ on = [ "M", "l" ], run = "linemode linecount",        desc = "Linemode: linecount" },
 	{ on = [ "M", "M" ], run = "linemode md5hash",        desc = "Linemode: md5hash" },
 	{ on = [ "M", "H" ], run = "linemode sha256hash",        desc = "Linemode: sha256hash" },
+	{ on = [ "M", "P" ], run = "linemode pagecount",        desc = "Linemode: PDF pagecount" },
 	
 	# Copy
 	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy the file path" },
