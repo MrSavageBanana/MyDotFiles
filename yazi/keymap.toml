@@ -4,9 +4,12 @@
 
 [mgr]
 
-# prepend_keymap = [
-#   { on = [ "E" ], run = "plugin simple-tag -- toggle-tag", desc = "Finder-style tag menu" },
-# ]
+prepend_keymap = [
+  { on = [ "E" ], run = "plugin simple-tag -- toggle-tag", desc = "Finder-style tag menu" },
+  { on = [ "<C-e>" ], run = "plugin simple-tag -- clear", desc = "Clear all tags from selection" },
+  { on = [ "M", "f" ], run = "plugin simple-tag -- filter --input --mode=or", desc = "Filter by tag" },
+  { on = [ "M", "F" ], run = "plugin simple-tag -- filter --input --mode=nor", desc = "Filter out by tag" },
+]
 
 keymap = [
 	{ on = "<Esc>", run = "escape",             desc = "Exit visual mode, clear selection, or cancel search" },
@@ -67,12 +70,13 @@ keymap = [
 	{ on = ["R","d"], run = "plugin recycle-bin -- delete", desc = "Delete from Trash" },
 	{ on = ["<C-s>"], run = "plugin kdeconnect-send", desc = "Send Selected Files via KDE Connect" },
 	{ on = "e", run = "plugin jump-to-char", desc = "Jump to char" },
-	# { on = "E", run = "plugin simple-tag -- toggle-tag", desc = "Tag Menu" },
+	{ on = "E", run = "plugin simple-tag -- toggle-tag", desc = "Tag Menu" },
 	# { on = [ "E" ], run = "plugin eza-preview",  desc = "Toggle tree/list dir preview" },
 	{ on = ["P","s"], run = "plugin pdfseparate", desc = "Split PDF pages (extract page range)" },
 	{ on = ["P","u"], run = "plugin pdfunite", desc = "Unite PDF files (merge selected PDFs)" },
-	{ on = ["P","u"], run = "plugin what-size", desc = "Calculate size of selected" },
-	
+	{ on = ["P","c"], run = "plugin what-size", desc = "Calculate size of selected" },
+	{ on = ["<C-p>" ], run = "plugin smart-paste", desc = "Paste into the hovered directory or CWD" },
+
 	# Relative-motions
 	{ on = [ "1" ], run = "plugin relative-motions 1 ", desc = "Trigger Relative Motion" },
 	{ on = [ "2" ], run = "plugin relative-motions 2 ", desc = "Trigger Relative Motion" },

@@ -54,19 +54,24 @@ rev = "aa88cd4"
 hash = "8b0e87c3176e0d44f79a8656f79f0fa"
 
 [[plugin.deps]]
-use = "boydaihungst/simple-tag"
-rev = "a971d5a"
-hash = "bd921661ea2be141a1ff182ed81d7012"
-
-[[plugin.deps]]
 use = "boydaihungst/relative-motions"
-rev = "d720b1c"
+rev = "=d720b1c"
 hash = "cb389a36241ada4893796d89dd5da7a0"
 
 [[plugin.deps]]
 use = "pirafrank/what-size"
 rev = "179ebf6"
 hash = "57056b9728006881d580ccabe8154a9c"
+
+[[plugin.deps]]
+use = "boydaihungst/simple-tag"
+rev = "=ef43e9f"
+hash = "fe1d215361ddbaead40da2cf607818e4"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-paste"
+rev = "442d908"
+hash = "3f8d49413bc8691b4c652eb417a20178"
 
 [flavor]
 deps = []

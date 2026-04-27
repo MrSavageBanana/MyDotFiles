@@ -21,30 +21,30 @@ require("relative-motions"):setup({
 --   enter_mode   = "first"
 -- })
 -- require("simple-tag"):setup({
---   ui_mode = "icon",
---   hints_disabled = false,
---   linemode_order = 1000,
+-- 	ui_mode = "icon",
+-- 	hints_disabled = false,
+-- 	linemode_order = 1000,
 --
---   tag_order = { "r", "o", "y", "g", "b", "p" },  -- Add this line!
+-- 	tag_order = { "r", "o", "y", "g", "b", "p" }, -- Add this line!
 --
---   colors = {
---     ["r"] = "#F85B52",
---     ["o"] = "#F6A137",
---     ["y"] = "#F5CE35",
---     ["g"] = "#4ECF64",
---     ["b"] = "#378CF8",
---     ["p"] = "#B46FD4",
---   },
+-- 	colors = {
+-- 		["r"] = "#F85B52",
+-- 		["o"] = "#F6A137",
+-- 		["y"] = "#F5CE35",
+-- 		["g"] = "#4ECF64",
+-- 		["b"] = "#378CF8",
+-- 		["p"] = "#B46FD4",
+-- 	},
 --
---   icons = {
---     default = "●",
---     ["r"] = "●",
---     ["o"] = "●",
---     ["y"] = "●",
---     ["g"] = "●",
---     ["b"] = "●",
---     ["p"] = "●",
---   },
+-- 	icons = {
+-- 		default = "●",
+-- 		["r"] = "●",
+-- 		["o"] = "●",
+-- 		["y"] = "●",
+-- 		["g"] = "●",
+-- 		["b"] = "●",
+-- 		["p"] = "●",
+-- 	},
 -- })
 -- Status:children_add(function(self)
 -- 	local h = self._current.hovered
@@ -248,3 +248,53 @@ function Linemode:pagecount()
 	pagecount_cache[path] = "-"
 	return ui.Line(string.format("%6s", "-"))
 end
+require("simple-tag"):setup({
+	-- UI display mode (icon, text, hidden)
+	ui_mode = "icon", -- (Optional)
+
+	-- Disable tag key hints (popup in bottom right corner)
+	hints_disabled = false, -- (Optional)
+
+	-- linemode order: adjusts icon/text position. For example, if you want icon to be on the most left of linemode then set linemode_order larger than 1000.
+	-- More info: https://github.com/sxyazi/yazi/blob/077faacc9a84bb5a06c5a8185a71405b0cb3dc8a/yazi-plugin/preset/components/linemode.lua#L4-L5
+	linemode_order = 500, -- (Optional)
+
+	-- You can backup/restore this folder within the same OS (Linux, windows, or MacOS).
+	-- But you can't restore backed up folder in the different OS because they use difference absolute path.
+	-- save_path =  -- full path to save tags folder (Optional)
+	--       - Linux/MacOS: os.getenv("HOME") .. "/.config/yazi/tags"
+	--       - Windows: os.getenv("APPDATA") .. "\\yazi\\config\\tags"
+
+	-- Set tag colors
+	colors = { -- (Optional)
+		-- Set this same value with `theme.toml` > [mgr] > hovered > reversed
+		-- Default theme use "reversed = true".
+		-- More info: https://github.com/sxyazi/yazi/blob/077faacc9a84bb5a06c5a8185a71405b0cb3dc8a/yazi-config/preset/theme-dark.toml#L25
+		-- Only need to set this if you use shipped/stable yazi <= v25.5.31 or nightly yazi installed before 11/12/2025
+		reversed = true, -- (Optional)
+		["r"] = "#F85B52",
+		["o"] = "#F6A137",
+		["y"] = "#F5CE35",
+		["g"] = "#4ECF64",
+		["b"] = "#378CF8",
+		["p"] = "#B46FD4",
+		-- More colors: https://yazi-rs.github.io/docs/configuration/theme#types.color
+		-- format: [tag key] = "color"
+	},
+
+	-- Set tag icons. Only show when ui_mode = "icon".
+	-- Any text or nerdfont icons should work as long as you use nerdfont to render yazi.
+	-- Default icon from mactag.yazi: ●; Some generic icons: , , 󱈤
+	-- More icon from nerd fonts: https://www.nerdfonts.com/cheat-sheet
+	icons = { -- (Optional)
+		-- default icon
+		-- format: [tag key] = "tag icon"
+		default = "●",
+		["r"] = "●",
+		["o"] = "●",
+		["y"] = "●",
+		["g"] = "●",
+		["b"] = "●",
+		["p"] = "●",
+	},
+})

@@ -19,8 +19,8 @@ title_format   = "Yazi: {cwd}"
 [preview]
 wrap            = "no"
 tab_size        = 2
-max_width       = 600
-max_height      = 900
+max_width       = 6000
+max_height      = 9000
 cache_dir       = ""
 image_delay     = 30
 image_filter    = "triangle"
@@ -109,7 +109,7 @@ micro_workers    = 10
 macro_workers    = 10
 bizarre_retry    = 3
 image_alloc      = 536870912  # 512MB
-image_bound      = [ 5000, 5000 ]
+image_bound      = [ 25000, 25000 ]
 suppress_preload = true
 
 [plugin]
@@ -119,9 +119,9 @@ prepend_fetchers = [
 ]
 
  append_fetchers = [
-   { id = "simple-tag", name = "*", run = "simple-tag" },
-   { id = "simple-tag", name = "*/", run = "simple-tag" },
- ]
+   { id = "simple-tag", url = "*",  run = "simple-tag", group = "simple-tag" },
+   { id = "simple-tag", url = "*/", run = "simple-tag", group = "simple-tag" },
+]
 
 spotters = [
 	{ name = "*/", run = "folder" },
