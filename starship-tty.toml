@@ -1,0 +1,27 @@
+format = """
+$directory
+$character
+"""
+
+add_newline = true
+
+[character]
+success_symbol = '[\$](white)' 
+error_symbol = '[\$](bold red)'
+
+[directory]
+style = "white"
+truncation_symbol = "…/"
+read_only = ""
+
+[python]
+disabled = true
+
+[git_branch]
+disabled = true
+
+[git_status]
+disabled = true
+
+[package]
+disabled = true
