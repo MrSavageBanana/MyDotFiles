@@ -1,0 +1,7 @@
+#!/bin/bash
+# Move to the docker folder
+cd /home/shayan/Docker/Windows/
+# Run the windows vm
+echo "Starting Windows..."
+sudo docker compose --file ./compose.yaml up && sleep 5 && xfreerdp3 /u:MyWindowsUser /p:MyWindowsPassword /v:127.0.0.1 /cert:tofu /dynamic-resolution
+

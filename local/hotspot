@@ -1,0 +1,9 @@
+#!/bin/bash
+while true; do
+	if nmcli -f SSID device wifi list | grep -q Shayanator; then
+		nmcli device wifi connect Shayanator
+		notify-send --urgency low "Connected to Hotspot"
+		break
+	fi
+	sleep 2
+done
