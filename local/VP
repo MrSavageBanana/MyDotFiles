@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+dirs=(
+    "Profile 7"
+    "Profile 6"
+    "Profile 5"
+    "Profile 4"
+    "Profile 3"
+    "Profile 2"
+    "Profile 1"
+)
+
+names=(
+    "7. Pics"
+    "6. Amy"
+    "5. Burhan"
+    "4. TT"
+    "3. Unscripted"
+    "2. Nasr"
+    "1. Milo"
+)
+
+if [[ ${#dirs[@]} -ne ${#names[@]} ]]; then
+    echo "Error: Array length mismatch." >&2
+    exit 1
+fi
+
+# 1. Added -m for multi-select. 
+# Use TAB to mark items and ENTER to confirm.
+selected_names=$(printf '%s\n' "${names[@]}" | fzf -m --prompt="Vivaldi Profiles› " --height=40% --border --no-sort)
+
+[[ -z "$selected_names" ]] && exit 0
+
+# 2. Loop through each line in the selection
+echo "$selected_names" | while read -r selected; do
+    profile_dir=""
+    
+    # Find matching directory
+    for i in "${!names[@]}"; do
+        if [[ "${names[$i]}" == "$selected" ]]; then
+            profile_dir="${dirs[$i]}"
+            break
+        fi
+    done
+
+    if [[ -n "$profile_dir" ]]; then
+        # 3. Launch each profile
+        echo "loading" > /tmp/rofi_status
+        hyprctl dispatch exec "/usr/bin/vivaldi-stable --remote-debugging-port=9222 --profile-directory=\"$profile_dir\""
+    fi
+done
+
+# Clear status once after launching starts
+hyprctl dispatch exec "bash -c 'sleep 1 && echo \"\" > /tmp/rofi_status'"
