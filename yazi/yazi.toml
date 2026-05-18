@@ -56,7 +56,10 @@ play = [
 	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
 pdff = [
-	{ run = 'fancy-cat "$@"', desc = "open in fancy-cat", block = true, for = "unix" },
+	{ run = 'fancy-cat "$@"', desc = "open in fancy-cat", block = true, orphan = true, for = "unix" },
+]
+docview = [
+	{ run = 'evince "$@"', desc = "open in papers", block = false, orphan = true, for = "unix"}
 ]
 micro= [
 	{ run = 'micro "$@"', desc = "open in micro", block = true, for = "unix" },
@@ -96,7 +99,7 @@ rules = [
 	# Empty file
 	{ mime = "inode/empty", use = [ "edit", "exif", "reveal" ] },
 	# PDFS
-	{mime = "application/pdf", use = [ "pdff", "exif", "reveal" ] },
+	{mime = "application/pdf", use = [ "pdff", "docview", "exif", "reveal" ] },
 	# Fallback
 	{ name = "*", use = [ "edit", "open", "exif", "reveal" ] },
 ]

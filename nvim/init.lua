@@ -34,9 +34,20 @@ vim.diagnostic.config({
 	virtual_text = false,
 	float = { border = "rounded" },
 })
-
+-- Custom keymap
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostic" })
-
+-- DISABLING MOUSE
+vim.opt.mouse = "a"
+vim.keymap.set({ "n", "i", "v" }, "<ScrollWheelDown>", "<C-e>")
+vim.keymap.set({ "n", "i", "v" }, "<ScrollWheelUp>", "<C-y>")
+-- Disable left click and left drag in Normal, Visual, and Insert modes
+local modes = { "n", "v", "i" }
+for _, mode in ipairs(modes) do
+	vim.keymap.set(mode, "<LeftMouse>", "<Nop>")
+	vim.keymap.set(mode, "<LeftDrag>", "<Nop>")
+	vim.keymap.set(mode, "<2-LeftMouse>", "<Nop>") -- Disables double click
+end
+-- Conceal custom command
 local _conceal_counter = 0
 
 vim.api.nvim_create_user_command("Conceal", function(opts)
