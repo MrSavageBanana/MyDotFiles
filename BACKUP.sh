@@ -3,10 +3,7 @@
 echo() {
     builtin echo -e "\033[7m >>> $* <<< \033[0m"
 }
-run() {
-    "$@" || echo "WARNING: command failed: $*"
-}
-pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'rmpc' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract-data-eng' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp')
+pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'rmpc' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract-data-eng' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp' 'neovim' )
 aur_packages=( 'brother-mfc-l2740dw' 'hyprkcs-git' 'waynergy' 'auto-cpufreq' 'peaclock' 'libinput-gestures' 'pacfetch' 'python-jpegtran-cffi-git' 'fbida')
 flatpak_packages=( 'com.oppzippy.OpenSCQ30' 'org.gnome.gitlab.YaLTeR.Identity' 'org.gnome.Characters' 'org.kde.kruler')
 brew_packages=('eza' 'bat' 'thefuck' 'tldr' 'grex' 'asciinema' 'stylua' 'prettier' 'tree-sitter-latex' 'tree-sitter-yaml' 'tree-sitter-markdown' 'fancy-cat' 'lm_sensors' 'starship' 'croc')
@@ -17,12 +14,13 @@ echo "starting setup..."
 cd ~
 echo "Updating system"
 sudo pacman -Syu
-echo "Installing All Pacman Packages"
 echo "Installing Yay"
 sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
 cd ~
+echo "Installing All Pacman Packages"
 sudo pacman -S "${pacman_packages[@]}"
 if command -v xdg-user-dirs-update; then
+	echo "CREATING FOLDER STRUCTURE"
 	xdg-user-dirs-update
 	cd ~/Desktop
 	rm *
@@ -39,6 +37,9 @@ fi
 #echo "xdg-user-dirs-update"
 #xdg-user-dirs-update 
 #rmdir Desktop
+# I need to download rust before the yay packages because they always ask me about rust or rustup and it screws up the rest so this can hopefull fix it
+echo "Installing Rustup"
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh 
 if command -v yay; then
 	echo "Installing All AUR Packages"
 	yay -S "${aur_packages[@]}"
@@ -46,6 +47,7 @@ else
 	echo "INSTALL AUR PACKAGES YOURSELF"
 fi
 
+# SOMETHING IS FUCKED
 # flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flatpaks  there is no evidence this needs to be run. 
 if command -v flatpak; then
 	echo "Installing All Flatpak Packages"
@@ -54,22 +56,15 @@ else
 	echo "INSTALL FLATPAK PACKAGES YOURSELF"
 fi
 echo "Installing Homebrew"
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 if command -v brew; then
 	echo "Installing All Homebrew Packages"
 	brew install "${brew_packages[@]}"
 else 
 	echo "INSTALL BREW PACKAGES YOURSELF"
 fi
-echo "Installing Rustup"
-curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh 
 # echo "Installing tailscale"
 # curl -fsSL https://tailscale.com/install.sh | sh 
-if command -v tailscale; then
-	sudo tailscale up
-else
-	echo "AUTHENTICATE TAILSCALE YOURSELF"
-fi
 echo "installing atuin"
 bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
 #echo "Installing starship"
@@ -133,7 +128,7 @@ if [ -d "MyDotFiles" ] ; then
 	sudo cp -r ~/MyDotFiles/u/s/ /usr/share/fonts
 	sudo cp -r ~/MyDotFiles/l/s/ ~/.local/share/fonts
 	fc-cache -fv
-	if [[ -d "~/.local/bin" ]]; then
+	if [[ -d "$HOME/.local/bin" ]]; then
 		echo "Copying ~/.local/bin files"
 		cd /home/shayan/MyDotFiles/local
 		cp * ~/.local/bin
@@ -159,6 +154,11 @@ echo "Adding shayan to groups"
 for service in "${groups[@]}"; do
 	sudo usermod -aG "$service" shayan
 done
+if command -v tailscale; then
+	sudo tailscale up
+else
+	echo "AUTHENTICATE TAILSCALE YOURSELF"
+fi
 echo "Finished. run ~/.bashrc. "
 #atuin init bash --disable-ctrl-r --disable-up-arrow > ~/.atuin_static_init.sh && sed -i 's/ATUIN_SESSION=$(atuin uuid)/ATUIN_SESSION=$(cat \/proc\/sys\/kernel\/random\/uuid)/' ~/.atuin_static_init.sh
 echo "run: line 158"
