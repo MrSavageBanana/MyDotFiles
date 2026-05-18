@@ -53,8 +53,9 @@ fi
 #xdg-user-dirs-update 
 #rmdir Desktop
 # I need to download rust before the yay packages because they always ask me about rust or rustup and it screws up the rest so this can hopefull fix it
-echo "Installing Rustup"
+echo "Installing Rustup MANUALLY"
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh 
+echo "ENDED RUSTUP MANUALLY"
 if command -v yay; then
 	echo "Installing All AUR Packages"
 	yay -S "${aur_packages[@]}"
