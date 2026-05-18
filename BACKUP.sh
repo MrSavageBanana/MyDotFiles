@@ -3,10 +3,10 @@
 echo() {
     builtin echo -e "\033[7m >>> $* <<< \033[0m"
 }
-pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract-data-eng' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp' 'neovim' 'pipewire-pulse' 'task' )
-aur_packages=( 'brother-mfc-l2740dw' 'hyprkcs-git' 'waynergy' 'auto-cpufreq' 'peaclock' 'libinput-gestures' 'pacfetch' 'python-jpegtran-cffi-git' 'fbida' 'rmpc-git' )
+pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract-data-eng' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp' 'neovim' 'pipewire-pulse' 'task' 'starship' 'eza' 'bat' 'thefuck' 'tealdeer' 'croc' )
+aur_packages=( 'brother-mfc-l2740dw' 'hyprkcs-git' 'waynergy' 'auto-cpufreq' 'peaclock' 'libinput-gestures' 'pacfetch' 'python-jpegtran-cffi-git' 'fbida' 'rmpc-git' 'tree-sitter-latex' 'tree-sitter-yaml' 'tree-sitter-markdown' )
 flatpak_packages=( 'com.oppzippy.OpenSCQ30' 'org.gnome.gitlab.YaLTeR.Identity' 'org.gnome.Characters' 'org.kde.kruler')
-brew_packages=('eza' 'bat' 'thefuck' 'tldr' 'grex' 'asciinema' 'stylua' 'prettier' 'tree-sitter-cli' 'tree-sitter-yaml' 'tree-sitter-markdown' 'fancy-cat' 'lm_sensors' 'starship' 'croc' 'unzip' )
+brew_packages=( 'grex' 'asciinema' 'stylua' 'prettier' 'fancy-cat' 'lm_sensors' 'unzip' )
 system_services=( 'cups.path' 'auto-cpufreq.service' 'avahi-daemon.service' 'bluetooth.service' 'cups.service' 'docker.service' 'libvirtd.service' 'NetworkManager-dispatcher.service' 'NetworkManager-wait-online.service' 'NetworkManager.service' 'sshd.service' 'systemd-resolved.service' 'systemd-timesyncd.service' 'tailscaled.service' 'tlp.service' 'ufw.service' 'avahi-daemon.socket' 'cups.socket' 'libvirtd-admin.socket' 'libvirtd-ro.socket' 'libvirtd.socket' 'systemd-resolved-monitor.socket' 'systemd-resolved-varlink.socket' 'systemd-userdbd.socket' 'virtlockd-admin.socket' 'virtlockd.socket' 'virtlogd-admin.socket' 'virtlogd.socket' 'remote-fs.target' 'fstrim.timer')
 user_services=( 'mpd.service' 'syncthing.service' 'wireplumber.service' 'xdg-user-dirs.service' 'p11-kit-server.socket' 'pipewire-pulse.socket' 'pipewire.socket' 'pipewire-pulse.service' ) 
 groups=('lp' 'docker' 'libvirt')
@@ -23,6 +23,7 @@ echo "Cloning Yay Repo"
 git clone https://aur.archlinux.org/yay.git
 echo "Compiling Yay"
 cd yay && makepkg -si
+echo "Going to HOME"
 cd ~
 echo "Installing All Pacman Packages"
 # for loop created with Claude. Account: Milobowler
@@ -61,15 +62,6 @@ else
 	echo "INSTALL AUR PACKAGES YOURSELF"
 fi
 
-# SOMETHING IS FUCKED
-# flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flatpaks  there is no evidence this needs to be run. 
-if command -v flatpak; then
-	sleep 2 # maybe this can stop the random answer of "n" when flatpak asks to install stuff 
-	echo "Installing All Flatpak Packages"
-	flatpak install flathub "${flatpak_packages[@]}"
-else
-	echo "INSTALL FLATPAK PACKAGES YOURSELF"
-fi
 echo "Installing Homebrew"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
@@ -85,6 +77,16 @@ echo "installing atuin"
 bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
 #echo "Installing starship"
 #curl -sS https://starship.rs/install.sh | sh 
+# SOMETHING IS FUCKED
+# flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flatpaks  there is no evidence this needs to be run. 
+echo "ATTEMPTING FLATPAK INSTALL"
+if command -v flatpak; then
+	sleep 2 # maybe this can stop the random answer of "n" when flatpak asks to install stuff 
+	echo "Installing All Flatpak Packages"
+	flatpak install flathub "${flatpak_packages[@]}"
+else
+	echo "INSTALL FLATPAK PACKAGES YOURSELF"
+fi
 if command -v starship; then
 	starship init bash > ~/.starship_static_init.sh
 else
