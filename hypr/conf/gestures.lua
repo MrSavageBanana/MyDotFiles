@@ -8,7 +8,7 @@
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
 
 -- 4-finger directional swipes = move focus
-hl.gesture({ fingers = 4, direction = "left",  action = "movefocus l" })
-hl.gesture({ fingers = 4, direction = "right", action = "movefocus r" })
-hl.gesture({ fingers = 4, direction = "up",    action = "movefocus u" })
-hl.gesture({ fingers = 4, direction = "down",  action = "movefocus d" })
+-- hl.gesture({ fingers = 4, direction = "left",  action = hl.dsp.exec_cmd("hyprctl dispatch movefocus l") })
+-- hl.gesture({ fingers = 4, direction = "right", action = hl.dsp.exec_cmd("hyprctl dispatch movefocus r") })
+-- hl.gesture({ fingers = 4, direction = "up",    action = hl.dsp.exec_cmd("hyprctl dispatch movefocus u") })
+-- hl.gesture({ fingers = 4, direction = "down",  action = hl.dsp.exec_cmd("hyprctl dispatch movefocus d") })
