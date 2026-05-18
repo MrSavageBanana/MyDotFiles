@@ -11,7 +11,7 @@ hl.config({
 })
 
 -- Animation curves (bezier definitions)
-hl.curve( "linear", { type = "bezier", points = { {0, 0}, {1, 1}
+hl.curve( "linear", { type = "bezier", points = { {0, 0}, {1, 1} } })
 hl.curve("md3_standard", { type = "bezier", points = { {0.2, 0}, {0, 1} } })
 hl.curve("md3_decel", { type = "bezier", points = { {0.05, 0.7}, {0.1, 1} } })
 hl.curve("md3_accel", { type = "bezier", points = { {0.3, 0}, {0.8, 0.15} } })
