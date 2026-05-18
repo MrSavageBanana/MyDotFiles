@@ -1,8 +1,12 @@
 #!/bin/bash
+# Override the standard echo command globally
+echo() {
+    builtin echo -e "\033[7m >>> $* <<< \033[0m"
+}
 run() {
     "$@" || echo "WARNING: command failed: $*"
 }
-pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'rmpc' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'hyprdvd' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler-utils' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp')
+pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'rmpc' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract-data-eng' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp')
 aur_packages=( 'brother-mfc-l2740dw' 'hyprkcs-git' 'waynergy' 'auto-cpufreq' 'peaclock' 'libinput-gestures' 'pacfetch' 'python-jpegtran-cffi-git' 'fbida')
 flatpak_packages=( 'com.oppzippy.OpenSCQ30' 'org.gnome.gitlab.YaLTeR.Identity' 'org.gnome.Characters' 'org.kde.kruler')
 brew_packages=('eza' 'bat' 'thefuck' 'tldr' 'grex' 'asciinema' 'stylua' 'prettier' 'tree-sitter-latex' 'tree-sitter-yaml' 'tree-sitter-markdown' 'fancy-cat' 'lm_sensors' 'starship' 'croc')
@@ -16,13 +20,17 @@ sudo pacman -Syu
 echo "Installing All Pacman Packages"
 echo "Installing Yay"
 sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+cd ~
 sudo pacman -S "${pacman_packages[@]}"
 if command -v xdg-user-dirs-update; then
 	xdg-user-dirs-update
+	cd ~/Desktop
+	rm *
+	cd ~
 	rmdir ~/Desktop
-	mkdir ~/Downloads/Code/
+	mkdir -p  ~/Downloads/Code/
 	mkdir ~/Music_new
-	mkdir ~/Downloads/Git_Cloned/
+	mkdir -p ~/Downloads/Git_Cloned/
 	mv ~/yay ~/Downloads/Git_Cloned
 else 
 	echo "RUN xdg-user-dirs-update YOURSELF"
@@ -64,7 +72,6 @@ else
 fi
 echo "installing atuin"
 bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
-atuin init bash --disable-ctrl-r --disable-up-arrow > ~/.atuin_static_init.sh && sed -i 's/ATUIN_SESSION=$(atuin uuid)/ATUIN_SESSION=$(cat \/proc\/sys\/kernel\/random\/uuid)/' ~/.atuin_static_init.sh 
 #echo "Installing starship"
 #curl -sS https://starship.rs/install.sh | sh 
 if command -v starship; then
@@ -75,7 +82,7 @@ fi
 if command -v fzf; then
 	fzf --bash > ~/.fzf_static.bash
 else
-	"RUN fzf --bash > ~/.fzf_static.bash YOURSELF"
+	echo "RUN fzf --bash > ~/.fzf_static.bash YOURSELF"
 fi
 echo "Installing Dotfiles"
 git clone https://github.com/MrSavageBanana/MyDotFiles.git 
@@ -94,39 +101,55 @@ if [ -d "MyDotFiles" ] ; then
 	cp -r yazi ~/.config/yazi
 	cp starship.toml ~/.config
 	cp starship-tty.toml ~/.config
-	cp atuin/config.toml ~/.config/atuin
+	if [[ -d "~/.config/atuin" ]]; then
+		cp atuin/config.toml ~/.config/atuin
+	else 
+		echo "ATUIN WASN'T INSTALLED"
+	fi
 	cp .bash-preexec.sh ~
 	cp .dircolors_cache ~
 	cp .bashrc ~
 	if command -v zoxide; then
 		zoxide init bash > ~/.zoxide-init.bash
 	fi
-	source ~/.bashrc
 	mkdir ~/.mydotfiles
 	cp sync_dots.sh  ~/.mydotfiles/
 	cp -r VivaldiCSS ~/Downloads/VivaldiCSS
 	if command -v python3; then
 		echo "installing pywal"
 		python3 -m venv .wal
-		source .wal/bin/activate 
-		pip install nu-pywal
-		echo "applying pywal"
-		wal -i ~/MyDotFiles/Wallpapers/greyscaled.jpg
-		deactivate
+		if [[ -d ".wal" ]]; then
+			source .wal/bin/activate 
+			cd .wal/bin/activate 
+			pip install nu-pywal
+		fi
+		if [[ -e ".wal/bin/wal" ]]; then
+			echo "applying pywal"
+			wal -i ~/MyDotFiles/Wallpapers/greyscaled.jpg
+			deactivate
+		fi
 	fi
 	echo "Installing Fonts"
-	cp -r ~/MyDotFiles/u/s/fonts /usr/share/fonts
-	cp -r ~/MyDotFiles/l/s/fonts ~/.local/share/fonts
+	sudo cp -r ~/MyDotFiles/u/s/ /usr/share/fonts
+	sudo cp -r ~/MyDotFiles/l/s/ ~/.local/share/fonts
 	fc-cache -fv
-	echo "Copying ~/.local/bin files"
-	cd /home/shayan/MyDotFiles/local
-	cp * ~/.local/bin
+	if [[ -d "~/.local/bin" ]]; then
+		echo "Copying ~/.local/bin files"
+		cd /home/shayan/MyDotFiles/local
+		cp * ~/.local/bin
+	else
+		echo "Copying Local files didn't work"
+	fi
 fi
 echo "Editing .desktop files"
 cd /usr/share/applications
 RemoveFromRofiResults=( 'nvim.desktop' 'mpv.desktop' 'micro.desktop' 'vivaldi-stable.desktop' 'btop.desktop' 'kitty.desktop' 'rofi.desktop' 'yazi.desktop')
 for results in "${RemoveFromRofiResults[@]}"; do
-	mv "$results" "$results.bak"
+	if [[ -e $results ]]; then
+		sudo mv "$results" "$results.bak"
+	else 
+		echo "$results doesn't exist so won't be renamed"
+	fi
 done
 cd ~ || true
 echo "Enabling Services"
@@ -137,6 +160,8 @@ for service in "${groups[@]}"; do
 	sudo usermod -aG "$service" shayan
 done
 echo "Finished. run ~/.bashrc. "
+#atuin init bash --disable-ctrl-r --disable-up-arrow > ~/.atuin_static_init.sh && sed -i 's/ATUIN_SESSION=$(atuin uuid)/ATUIN_SESSION=$(cat \/proc\/sys\/kernel\/random\/uuid)/' ~/.atuin_static_init.sh
+echo "run: line 158"
 # Directories touched
 # /usr/share/applications
 # 	nvim.desktop.bak
