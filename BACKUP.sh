@@ -3,32 +3,41 @@
 echo() {
     builtin echo -e "\033[7m >>> $* <<< \033[0m"
 }
-pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'rmpc' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract-data-eng' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp' 'neovim' )
+pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'rmpc' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract-data-eng' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp' 'neovim' 'pipewire-pulse' )
 aur_packages=( 'brother-mfc-l2740dw' 'hyprkcs-git' 'waynergy' 'auto-cpufreq' 'peaclock' 'libinput-gestures' 'pacfetch' 'python-jpegtran-cffi-git' 'fbida')
 flatpak_packages=( 'com.oppzippy.OpenSCQ30' 'org.gnome.gitlab.YaLTeR.Identity' 'org.gnome.Characters' 'org.kde.kruler')
 brew_packages=('eza' 'bat' 'thefuck' 'tldr' 'grex' 'asciinema' 'stylua' 'prettier' 'tree-sitter-latex' 'tree-sitter-yaml' 'tree-sitter-markdown' 'fancy-cat' 'lm_sensors' 'starship' 'croc' 'unzip' )
 system_services=( 'cups.path' 'auto-cpufreq.service' 'avahi-daemon.service' 'bluetooth.service' 'cups.service' 'docker.service' 'libvirtd.service' 'NetworkManager-dispatcher.service' 'NetworkManager-wait-online.service' 'NetworkManager.service' 'sshd.service' 'systemd-resolved.service' 'systemd-timesyncd.service' 'tailscaled.service' 'tlp.service' 'ufw.service' 'avahi-daemon.socket' 'cups.socket' 'libvirtd-admin.socket' 'libvirtd-ro.socket' 'libvirtd.socket' 'systemd-resolved-monitor.socket' 'systemd-resolved-varlink.socket' 'systemd-userdbd.socket' 'virtlockd-admin.socket' 'virtlockd.socket' 'virtlogd-admin.socket' 'virtlogd.socket' 'remote-fs.target' 'fstrim.timer')
-user_services=( 'mpd.service' 'syncthing.service' 'wireplumber.service' 'xdg-user-dirs.service' 'p11-kit-server.socket' 'pipewire-pulse.socket' 'pipewire.socket') 
+user_services=( 'mpd.service' 'syncthing.service' 'wireplumber.service' 'xdg-user-dirs.service' 'p11-kit-server.socket' 'pipewire-pulse.socket' 'pipewire.socket' 'pipewire-pulse.service' ) 
 groups=('lp' 'docker' 'libvirt')
 echo "starting setup..."
 cd ~
 echo "Updating system"
 sudo pacman -Syu
+# Get my current .bashrc so everything which is needed is already there.
+curl https://raw.githubusercontent.com/MrSavageBanana/MyDotFiles/refs/heads/main/.bashrc > ~/.bashrc
 echo "Installing Yay"
-sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+echo "Installing Yay Dependencies"
+sudo pacman -S --needed git base-devel go 
+echo "Cloning Yay Repo"
+git clone https://aur.archlinux.org/yay.git
+echo "Compiling Yay"
+cd yay && makepkg -si
 cd ~
 echo "Installing All Pacman Packages"
 sudo pacman -S "${pacman_packages[@]}"
 if command -v xdg-user-dirs-update; then
 	echo "CREATING FOLDER STRUCTURE"
 	xdg-user-dirs-update
-	cd ~/Desktop
-	rm *
 	cd ~
 	rmdir ~/Desktop
+	echo "REMOVED DESKTOP FOLDER"
 	mkdir -p  ~/Downloads/Code/
+	echo "CREATED CODE FOLDER"
 	mkdir ~/Music_new
+	echo "CREATED MUSIC FOLDER"
 	mkdir -p ~/Downloads/Git_Cloned/
+	echo "CREATED GIT_CLONED FOLDER"
 	mv ~/yay ~/Downloads/Git_Cloned
 else 
 	echo "RUN xdg-user-dirs-update YOURSELF"
@@ -50,6 +59,7 @@ fi
 # SOMETHING IS FUCKED
 # flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flatpaks  there is no evidence this needs to be run. 
 if command -v flatpak; then
+	sleep 2 # maybe this can stop the random answer of "n" when flatpak asks to install stuff 
 	echo "Installing All Flatpak Packages"
 	flatpak install flathub "${flatpak_packages[@]}"
 else
@@ -57,6 +67,7 @@ else
 fi
 echo "Installing Homebrew"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
 if command -v brew; then
 	echo "Installing All Homebrew Packages"
 	brew install "${brew_packages[@]}"
@@ -93,17 +104,18 @@ if [ -d "MyDotFiles" ] ; then
 	cp -r rmpc ~/.config/rmpc
 	cp -r rofi ~/.config/rofi
 	cp -r waybar ~/.config/waybar
+	chmod +x ~/.config/waybar/scripts/privacy_dots.sh
 	cp -r yazi ~/.config/yazi
 	cp starship.toml ~/.config
 	cp starship-tty.toml ~/.config
-	if [[ -d "~/.config/atuin" ]]; then
+	if [[ -d "$HOME/.config/atuin" ]]; then
+		rm "$HOME/.config/atuin/config.toml"
 		cp atuin/config.toml ~/.config/atuin
 	else 
 		echo "ATUIN WASN'T INSTALLED"
 	fi
 	cp .bash-preexec.sh ~
 	cp .dircolors_cache ~
-	cp .bashrc ~
 	if command -v zoxide; then
 		zoxide init bash > ~/.zoxide-init.bash
 	fi
@@ -112,28 +124,34 @@ if [ -d "MyDotFiles" ] ; then
 	cp -r VivaldiCSS ~/Downloads/VivaldiCSS
 	if command -v python3; then
 		echo "installing pywal"
+		echo "creating virtual environment"
 		python3 -m venv .wal
 		if [[ -d ".wal" ]]; then
+			echo "entering environment"
 			source .wal/bin/activate 
-			cd .wal/bin/activate 
 			pip install nu-pywal
 		fi
 		if [[ -e ".wal/bin/wal" ]]; then
 			echo "applying pywal"
-			wal -i ~/MyDotFiles/Wallpapers/greyscaled.jpg
+			wal -i ~/MyDotFiles/wallpapers/greyscaled.jpg
 			deactivate
 		fi
 	fi
 	echo "Installing Fonts"
-	sudo cp -r ~/MyDotFiles/u/s/ /usr/share/fonts
-	sudo cp -r ~/MyDotFiles/l/s/ ~/.local/share/fonts
+	cd ~/MyDotFiles/u/s/
+	sudo cp * /usr/share/fonts
+	cd ~/MyDotFiles/l/s/fonts/
+	sudo cp * ~/.local/share/fonts
+	cd ~
 	fc-cache -fv
+	mkdir -p "$HOME/.local/bin"
 	if [[ -d "$HOME/.local/bin" ]]; then
 		echo "Copying ~/.local/bin files"
 		cd /home/shayan/MyDotFiles/local
 		cp * ~/.local/bin
+		chmod +x ~/.local/bin/rofi-run-wrapper.sh
 	else
-		echo "Copying Local files didn't work"
+		echo "Copying Local files (somehow) didn't work"
 	fi
 fi
 echo "Editing .desktop files"
@@ -155,7 +173,7 @@ for service in "${groups[@]}"; do
 	sudo usermod -aG "$service" shayan
 done
 echo "AUTHENTICATE TAILSCALE YOURSELF"
-echo "Finished. run ~/.bashrc. "
+echo "Finished. run source ~/.bashrc. "
 #atuin init bash --disable-ctrl-r --disable-up-arrow > ~/.atuin_static_init.sh && sed -i 's/ATUIN_SESSION=$(atuin uuid)/ATUIN_SESSION=$(cat \/proc\/sys\/kernel\/random\/uuid)/' ~/.atuin_static_init.sh
 echo "run: line 158"
 # Directories touched
@@ -164,6 +182,11 @@ echo "run: line 158"
 # 	mpv.desktop.bak
 # 	micro.desktop.bak
 # 	vivaldi-stable.desktop.bak
+# 	kitty.desktop.bak
+# 	micro.desktop.bak
+# 	btop.desktop.bak
+# 	rofi.desktop.bak
+# 	yazi.desktop.bak
 # ~/.local/bin
 # 	hotspot
 # 	rofi-run-wrapper.sh
@@ -180,7 +203,7 @@ echo "run: line 158"
 # 	.bash-preexec.sh
 # 	.dircolors_cache
 # 	.fzf_static.bash
-# 	.starship_static_init.sh
+### 	.starship_static_init.sh 
 # 	.zoxide-init.bash
 # 	.mydotfiles/sync_dots.sh
 # 	~/Music_new/
