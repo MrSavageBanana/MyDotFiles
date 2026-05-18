@@ -6,7 +6,7 @@ echo() {
 pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'rmpc' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract-data-eng' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp' 'neovim' )
 aur_packages=( 'brother-mfc-l2740dw' 'hyprkcs-git' 'waynergy' 'auto-cpufreq' 'peaclock' 'libinput-gestures' 'pacfetch' 'python-jpegtran-cffi-git' 'fbida')
 flatpak_packages=( 'com.oppzippy.OpenSCQ30' 'org.gnome.gitlab.YaLTeR.Identity' 'org.gnome.Characters' 'org.kde.kruler')
-brew_packages=('eza' 'bat' 'thefuck' 'tldr' 'grex' 'asciinema' 'stylua' 'prettier' 'tree-sitter-latex' 'tree-sitter-yaml' 'tree-sitter-markdown' 'fancy-cat' 'lm_sensors' 'starship' 'croc')
+brew_packages=('eza' 'bat' 'thefuck' 'tldr' 'grex' 'asciinema' 'stylua' 'prettier' 'tree-sitter-latex' 'tree-sitter-yaml' 'tree-sitter-markdown' 'fancy-cat' 'lm_sensors' 'starship' 'croc' 'unzip' )
 system_services=( 'cups.path' 'auto-cpufreq.service' 'avahi-daemon.service' 'bluetooth.service' 'cups.service' 'docker.service' 'libvirtd.service' 'NetworkManager-dispatcher.service' 'NetworkManager-wait-online.service' 'NetworkManager.service' 'sshd.service' 'systemd-resolved.service' 'systemd-timesyncd.service' 'tailscaled.service' 'tlp.service' 'ufw.service' 'avahi-daemon.socket' 'cups.socket' 'libvirtd-admin.socket' 'libvirtd-ro.socket' 'libvirtd.socket' 'systemd-resolved-monitor.socket' 'systemd-resolved-varlink.socket' 'systemd-userdbd.socket' 'virtlockd-admin.socket' 'virtlockd.socket' 'virtlogd-admin.socket' 'virtlogd.socket' 'remote-fs.target' 'fstrim.timer')
 user_services=( 'mpd.service' 'syncthing.service' 'wireplumber.service' 'xdg-user-dirs.service' 'p11-kit-server.socket' 'pipewire-pulse.socket' 'pipewire.socket') 
 groups=('lp' 'docker' 'libvirt')
@@ -56,7 +56,7 @@ else
 	echo "INSTALL FLATPAK PACKAGES YOURSELF"
 fi
 echo "Installing Homebrew"
-sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 if command -v brew; then
 	echo "Installing All Homebrew Packages"
 	brew install "${brew_packages[@]}"
@@ -154,11 +154,7 @@ echo "Adding shayan to groups"
 for service in "${groups[@]}"; do
 	sudo usermod -aG "$service" shayan
 done
-if command -v tailscale; then
-	sudo tailscale up
-else
-	echo "AUTHENTICATE TAILSCALE YOURSELF"
-fi
+echo "AUTHENTICATE TAILSCALE YOURSELF"
 echo "Finished. run ~/.bashrc. "
 #atuin init bash --disable-ctrl-r --disable-up-arrow > ~/.atuin_static_init.sh && sed -i 's/ATUIN_SESSION=$(atuin uuid)/ATUIN_SESSION=$(cat \/proc\/sys\/kernel\/random\/uuid)/' ~/.atuin_static_init.sh
 echo "run: line 158"
