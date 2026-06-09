@@ -28,7 +28,7 @@ local mainMod = "SUPER"
 --   hsel("move", 'workspace = "m+1"', "move", 'workspace = "m+1", follow = false')
 -- created with Claude. Account: Milobowler
 hl.bind(
-	mainMod .. "+ F1",
+	mainMod .. " + SHIFT + F1",
 	hl.dsp.exec_cmd(
 		"bash -c 'pkill -f whichkey-listen.sh; sleep 0.2; ~/.config/hypr/hyprvim/scripts/whichkey-listen.sh &'"
 	)
@@ -128,9 +128,6 @@ hl.bind(
 	{ release = true, submap_universal = true }
 )
 
-hl.bind(mainMod .. " + D", function()
-	hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/gotospecial.sh dashboard"))
-end, { description = "Go to Dashboard" })
 -- Region screenshot to swappy
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd([[grim -g "$(slurp)" - | swappy -f -]]))
 
@@ -145,6 +142,7 @@ hl.bind(
 	hl.dsp.exec_cmd("~/.config/hypr/scripts/vimviva.sh Up   Control_L k"),
 	{ repeating = true, submap_universal = true }
 )
+
 -- Vivaldi: focus tab bar, then open tab context menu
 hl.bind(
 	mainMod .. " + X",
@@ -155,9 +153,11 @@ hl.bind(
 )
 -- Just context menu
 hl.bind(
-	mainMod .. " + Z",
-	hl.dsp.exec_cmd([[hyprctl eval 'hl.dispatch(hl.dsp.send_shortcut({ mods = "SHIFT", key = "F10" }))']]),
-	{ submap_universal = true }
+	mainMod .. " + SHIFT + X",
+	hl.dsp.exec_cmd(
+		[[hyprctl eval 'hl.dispatch(hl.dsp.send_shortcut({ mods = "SHIFT", key = "F10" }))']],
+		{ submap_universal = true }
+	)
 )
 
 -- Exit Hyprland (long press, so it can't be accidental)
@@ -168,21 +168,13 @@ hl.bind(mainMod .. " + N", hl.dsp.exit(), { long_press = true, submap_universal 
 -- ============================================================================
 
 -- Close
-hl.bind(mainMod .. " + C", function()
-	-- This tag closing isn't closing multiple. I don't like that.
-	hl.dispatch(hl.dsp.window.close({ window = "tag:selected" }))
-	hl.dispatch(hl.dsp.window.close())
-end, { submap_universal = true })
--- Kill
-hl.bind(mainMod .. " + C", function()
-	hl.dispatch(hl.dsp.window.kill({ window = "tag:selected" }))
-	hl.dispatch(hl.dsp.window.kill())
-end, { long_press = true, locked = true, submap_universal = true })
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hsel("close")), { submap_universal = true })
 
-hl.bind(mainMod .. " + Q", function()
-	hl.dispatch(hl.dsp.window.kill({ window = "tag:selected" }))
-	hl.dispatch(hl.dsp.window.kill())
-end, { long_press = true, locked = true, submap_universal = true })
+-- Kill (long press, locked)
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hsel("kill")), { long_press = true, locked = true, submap_universal = true })
+
+-- Kill (long press)
+hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(hsel("kill")), { long_press = true, locked = true, submap_universal = true })
 
 -- Fullscreen maximize (mode = "maximized")
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "maximized" }), { submap_universal = true })
@@ -211,53 +203,30 @@ hl.bind(mainMod .. " + H", hl.dsp.focus({ workspace = "r-1" }), { repeating = tr
 -- MOVE WINDOW TO ANOTHER WORKSPACE  (selection-aware)
 -- ============================================================================
 
-hl.bind(mainMod .. " + SHIFT + L", function()
-	hl.dispatch(hl.dsp.window.move({ workspace = "r+1", window = "tag:selected" }, { submap_universal = true }))
-	hl.dispatch(hl.dsp.window.move({ workspace = "r+1" }, { submap_universal = true }))
-end)
-hl.bind(mainMod .. " + SHIFT + H", function()
-	hl.dispatch(hl.dsp.window.move({ workspace = "r-1", window = "tag:selected" }, { submap_universal = true }))
-	hl.dispatch(hl.dsp.window.move({ workspace = "r-1" }, { submap_universal = true }))
-end)
+hl.bind(
+	mainMod .. " + SHIFT + L",
+	hl.dsp.exec_cmd("/home/shayan/.config/hypr/scripts/ws-move-next.sh"),
+	{ submap_universal = true }
+)
+hl.bind(
+	mainMod .. " + SHIFT + H",
+	hl.dsp.exec_cmd("/home/shayan/.config/hypr/scripts/ws-move-prev.sh"),
+	{ submap_universal = true }
+)
+
 -- ============================================================================
--- RESIZE SUBMAP  (selection-aware) | Super + R
+-- RESIZE SUBMAP  (selection-aware)
 -- ============================================================================
 -- SUPER+R -> resize root. From there:
 --   W -> Increase submap (HJKL grow on respective axis)
 --   E -> Decrease submap (HJKL shrink on respective axis)
 -- Escape returns one level; SUPER+R exits entirely.
 
-hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
-hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
-hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"), { description = "Movement Submap" })
-hl.bind(mainMod .. " + P", hl.dsp.submap("properties"), { description = "Properties Submap" })
-hl.bind(mainMod .. " + R", hl.dsp.submap("resize"), { description = "Resize submap" })
+hl.bind(mainMod .. " + R", hl.dsp.submap("resize"))
 
 hl.define_submap("resize", function()
-	hl.bind(
-		"H",
-		hl.dsp.exec_cmd(hsel("resize", "x = -20, y = 0, relative = true")),
-		{ repeating = true, description = "Increase Left" }
-	)
-	hl.bind(
-		"L",
-		hl.dsp.exec_cmd(hsel("resize", "x = 20, y = 0, relative = true")),
-		{ repeating = true, description = "Increase Right" }
-	)
-	hl.bind(
-		"K",
-		hl.dsp.exec_cmd(hsel("resize", "x = 0, y = 20, relative = true")),
-		{ repeating = true, description = "Increase Up" }
-	)
-	hl.bind(
-		"J",
-		hl.dsp.exec_cmd(hsel("resize", "x = 0, y = -20, relative = true")),
-		{ repeating = true, description = "Increase Down" }
-	)
-	hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
-	hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
-	hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"), { description = "Movement Submap" })
-	hl.bind(mainMod .. " + P", hl.dsp.submap("properties"), { description = "Properties Submap" })
+	hl.bind("W", hl.dsp.submap("Increase_size"))
+	hl.bind("E", hl.dsp.submap("Decrease_size"))
 	hl.bind("Escape", hl.dsp.submap("reset"))
 end)
 
@@ -278,7 +247,7 @@ hl.define_submap("Decrease_size", function()
 end)
 
 -- ============================================================================
--- GROUP SUBMAP  (not selection-aware; groups are about the active window) | Super + G
+-- GROUP SUBMAP  (not selection-aware; groups are about the active window)
 -- ============================================================================
 -- SUPER+G ->
 --   A -> create / toggle group
@@ -289,26 +258,19 @@ end)
 hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"))
 
 hl.define_submap("grouping", function()
-	hl.bind("A", function()
-		hl.dispatch(hl.dsp.group.toggle({}), { description = "Toggle Group" })
-		hl.dispatch(hl.dsp.submap("reset"))
-	end)
+	hl.bind("A", hl.dsp.group.toggle({}), { description = "Toggle Group" })
 	hl.bind("S", function()
 		hl.dispatch(hl.dsp.group.lock_active({}))
 		hl.dispatch(hl.dsp.submap("reset"))
-	end, { description = "Lock group" })
+	end)
 	hl.bind("D", hl.dsp.window.deny_from_group({}), { description = "Deny window from group" })
 	hl.bind("F", hl.dsp.group.next({}), { description = "Next window in Group" })
 	hl.bind("SHIFT + F", hl.dsp.group.prev({}), { description = "Previous window in Group" })
-	hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
-	hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"), { description = "Movement Submap" })
-	hl.bind(mainMod .. " + P", hl.dsp.submap("properties"), { description = "Properties Submap" })
-	hl.bind(mainMod .. " + R", hl.dsp.submap("resize"), { description = "Resize submap" })
-	hl.bind("Escape", hl.dsp.submap("reset"))
+	hl.bind("Escape", hl.dsp.submap("reset"), { description = "Exit Group Submap" })
 end)
 
 -- ============================================================================
--- NAVIGATION SUBMAP  (focus only; never selection-aware) Super + Alt_L
+-- NAVIGATION SUBMAP  (focus only; never selection-aware)
 -- ============================================================================
 -- SUPER+ALT ->
 --   S -> special workspace: extra
@@ -323,12 +285,12 @@ hl.define_submap("navigation", function()
 	hl.bind("S", function()
 		hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/gotospecial.sh extra"))
 		hl.dispatch(hl.dsp.submap("reset"))
-	end, { description = "Go to Extra" })
+	end)
 	hl.bind("D", function()
 		hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/gotospecial.sh dashboard"))
 		hl.dispatch(hl.dsp.submap("reset"))
-	end, { description = "Go to Dashboard" })
-	hl.bind("G", hl.dsp.submap("relative"), { description = "Enter Relative Submap" })
+	end)
+	hl.bind("G", hl.dsp.submap("focus"))
 	hl.bind("H", hl.dsp.focus({ direction = "l" }), { repeating = true })
 	hl.bind("J", hl.dsp.focus({ direction = "d" }), { repeating = true })
 	hl.bind("K", hl.dsp.focus({ direction = "u" }), { repeating = true })
@@ -338,33 +300,30 @@ hl.define_submap("navigation", function()
 		hl.bind(tostring(n), function()
 			hl.dispatch(hl.dsp.focus({ workspace = n }))
 			hl.dispatch(hl.dsp.submap("reset"))
-		end, { description = "Move window(s) to " .. n })
+		end)
 	end
 	hl.bind("0", function()
 		hl.dispatch(hl.dsp.focus({ workspace = 10 }))
 		hl.dispatch(hl.dsp.submap("reset"))
-	end, { description = "Go to workspace 10" })
-	hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
-	hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"), { description = "Movement Submap" })
-	hl.bind(mainMod .. " + P", hl.dsp.submap("properties"), { description = "Properties Submap" })
-	hl.bind(mainMod .. " + R", hl.dsp.submap("resize"), { description = "Resize submap" })
+	end)
 	hl.bind("Escape", hl.dsp.submap("reset"))
+	hl.bind(mainMod .. " + ALT", hl.dsp.submap("reset"))
 end)
 
-hl.define_submap("relative", function()
+hl.define_submap("focus", function()
 	hl.bind("L", function()
 		hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
 		hl.dispatch(hl.dsp.submap("reset"))
-	end, { description = "Go to Right workspace" })
+	end)
 	hl.bind("H", function()
 		hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
 		hl.dispatch(hl.dsp.submap("reset"))
-	end, { description = "Go to Left workspace" })
+	end)
 	hl.bind("Escape", hl.dsp.submap("navigation"))
 end)
 
 -- ============================================================================
--- MOVEMENT SUBMAP  (selection-aware where it makes sense) | Super + Control_L
+-- MOVEMENT SUBMAP  (selection-aware where it makes sense)
 -- ============================================================================
 -- SUPER+Z ->
 --   S -> move window(s) to special:extra
@@ -377,19 +336,17 @@ end)
 hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"))
 
 hl.define_submap("movement", function()
+	hl.bind("Control_L", hl.dsp.window.drag(), { mouse = true })
 	hl.bind("S", function()
-		hl.dispatch(hl.dsp.exec_cmd("bash ~/.config/hypr/scripts/movetospecial.sh extra"))
+		hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/movetospecial.sh extra"))
 		hl.dispatch(hl.dsp.submap("reset"))
-	end, { description = "Move window to extra" })
+	end)
 	hl.bind("D", function()
-		hl.dispatch(hl.dsp.exec_cmd("bash ~/.config/hypr/scripts/movetospecial.sh dashboard"))
+		hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/movetospecial.sh dashboard"))
 		hl.dispatch(hl.dsp.submap("reset"))
-	end, { description = "Move window to dashboard" })
-	hl.bind("G", hl.dsp.submap("Relative"), { description = "Enter Relative Submap" })
-	hl.bind("H", hl.dsp.window.move({ direction = "l" }), { description = "Move window to left" })
-	hl.bind("J", hl.dsp.window.move({ direction = "d" }), { description = "Move window to down" })
-	hl.bind("K", hl.dsp.window.move({ direction = "u" }), { description = "Move window to up" })
-	hl.bind("L", hl.dsp.window.move({ direction = "r" }), { description = "Move window to right" })
+	end)
+	hl.bind("L", hl.dsp.exec_cmd(hsel("move", 'workspace = "m+1"', "move", 'workspace = "m+1", follow = false')))
+	hl.bind("H", hl.dsp.exec_cmd(hsel("move", 'workspace = "m-1"', "move", 'workspace = "m-1", follow = false')))
 	for i = 1, 9 do
 		local n = i
 		hl.bind(tostring(n), function()
@@ -399,43 +356,23 @@ hl.define_submap("movement", function()
 				)
 			)
 			hl.dispatch(hl.dsp.submap("reset"))
-		end, { description = "Move window(s) to " .. n })
+		end)
 	end
 	hl.bind("0", function()
 		hl.dispatch(hl.dsp.exec_cmd(hsel("move", 'workspace = "10"', "move", 'workspace = "10", follow = false')))
 		hl.dispatch(hl.dsp.submap("reset"))
-	end, { description = "Move window(s) to 10" })
+	end)
 	-- Group in/out are about the active window's relationship to a group;
-	hl.bind("I", hl.dsp.window.move({ into_group = "r" }), { description = "Move window into group" })
-	hl.bind("O", hl.dsp.window.move({ out_of_group = true }), { description = "Move window out of group" })
+	-- multi-window doesn't have a clean interpretation, so we leave these
+	-- single-target.
+	hl.bind("I", hl.dsp.window.move({ into_group = "r" }))
+	hl.bind("O", hl.dsp.window.move({ out_of_group = true }))
 	hl.bind("Control_L", hl.dsp.window.drag(), { mouse = true })
-	hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
-	hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
-	hl.bind(mainMod .. " + P", hl.dsp.submap("properties"), { description = "Properties Submap" })
-	hl.bind(mainMod .. " + R", hl.dsp.submap("resize"), { description = "Resize submap" })
 	hl.bind("Escape", hl.dsp.submap("reset"))
-end)
-hl.define_submap("Relative", function()
-	hl.bind(
-		"L",
-		hl.dsp.exec_cmd(hsel("move", 'workspace = "m+1"', "move", 'workspace = "m+1", follow = false')),
-		{ description = "Move window(s) to Right workspace" }
-	)
-	hl.bind(
-		"H",
-		hl.dsp.exec_cmd(hsel("move", 'workspace = "m-1"', "move", 'workspace = "m-1", follow = false')),
-		{ description = "Move window(s) to Left workspace" }
-	)
-	hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
-	hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
-	hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"), { description = "Movement Submap" })
-	hl.bind(mainMod .. " + P", hl.dsp.submap("properties"), { description = "Properties Submap" })
-	hl.bind(mainMod .. " + R", hl.dsp.submap("resize"), { description = "Resize submap" })
-	hl.bind("Escape", hl.dsp.submap("navigation"))
 end)
 
 -- ============================================================================
--- PROPERTIES SUBMAP  (selection-aware where it makes sense) | Super + P
+-- PROPERTIES SUBMAP  (selection-aware where it makes sense)
 -- ============================================================================
 -- SUPER+P ->
 --   T -> toggle pin
@@ -446,54 +383,62 @@ end)
 hl.bind(mainMod .. " + P", hl.dsp.submap("properties"))
 
 hl.define_submap("properties", function()
-	hl.bind("T", hl.dsp.exec_cmd(hsel("pin")), { description = "Pin window(s)" })
-	hl.bind("S", hl.dsp.layout("togglesplit"), { description = "Toggle split" })
-	hl.bind("F", hl.dsp.exec_cmd(hsel("float")), { description = "Float window{s}" })
-	hl.bind("P", hl.dsp.exec_cmd(hsel("pseudo")), { description = "Toggle pseudo" })
-	hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
-	hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
-	hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"), { description = "Movement Submap" })
-	hl.bind(mainMod .. " + R", hl.dsp.submap("resize"), { description = "Resize submap" })
+	hl.bind("T", hl.dsp.exec_cmd(hsel("pin")))
+	hl.bind("S", hl.dsp.layout("togglesplit")) -- not per-window
+	hl.bind("F", hl.dsp.exec_cmd(hsel("float")))
+	hl.bind("P", hl.dsp.exec_cmd(hsel("pseudo")))
 	hl.bind("Escape", hl.dsp.submap("reset"))
 end)
 
 -- ============================================================================
--- TAGGING (the selection itself - not wrapped)
+-- TAG SUBMAP  (the selection itself - not wrapped)
 -- ============================================================================
 -- SUPER+T ->
 --   S -> add the active window to the selection (idempotent)
 --   D -> clear ALL tags from the active window
 --        (matches your old D behavior; gets the window completely out of
 --         both "selected" and "prev_selected")
+--   R -> restore the previous selection: prev_selected -> selected
+--   X -> clear the "selected" tag from every window (drop the whole batch
+--        without acting on it)
 
-hl.bind("ALT_R", function()
-	hl.dispatch(hl.dsp.window.tag({ tag = "selected" }), { non_consuming = true })
-end, { submap_universal = true })
-hl.bind(mainMod .. " + semicolon", function()
-	hl.dispatch(hl.dsp.window.tag({ tag = "selected" }), { non_consuming = true })
-end, { submap_universal = true })
-hl.bind("SUPER + mouse:272", function()
-	hl.dispatch(hl.dsp.window.tag({ tag = "selected" }))
-end, { submap_universal = true })
--- I am contemplating removing this submap since tagging is needed to make so much of this script work
--- hl.bind(mainMod .. " + T", hl.dsp.submap("tagging"))
--- hl.define_submap("tagging", function()
--- 	-- S: add active window to selection.
--- 	-- hl.dsp.window.tag sets the Hyprland tag (border colour).
--- 	-- action binds know which windows to batch over.
--- 	-- Both are required; one without the other is the bug that was here.
--- 	hl.bind("S", function()
--- 		hl.dispatch(hl.dsp.window.tag({ tag = "+selected" }))
--- 	end)
---
--- 	-- D: remove active window from selection (deselect, not clear-all).
--- 	hl.bind("D", function()
--- 		hl.dispatch(hl.dsp.window.tag({ tag = "-selected", window = "tag:selected" }))
--- 		hl.dispatch(hl.dsp.window.tag({ tag = "-selected" }))
--- 	end)
---
--- 	hl.bind("Escape", hl.dsp.submap("reset"))
--- end)
+hl.bind(mainMod .. " + T", hl.dsp.submap("tagging"))
+
+hl.bind("ALT + SPACE", function()
+	hl.dispatch(hl.dsp.window.tag({ tag = "+selected" }))
+	hl.dispatch(hl.dsp.exec_cmd("hyprsel select"))
+end)
+hl.define_submap("tagging", function()
+	-- S: add active window to selection.
+	-- hl.dsp.window.tag sets the Hyprland tag (border colour).
+	-- hyprsel select syncs the daemon's internal selected set so that
+	-- action binds know which windows to batch over.
+	-- Both are required; one without the other is the bug that was here.
+	hl.bind("S", function()
+		hl.dispatch(hl.dsp.window.tag({ tag = "+selected" }))
+		hl.dispatch(hl.dsp.exec_cmd("hyprsel select"))
+	end)
+
+	-- D: remove active window from selection (deselect, not clear-all).
+	hl.bind("D", function()
+		hl.dispatch(hl.dsp.window.tag({ tag = "-selected" }))
+		hl.dispatch(hl.dsp.exec_cmd("hyprsel deselect"))
+	end)
+
+	-- X: drop the entire live selection without performing any action.
+	hl.bind("X", function()
+		hl.dispatch(hl.dsp.exec_cmd("hyprsel clear"))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
+
+	-- R: restore the previous selection (swap selected <-> prev_selected).
+	hl.bind("R", function()
+		hl.dispatch(hl.dsp.exec_cmd("hyprsel reselect"))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
+
+	hl.bind("Escape", hl.dsp.submap("reset"))
+end)
 
 -- ============================================================================
 -- MOUSE

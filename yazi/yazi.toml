@@ -1,6 +1,6 @@
 # A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
 # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
-#:schema https://yazi-rs.github.io/schemas/keymap.json
+"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
 [mgr]
 ratio          = [ 1, 4, 3 ]
@@ -51,7 +51,7 @@ extract = [
 	{ run = 'ya pub extract --list %*',   desc = "Extract here", for = "windows" },
 ]
 play = [
-	{ run = 'mpv --force-window "$@"', orphan = true, for = "unix" },
+	{ run = 'mpv --force-window "$@"', block = true, for = "unix" },
 	{ run = 'mpv --force-window %*', orphan = true, for = "windows" },
 	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
@@ -60,6 +60,12 @@ pdff = [
 ]
 docview = [
 	{ run = 'evince "$@"', desc = "open in papers", block = false, orphan = true, for = "unix"}
+]
+okular = [
+	{ run = 'okular "$@"', desc = "open in okular", block = false, orphan = true, for = "unix"}
+]
+inkscape = [
+	{ run = 'inkscape "$@"', desc = "open in inkscape", block = false, orphan = true, for = "unix"}
 ]
 micro= [
 	{ run = 'micro "$@"', desc = "open in micro", block = true, for = "unix" },
@@ -78,6 +84,12 @@ bulk-rename = [
 	{  run = 'micro "$@"', desc = "Use micro for bulk-rename", for = "unix" },
 	{  run = 'micro "%*"', desc = "Use micro for bulk-rename", for = "windows" }
 ]
+foliate = [
+	{ run = 'foliate "%*"', desc = "open in foliate", block = false, orphan = true },
+]
+gwenview = [
+	{ run = 'gwenview "%*"', desc = "open in gwenview", block = false },
+]
 [open]
 rules = [
 	# Folder
@@ -88,7 +100,7 @@ rules = [
 	# Text
 	{ mime = "text/*", use = [ "edit", "micro", "exif", "reveal" ] },
 	# Image
-	{ mime = "image/*", use = [ "eog", "open", "exif", "reveal" ] },
+	{ mime = "image/*", use = [ "eog", "inkscape", "gwenview", "edit", "open", "exif", "reveal" ] },
 	# Media
 	{ mime = "{audio,video}/*", use = [ "play", "exif", "reveal" ] },
 	# Archive
@@ -99,13 +111,15 @@ rules = [
 	# Empty file
 	{ mime = "inode/empty", use = [ "edit", "exif", "reveal" ] },
 	# PDFS
-	{mime = "application/pdf", use = [ "pdff", "docview", "exif", "reveal" ] },
+	{mime = "application/pdf", use = [ "pdff", "docview", "okular", "inkscape", "exif", "reveal" ] },
+	# Epub
+	{mime = "application/epub+zip", use = [ "foliate", "exif", "reveal" ] },
 	# Fallback
 	{ url = "*", use = [ "edit", "open", "exif", "reveal" ] },
 ]
 [[open.prepend_rules]]
 url = "bulk-rename.txt"
-use = "micro"
+use = "edit"
 
 [tasks]
 micro_workers    = 10
@@ -118,12 +132,12 @@ suppress_preload = true
 [plugin]
 prepend_fetchers = [
 	# Mimetype
-	#{ id = "mime", name = "*", run = "mime", prio = "high" }, # fetchers are actively being developed. 
+	{ id = "mime", name = "*", run = "mime", prio = "high" },
 ]
 
  append_fetchers = [
-   #{ id = "simple-tag", url = "*",  run = "simple-tag", group = "simple-tag" }, # fetchers are actively being developed.
-   #{ id = "simple-tag", url = "*/", run = "simple-tag", group = "simple-tag" }, # fetchers are actively being developed.
+   { id = "simple-tag", url = "*",  run = "simple-tag", group = "simple-tag" },
+   { id = "simple-tag", url = "*/", run = "simple-tag", group = "simple-tag" },
 ]
 
 spotters = [

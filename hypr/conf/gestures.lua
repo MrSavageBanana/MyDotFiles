@@ -5,7 +5,9 @@
 --       exec_cmd as a safe fallback — check the wiki for a native dispatcher form.
 
 -- 3-finger horizontal swipe = switch workspaces
+hl.gesture({ fingers = 3, direction = "vertical", mods = "SUPER", scale = 10, action = "workspace" })
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
+hl.gesture({ fingers = 4, direction = "vertical", action = "fullscreen" })
 
 -- 4-finger directional swipes = move focus
 -- hl.gesture({ fingers = 4, direction = "left",  action = hl.dsp.exec_cmd("hyprctl dispatch movefocus l") })

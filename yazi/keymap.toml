@@ -129,7 +129,7 @@ keymap = [
 	{ on = "z",         run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
 	{ on = "Z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
 #	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
-
+ 	{ on = "<C-y>", run = "shell -- dragon-drop -x -i -T %s1" },
 	# Linemode
 	{ on = [ "M", "p" ], run = "linemode permissions", desc = "Linemode: permissions" },
 	{ on = [ "M", "s" ], run = "linemode size",        desc = "Linemode: size" },

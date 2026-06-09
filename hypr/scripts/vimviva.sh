@@ -6,8 +6,8 @@ PASSTHROUGH_KEY="$3"
 ACTIVE_CLASS=$(hyprctl activewindow -j | jq -r '.class')
 
 if [[ "$ACTIVE_CLASS" == "vivaldi-stable" || "$ACTIVE_CLASS" == "com.github.hluk.copyq" || "$ACTIVE_CLASS" == "firefox" || "$ACTIVE_CLASS" == "org.gnome.Meld" ]]; then
-    hyprctl dispatch sendshortcut ",$VIVALDI_KEY,"
+    hyprctl eval "hl.dispatch(hl.dsp.send_shortcut({ mods = 'NONE', key = '$VIVALDI_KEY' }))"
 else
-    hyprctl dispatch sendshortcut "$PASSTHROUGH_MOD,$PASSTHROUGH_KEY,"
+    hyprctl eval "hl.dispatch(hl.dsp.send_shortcut({ mods = '$PASSTHROUGH_MOD', key = '$PASSTHROUGH_KEY' }))"
 fi
 

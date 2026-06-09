@@ -1,0 +1,39 @@
+# See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
+# Rule for Rofi: always float and center on the screen
+windowrule {
+  name = windowrule-1
+  float = on
+  center = on
+  no_anim = on
+  border_size = 0
+  match:class = ^(rofi)$
+}
+
+# speed it up
+# don't ruin the illusion
+# Rule for Kruler: always float and center on the screen
+windowrule {
+  name = kruler
+  float = on
+  border_size = on
+  match:class = ^(org.kde.kruler)
+}
+
+windowrule {
+  name = windowrule-2
+  float = on
+  match:class = xdg-desktop-portal-gtk
+}
+# Transparent Startpage Vivaldi
+# windowrule {
+#   name = windowrule-3
+#   opacity = 1.00 0.31
+#   match:title = ^(Start Page - Vivaldi)$
+# }
+windowrule {
+ name = Vivaldi_Profile_Picker
+ float = on
+ center = on
+ match:class = ^(popup_term)$
+ size = 350 280
+}
