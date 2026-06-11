@@ -29,6 +29,7 @@ if [ -z "$key" ]; then
     git clone https://aur.archlinux.org/yay.git
     echo "Compiling Yay"
     cd yay && makepkg -si
+	mv ~/yay ~/Downloads/Git_Cloned # this line is problomatic if 
     if command -v yay; then
 	    echo "Installing All AUR Packages"
 	    yay -S "${aur_packages[@]}"
@@ -61,7 +62,6 @@ if command -v xdg-user-dirs-update; then
 	echo "CREATED MUSIC FOLDER"
 	mkdir -p ~/Downloads/Git_Cloned/
 	echo "CREATED GIT_CLONED FOLDER"
-	mv ~/yay ~/Downloads/Git_Cloned
 else 
 	echo "RUN xdg-user-dirs-update YOURSELF"
 fi
@@ -85,6 +85,7 @@ fi
 
 
 echo "Installing Homebrew"
+sudo pacman -S --needed git
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
 
