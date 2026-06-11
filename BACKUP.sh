@@ -3,7 +3,7 @@
 echo() {
     builtin echo -e "\033[7m >>> $* <<< \033[0m"
 }
-pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract-data-eng' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp' 'neovim' 'pipewire-pulse' 'task' 'starship' 'eza' 'bat' 'thefuck' 'tealdeer' 'croc' )
+pacman_packages=( 'vivaldi' 'firefox' 'evince' 'meld' 'kdeconnect' 'thunar' 'foliate' 'okular' 'libreoffice-fresh' 'eog' 'virt-manager' 'gpu-screen-recorder' 'gwenview' 'copyq' 'lxappearance' 'helvum' 'rofi' 'hyprland' 'hyprpaper' 'hyprlock' 'waybar' 'dunst' 'wl-clipboard' 'dbus' 'wireplumber' 'brightnessctl' 'networkmanager' 'jq' 'grim' 'slurp' 'libnotify' 'xdg-user-dirs' 'alsa-utils' 'fastfetch' 'ffmpeg' 'flatpak' 'imagemagick' 'cups' 'system-config-printer' 'calc' 'btop' 'mpd' 'mpc' 'mpv' 'wev' 'rsync' 'cava' 'taskwarrior-tui' 'kitty' 'dua-cli' 'img2pdf' 'pastel' 'swappy' 'syncthing' 'tesseract-data-eng' 'tesseract' 'synaptics' 'tree-sitter' 'ufw' 'vlc' 'trash-cli' 'fd' 'ripgrep' 'fzf' 'zoxide' 'poppler' 'perl-image-exiftool' 'yazi' 'micro' 'bluez' 'net-tools' 'bc' '7zip' 'pavucontrol' 'docker' 'tailscale' 'tlp' 'neovim' 'pipewire-pulse' 'task' 'starship' 'eza' 'bat' 'thefuck' 'tealdeer' 'croc' 'xrdb' )
 aur_packages=( 'brother-mfc-l2740dw' 'hyprkcs-git' 'waynergy' 'auto-cpufreq' 'peaclock' 'libinput-gestures' 'pacfetch' 'python-jpegtran-cffi-git' 'fbida' 'rmpc-git' 'tree-sitter-latex' 'tree-sitter-yaml' 'tree-sitter-markdown' )
 flatpak_packages=( 'com.oppzippy.OpenSCQ30' 'org.gnome.gitlab.YaLTeR.Identity' 'org.gnome.Characters' 'org.kde.kruler')
 brew_packages=( 'grex' 'asciinema' 'stylua' 'prettier' 'fancy-cat' 'lm_sensors' 'unzip' )
@@ -11,18 +11,35 @@ system_services=( 'cups.path' 'auto-cpufreq.service' 'avahi-daemon.service' 'blu
 user_services=( 'mpd.service' 'syncthing.service' 'wireplumber.service' 'xdg-user-dirs.service' 'p11-kit-server.socket' 'pipewire-pulse.socket' 'pipewire.socket' 'pipewire-pulse.service' ) 
 groups=('lp' 'docker' 'libvirt')
 echo "starting setup..."
-cd ~
+cd ~ || exit
 echo "Updating system"
 sudo pacman -Syu
 # Get my current .bashrc so everything which is needed is already there.
 curl https://raw.githubusercontent.com/MrSavageBanana/MyDotFiles/refs/heads/main/.bashrc > ~/.bashrc
-echo "Installing Yay"
-echo "Installing Yay Dependencies"
-sudo pacman -S --needed git base-devel go 
-echo "Cloning Yay Repo"
-git clone https://aur.archlinux.org/yay.git
-echo "Compiling Yay"
-cd yay && makepkg -si
+
+read -s -n 1 -p "Press [Enter] to setup Yay and install packages, or any other key to skip: " key
+echo ""
+
+if [ -z "$key" ]; then
+    echo "Running the action..."
+    echo "Installing Yay"
+    echo "Installing Yay Dependencies"
+    sudo pacman -S --needed git base-devel go 
+    echo "Cloning Yay Repo"
+    git clone https://aur.archlinux.org/yay.git
+    echo "Compiling Yay"
+    cd yay && makepkg -si
+    if command -v yay; then
+	    echo "Installing All AUR Packages"
+	    yay -S "${aur_packages[@]}"
+    else
+	    echo "INSTALL AUR PACKAGES YOURSELF"
+    fi
+else
+    echo "Skipped. Continuing with the rest of the script..."
+fi
+
+# Rest of your script goes here
 echo "Going to HOME"
 cd ~
 echo "Installing All Pacman Packages"
@@ -53,25 +70,42 @@ fi
 #xdg-user-dirs-update 
 #rmdir Desktop
 # I need to download rust before the yay packages because they always ask me about rust or rustup and it screws up the rest so this can hopefull fix it
-echo "Installing Rustup MANUALLY"
-curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh 
-echo "ENDED RUSTUP MANUALLY"
-if command -v yay; then
-	echo "Installing All AUR Packages"
-	yay -S "${aur_packages[@]}"
+read -s -n 1 -p "Press [Enter] to setup rust, or any other key to skip: " key
+echo ""
+
+if [ -z "$key" ]; then
+	echo "Running the action..."
+	# Put the command you want to run right here
+	echo "Installing Rustup MANUALLY"
+	curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh 
+	echo "ENDED RUSTUP MANUALLY"
 else
-	echo "INSTALL AUR PACKAGES YOURSELF"
+    echo "Skipped. Continuing with the rest of the script..."
 fi
+
 
 echo "Installing Homebrew"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+
 if command -v brew; then
-	echo "Installing All Homebrew Packages"
-	brew install "${brew_packages[@]}"
+	read -s -n 1 -p "Press [Enter] to install All brew packages, or any other key to install needed packages: " key
+	echo ""
+
+	if [ -z "$key" ]; then
+		echo "Installing All Homebrew Packages"
+		brew install "${brew_packages[@]}"
+	else
+		echo "Installing needed Packages"
+		brew install "${brew_packages[4]}"
+	fi
 else 
 	echo "INSTALL BREW PACKAGES YOURSELF"
 fi
+
+
+# Rest of your script goes here
+echo "Script continues..."
 # echo "Installing tailscale"
 # curl -fsSL https://tailscale.com/install.sh | sh 
 echo "installing atuin"
@@ -80,14 +114,22 @@ bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
 #curl -sS https://starship.rs/install.sh | sh 
 # SOMETHING IS FUCKED
 # flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flatpaks  there is no evidence this needs to be run. 
-echo "ATTEMPTING FLATPAK INSTALL"
-if command -v flatpak; then
-	sleep 2 # maybe this can stop the random answer of "n" when flatpak asks to install stuff 
-	echo "Installing All Flatpak Packages"
-	flatpak install flathub "${flatpak_packages[@]}"
+read -s -n 1 -p "Press [Enter] to setup flatpak, or any other key to skip: " key
+echo ""
+
+if [ -z "$key" ]; then
+	echo "ATTEMPTING FLATPAK INSTALL"
+	if command -v flatpak; then
+		sleep 2 # maybe this can stop the random answer of "n" when flatpak asks to install stuff 
+		echo "Installing All Flatpak Packages"
+		flatpak install flathub "${flatpak_packages[@]}"
+	else
+		echo "INSTALL FLATPAK PACKAGES YOURSELF"
+	fi
 else
-	echo "INSTALL FLATPAK PACKAGES YOURSELF"
+    echo "Skipped. Continuing with the rest of the script..."
 fi
+
 if command -v starship; then
 	starship init bash > ~/.starship_static_init.sh
 else
@@ -102,7 +144,7 @@ echo "Installing Dotfiles"
 git clone https://github.com/MrSavageBanana/MyDotFiles.git 
 if [ -d "MyDotFiles" ] ; then
 	echo "applying dotfiles"
-	cd 'MyDotFiles' 
+	cd 'MyDotFiles' || exit
 	cp -r dunst ~/.config/dunst
 	cp -r hypr ~/.config/hypr
 	cp -r kitty ~/.config/kitty
