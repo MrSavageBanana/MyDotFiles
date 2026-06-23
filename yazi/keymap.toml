@@ -50,7 +50,9 @@ keymap = [
 	{ on = "<Right>", run = "enter", desc = "Enter the child directory" },
 
 	{ on = "H", run = "back",    desc = "Back to previous directory" },
-	{ on = "L", run = "forward", desc = "Forward to next directory" },
+	#{ on = "L", run = "forward", desc = "Forward to next directory" },
+	{ on = "L", run = "plugin eza-preview",  desc = "Toggle tree/list dir preview" },
+
 
 	# Toggle
 	{ on = "<Space>", run = [ "toggle", "arrow next" ], desc = "Toggle the current selection state" },

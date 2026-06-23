@@ -8,6 +8,7 @@ vim.opt.wrap = false
 -- System clipboard copy
 vim.keymap.set("v", "<leader>y", '"+y', { desc = "Copy to system clipboard" })
 vim.keymap.set("n", "<leader>Y", '"+yy', { desc = "Copy line to system clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "actually delete text" })
 -- Folds
 vim.opt.foldcolumn = "1"
 vim.opt.foldlevel = 99
@@ -140,10 +141,12 @@ end, {
 	desc = "Remove a single conceal rule by its original argument.",
 })
 
-vim.api.nvim_create_user_command("ConcealClear", function()
-	for _, group in pairs(_conceal_rules) do
-		pcall(vim.cmd, "syntax clear " .. group)
-	end
-	_conceal_rules = {}
-	_conceal_counter = 0
-end, { desc = "Clear all rules created by :Conceal" })
+vim
+	.api
+	.nvim_create_user_command("ConcealClear", function()
+		for _, group in pairs(_conceal_rules) do
+			pcall(vim.cmd, "syntax clear " .. group)
+		end
+		_conceal_rules = {}
+		_conceal_counter = 0
+	end, { desc = "Clear all rules created by :Conceal" })

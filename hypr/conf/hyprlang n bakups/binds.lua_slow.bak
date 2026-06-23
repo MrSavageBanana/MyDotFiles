@@ -1,0 +1,506 @@
+-- ============================================================================
+-- Hyprland Lua binds (Hyprland 0.55+)
+--
+-- Docs:
+--   https://wiki.hypr.land/Configuring/Basics/Binds/
+--   https://wiki.hypr.land/Configuring/Basics/Dispatchers/
+--
+-- FLAG QUICK REFERENCE (old hyprlang -> new option table):
+--   bind   (no flags)   -> hl.bind(key, dsp)
+--   binde  (repeat)     -> hl.bind(key, dsp, { repeating  = true })
+--   bindr  (release)    -> hl.bind(key, dsp, { release    = true })
+--   bindo  (long press) -> hl.bind(key, dsp, { long_press = true })
+--   bindl  (locked)     -> hl.bind(key, dsp, { locked     = true })
+--   bindm  (mouse)      -> hl.bind(key, dsp, { mouse      = true })
+--
+-- Requires on PATH: hyprctl, jq, bash (jq is only used by the selection helpers).
+-- ============================================================================
+
+local mainMod = "SUPER"
+
+-- ============================================================================
+-- SELECTION-AWARE TAGGING
+-- ============================================================================
+-- The "selected" tag turns ordinary single-window bindings into multi-window
+-- ones. Any binding wrapped with sel_* below behaves like this:
+--
+--   * If the *active* window carries the "selected" tag, the action runs on
+--     every window that carries it. The whole batch is then rotated:
+--     each "selected" tag becomes "prev_selected" (any previous
+--     "prev_selected" tags are cleared first so the next round is clean).
+--   * If the active window does NOT carry "selected", the binding behaves
+--     exactly the way it always did - just the active window.
+--
+-- Workflow:
+--   1. Focus a window -> SUPER+T, S  (adds it to the selection).
+--   2. Move to another window -> SUPER+T, S. Repeat.
+--   3. With ANY selected window focused, hit any normal action
+--      (close / fullscreen / move-to-ws / resize / pin / float / pseudo).
+--      It applies to the whole selection, then they all become
+--      "prev_selected".
+--   4. SUPER+T, R restores the previous selection (prev_selected -> selected),
+--      so you can run another action on the same group.
+--
+-- SUPER+T, D clears every tag from the active window if you ever want to
+-- bail out of the system. SUPER+T, X drops the whole live selection.
+-- ----------------------------------------------------------------------------
+
+-- Slurp a small amount of JSON from hyprctl and look for a tag inside the
+-- active window's "tags" array. We avoid pulling in a JSON library by doing a
+-- targeted match on the tags slice.
+local function active_has_tag(tag)
+	local h = io.popen("hyprctl activewindow -j 2>/dev/null")
+	if not h then
+		return false
+	end
+	local data = h:read("*a")
+	h:close()
+	local tags = data:match('"tags"%s*:%s*%[(.-)%]')
+	return tags ~= nil and tags:find('"' .. tag .. '"', 1, true) ~= nil
+end
+
+-- Get a list of window addresses (e.g. "0x123abc") that carry the given tag.
+-- Uses jq for safe JSON parsing of `hyprctl clients -j`.
+local function addresses_with_tag(tag)
+	local cmd = string.format(
+		[[hyprctl clients -j 2>/dev/null | jq -r '.[] | select(.tags // [] | index("%s")) | .address' 2>/dev/null]],
+		tag
+	)
+	local h = io.popen(cmd)
+	if not h then
+		return {}
+	end
+	local data = h:read("*a")
+	h:close()
+	local addrs = {}
+	for line in data:gmatch("[^\r\n]+") do
+		if line:match("^0x") then
+			table.insert(addrs, line)
+		end
+	end
+	return addrs
+end
+
+-- Apply +to_tag and -from_tag to every supplied address.
+local function rotate_addresses(addrs, from_tag, to_tag)
+	for _, a in ipairs(addrs) do
+		local sel = "address:" .. a
+		hl.dispatch(hl.dsp.window.tag({ tag = "+" .. to_tag, window = sel }))
+		hl.dispatch(hl.dsp.window.tag({ tag = "-" .. from_tag, window = sel }))
+	end
+end
+
+-- Strip a tag from every window currently carrying it.
+local function clear_tag_everywhere(tag)
+	for _, a in ipairs(addresses_with_tag(tag)) do
+		hl.dispatch(hl.dsp.window.tag({ tag = "-" .. tag, window = "address:" .. a }))
+	end
+end
+
+-- The core wrapper. `on_target` is called once per target, where target is
+-- either nil (operate on the active window) or "address:0x..." (operate on
+-- that specific window).
+local function with_selection(on_target)
+	return function()
+		if active_has_tag("selected") then
+			local addrs = addresses_with_tag("selected")
+			-- Drop any stale prev_selected so the new round is the only one
+			-- you can re-select to.
+			clear_tag_everywhere("prev_selected")
+			for _, a in ipairs(addrs) do
+				on_target("address:" .. a)
+			end
+			-- Convert selected -> prev_selected so the selection is "spent".
+			rotate_addresses(addrs, "selected", "prev_selected")
+		else
+			on_target(nil)
+		end
+	end
+end
+
+-- Dispatcher helpers ---------------------------------------------------------
+-- These adapt the three different dispatcher calling conventions to
+-- with_selection.
+
+-- For dispatchers that take a window as the only positional arg
+-- (close, kill).
+local function sel_pos(fn)
+	return with_selection(function(t)
+		if t then
+			hl.dispatch(fn(t))
+		else
+			hl.dispatch(fn())
+		end
+	end)
+end
+
+-- For dispatchers that take a table with an optional `window` key
+-- (fullscreen, float, pin, pseudo, resize, ...).
+local function sel_tbl(fn, base)
+	base = base or {}
+	return with_selection(function(t)
+		local args = {}
+		for k, v in pairs(base) do
+			args[k] = v
+		end
+		if t then
+			args.window = t
+		end
+		hl.dispatch(fn(args))
+	end)
+end
+
+-- For dispatchers whose Lua API does NOT accept a window arg (move-to-ws,
+-- swap, ...). We fall back to `hyprctl dispatch <name> ARGS,WINDOW` which the
+-- underlying C++ dispatcher does honour. When acting on the active window
+-- (no selector), `cmd_active` is used; when iterating selected windows,
+-- `cmd_targeted` is used (often the *silent* variant so we don't surf
+-- workspaces during the loop).
+local function sel_dispatch(cmd_active, cmd_targeted)
+	cmd_targeted = cmd_targeted or cmd_active
+	return with_selection(function(t)
+		if t then
+			hl.dispatch(hl.dsp.exec_cmd(string.format("hyprctl dispatch %s", cmd_targeted(t))))
+		else
+			hl.dispatch(hl.dsp.exec_cmd(string.format("hyprctl dispatch %s", cmd_active())))
+		end
+	end)
+end
+
+-- Convenience: move to workspace.
+--   * Single (active) window: `movetoworkspace WS` so you follow the window.
+--   * Multi window: `movetoworkspacesilent WS,address:0x...` so we don't
+--     chase the cursor across workspaces while the loop runs.
+local function sel_move_to_ws(ws_str)
+	return sel_dispatch(function()
+		return string.format("movetoworkspace '%s'", ws_str)
+	end, function(t)
+		return string.format("movetoworkspacesilent '%s,%s'", ws_str, t)
+	end)
+end
+
+-- ============================================================================
+-- HARDWARE KEYS
+-- ============================================================================
+
+hl.bind(
+	"XF86AudioRaiseVolume",
+	hl.dsp.exec_cmd("wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%+"),
+	{ repeating = true }
+)
+hl.bind(
+	"XF86AudioLowerVolume",
+	hl.dsp.exec_cmd("wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%-"),
+	{ repeating = true }
+)
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl set 10%+"), { repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 10%-"), { repeating = true })
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
+hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"))
+hl.bind("XF86WLAN", hl.dsp.exec_cmd("nmcli radio wifi toggle"))
+hl.bind("XF86Refresh", hl.dsp.exec_cmd("xdotool key F5"))
+
+-- ============================================================================
+-- LAUNCHERS & SHELL HELPERS
+-- ============================================================================
+
+-- Kitty (single instance)
+hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd("kitty --single-instance"))
+
+-- Rofi
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("bash ~/.config/rofi/launchers/type-7/launcher.sh"))
+
+-- CopyQ
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("copyq toggle"))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("kdeconnect-cli --send-clipboard -n Shayans-Desktop"))
+
+-- Popup terminal / Vivaldi-profile picker script (VP)
+hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("kitty --class=popup_term -e bash ~/.local/bin/VP"))
+
+-- Waybar: tap = SIGUSR1 reload; hold = full reload
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("killall -SIGUSR1 waybar"), { release = true })
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("~/.config/ml4w/scripts/reload-waybar.sh"), { long_press = true })
+
+-- Screen rotate
+hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("~/.config/hypr/scripts/rotate.sh"))
+
+-- Screenshot: tap = screenshot, hold = OCR
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot_handler.sh hold"), { long_press = true })
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot_handler.sh release"), { release = true })
+
+-- Region screenshot to swappy
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd([[grim -g "$(slurp)" - | swappy -f -]]))
+
+-- Vivaldi vim-style passthrough
+hl.bind("CTRL + J", hl.dsp.exec_cmd("~/.config/hypr/scripts/vimviva.sh Down Control_L j"), { repeating = true })
+hl.bind("CTRL + K", hl.dsp.exec_cmd("~/.config/hypr/scripts/vimviva.sh Up   Control_L k"), { repeating = true })
+
+-- Vivaldi: focus tab bar, then open tab context menu
+hl.bind(
+	mainMod .. " + X",
+	hl.dsp.exec_cmd(
+		[[hyprctl eval 'hl.dispatch(hl.dsp.send_shortcut({ "CTRL ALT SHIFT, I, activewindow"}))' && hyprctl eval 'hl.dispatch(hl.dsp.send_shortcut({ "SHIFT, F10, activewindow"}))']]
+	)
+)
+-- Just context menu
+hl.bind(mainMod .. " + SHIFT + X", hl.dsp.exec_cmd([[hyprctl dispatch sendshortcut "SHIFT,F10,activewindow"]]))
+
+-- Exit Hyprland (long press, so it can't be accidental)
+hl.bind(mainMod .. " + N", hl.dsp.exit(), { long_press = true })
+
+-- ============================================================================
+-- WINDOW ACTIONS  (selection-aware)
+-- ============================================================================
+
+-- Close / kill the active (or selected) window(s)
+hl.bind(mainMod .. " + C", sel_pos(hl.dsp.window.close))
+hl.bind(mainMod .. " + C", sel_pos(hl.dsp.window.kill), { long_press = true, locked = true })
+hl.bind(mainMod .. " + Q", sel_pos(hl.dsp.window.kill), { long_press = true })
+
+-- Fullscreen: tap = "maximized" (fake fullscreen, keeps gaps/bars);
+--             hold = real fullscreen (default mode)
+hl.bind(mainMod .. " + F", sel_tbl(hl.dsp.window.fullscreen, { mode = "maximized" }))
+hl.bind(mainMod .. " + F", sel_tbl(hl.dsp.window.fullscreen), { long_press = true })
+
+-- Swap with the next window in the layout.
+-- (Not selection-aware: swapping a *group* of windows pairwise doesn't have
+-- a meaningful interpretation.)
+hl.bind(mainMod .. " + S", hl.dsp.window.swap({ next = true }))
+
+-- ============================================================================
+-- WORKSPACE NAVIGATION  (focus only - not selection-aware)
+-- ============================================================================
+
+-- Top-level: exact (relative across all workspaces, incl. empty)
+hl.bind(mainMod .. " + L", hl.dsp.focus({ workspace = "r+1" }), { repeating = true })
+hl.bind(mainMod .. " + H", hl.dsp.focus({ workspace = "r-1" }), { repeating = true })
+
+-- ============================================================================
+-- MOVE WINDOW TO ANOTHER WORKSPACE  (selection-aware)
+-- ============================================================================
+
+hl.bind(mainMod .. " + SHIFT + L", sel_move_to_ws("r+1"), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + H", sel_move_to_ws("r-1"), { repeating = true })
+
+-- ============================================================================
+-- RESIZE SUBMAP  (selection-aware)
+-- ============================================================================
+-- SUPER+R -> resize root. From there:
+--   W -> Increase submap (HJKL grow on respective axis)
+--   E -> Decrease submap (HJKL shrink on respective axis)
+-- Escape returns one level; SUPER+R exits entirely.
+
+hl.bind(mainMod .. " + R", hl.dsp.submap("resize"))
+
+hl.define_submap("resize", function()
+	hl.bind("W", hl.dsp.submap("Increase_size"))
+	hl.bind("E", hl.dsp.submap("Decrease_size"))
+	hl.bind("Escape", hl.dsp.submap("reset"))
+	hl.bind(mainMod .. " + R", hl.dsp.submap("reset"))
+end)
+
+hl.define_submap("Increase_size", function()
+	hl.bind("H", sel_tbl(hl.dsp.window.resize, { x = 20, y = 0, relative = true }), { repeating = true })
+	hl.bind("L", sel_tbl(hl.dsp.window.resize, { x = 20, y = 0, relative = true }), { repeating = true })
+	hl.bind("K", sel_tbl(hl.dsp.window.resize, { x = 0, y = 20, relative = true }), { repeating = true })
+	hl.bind("J", sel_tbl(hl.dsp.window.resize, { x = 0, y = 20, relative = true }), { repeating = true })
+	hl.bind("Escape", hl.dsp.submap("resize"))
+	hl.bind(mainMod .. " + R", hl.dsp.submap("reset"))
+end)
+
+hl.define_submap("Decrease_size", function()
+	hl.bind("H", sel_tbl(hl.dsp.window.resize, { x = -20, y = 0, relative = true }), { repeating = true })
+	hl.bind("L", sel_tbl(hl.dsp.window.resize, { x = -20, y = 0, relative = true }), { repeating = true })
+	hl.bind("K", sel_tbl(hl.dsp.window.resize, { x = 0, y = -20, relative = true }), { repeating = true })
+	hl.bind("J", sel_tbl(hl.dsp.window.resize, { x = 0, y = -20, relative = true }), { repeating = true })
+	hl.bind("Escape", hl.dsp.submap("resize"))
+	hl.bind(mainMod .. " + R", hl.dsp.submap("reset"))
+end)
+
+-- ============================================================================
+-- GROUP SUBMAP  (not selection-aware; groups are about the active window)
+-- ============================================================================
+-- SUPER+G ->
+--   A -> create / toggle group
+--   S -> lock active group (then exit submap)
+--   D -> deny active window from being grouped
+--   F -> next window in group
+
+hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"))
+
+hl.define_submap("grouping", function()
+	hl.bind("A", hl.dsp.group.toggle({}))
+	hl.bind("S", function()
+		hl.dispatch(hl.dsp.group.lock_active({}))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
+	hl.bind("D", hl.dsp.window.deny_from_group({}))
+	hl.bind("F", hl.dsp.group.next({}))
+	hl.bind("Escape", hl.dsp.submap("reset"))
+	hl.bind(mainMod .. " + G", hl.dsp.submap("reset"))
+end)
+
+-- ============================================================================
+-- NAVIGATION SUBMAP  (focus only; never selection-aware)
+-- ============================================================================
+-- SUPER+ALT ->
+--   S -> special workspace: extra
+--   D -> special workspace: dashboard
+--   F -> enter focus submap (HJKL directional focus)
+--   H/L -> workspace m-1 / m+1 (only existing workspaces on this monitor)
+--   1-9, 0 -> workspace 1-9, 10
+
+hl.bind(mainMod .. " + ALT", hl.dsp.submap("navigation"))
+
+hl.define_submap("navigation", function()
+	hl.bind("S", function()
+		hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/gotospecial.sh extra"))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
+	hl.bind("D", function()
+		hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/gotospecial.sh dashboard"))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
+	hl.bind("F", hl.dsp.submap("focus"))
+	hl.bind("L", hl.dsp.focus({ workspace = "m+1" }), { repeating = true })
+	hl.bind("H", hl.dsp.focus({ workspace = "m-1" }), { repeating = true })
+	for i = 1, 9 do
+		local n = i
+		hl.bind(tostring(n), function()
+			hl.dispatch(hl.dsp.focus({ workspace = n }))
+			hl.dispatch(hl.dsp.submap("reset"))
+		end)
+	end
+	hl.bind("0", function()
+		hl.dispatch(hl.dsp.focus({ workspace = 10 }))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
+	hl.bind("Escape", hl.dsp.submap("reset"))
+	hl.bind(mainMod .. " + ALT", hl.dsp.submap("reset"))
+end)
+
+hl.define_submap("focus", function()
+	hl.bind("H", hl.dsp.focus({ direction = "l" }), { repeating = true })
+	hl.bind("J", hl.dsp.focus({ direction = "d" }), { repeating = true })
+	hl.bind("K", hl.dsp.focus({ direction = "u" }), { repeating = true })
+	hl.bind("L", hl.dsp.focus({ direction = "r" }), { repeating = true })
+	hl.bind("Escape", hl.dsp.submap("navigation"))
+	hl.bind(mainMod .. " + ALT", hl.dsp.submap("reset"))
+end)
+
+-- ============================================================================
+-- MOVEMENT SUBMAP  (selection-aware where it makes sense)
+-- ============================================================================
+-- SUPER+Z ->
+--   S -> move window(s) to special:extra
+--   D -> move window(s) to special:dashboard
+--   H/L -> move to relative workspace on this monitor
+--   1-9, 0 -> move to workspace N
+--   I -> move into adjacent group (rightward)
+--   O -> move out of group
+
+hl.bind(mainMod .. " + Z", hl.dsp.submap("movement"))
+
+hl.define_submap("movement", function()
+	hl.bind("S", function()
+		sel_move_to_ws("special:extra")()
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
+	hl.bind("D", function()
+		sel_move_to_ws("special:dashboard")()
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
+	hl.bind("L", sel_move_to_ws("m+1"), { repeating = true })
+	hl.bind("H", sel_move_to_ws("m-1"), { repeating = true })
+	for i = 1, 9 do
+		local n = i
+		hl.bind(tostring(n), function()
+			sel_move_to_ws(tostring(n))()
+			hl.dispatch(hl.dsp.submap("reset"))
+		end)
+	end
+	hl.bind("0", function()
+		sel_move_to_ws("10")()
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
+	-- Group in/out are about the active window's relationship to a group;
+	-- multi-window doesn't have a clean interpretation, so we leave these
+	-- single-target.
+	hl.bind("I", hl.dsp.window.move({ into_group = "r" }))
+	hl.bind("O", hl.dsp.window.move({ out_of_group = true }))
+	hl.bind("Escape", hl.dsp.submap("reset"))
+	hl.bind(mainMod .. " + Z", hl.dsp.submap("reset"))
+end)
+
+-- ============================================================================
+-- PROPERTIES SUBMAP  (selection-aware where it makes sense)
+-- ============================================================================
+-- SUPER+P ->
+--   T -> toggle pin
+--   S -> toggle layout split direction (layout-level, not per-window)
+--   F -> toggle floating
+--   P -> toggle pseudo-tiling
+
+hl.bind(mainMod .. " + P", hl.dsp.submap("properties"))
+
+hl.define_submap("properties", function()
+	hl.bind("T", sel_tbl(hl.dsp.window.pin))
+	hl.bind("S", hl.dsp.layout("togglesplit")) -- not per-window
+	hl.bind("F", sel_tbl(hl.dsp.window.float, { action = "toggle" }))
+	hl.bind("P", sel_tbl(hl.dsp.window.pseudo, { action = "toggle" }))
+	hl.bind("Escape", hl.dsp.submap("reset"))
+	hl.bind(mainMod .. " + P", hl.dsp.submap("reset"))
+end)
+
+-- ============================================================================
+-- TAG SUBMAP  (the selection itself - not wrapped)
+-- ============================================================================
+-- SUPER+T ->
+--   S -> add the active window to the selection (idempotent)
+--   D -> clear ALL tags from the active window
+--        (matches your old D behavior; gets the window completely out of
+--         both "selected" and "prev_selected")
+--   R -> restore the previous selection: prev_selected -> selected
+--   X -> clear the "selected" tag from every window (drop the whole batch
+--        without acting on it)
+
+hl.bind(mainMod .. " + T", hl.dsp.submap("tagging"))
+
+hl.define_submap("tagging", function()
+	-- Add to selection. "+" prefix means "add if not present" so pressing
+	-- S twice on the same window is a no-op rather than a toggle, which is
+	-- usually what you want when building up a set.
+	hl.bind("S", function()
+		hl.dispatch(hl.dsp.window.tag({ tag = "+selected" }))
+	end)
+
+	-- Clear all tags from the active window (kills both selected and prev_selected on it).
+	hl.bind("D", function()
+		hl.dispatch(hl.dsp.window.clear_tags({}))
+	end)
+
+	-- Re-select: take whatever currently has "prev_selected" and turn it
+	-- back into "selected". We clear the existing "selected" set first so
+	-- the restored selection is the only one active.
+	hl.bind("R", function()
+		clear_tag_everywhere("selected")
+		local addrs = addresses_with_tag("prev_selected")
+		rotate_addresses(addrs, "prev_selected", "selected")
+	end)
+
+	-- Drop the whole live selection without performing an action.
+	hl.bind("X", function()
+		clear_tag_everywhere("selected")
+	end)
+
+	hl.bind("Escape", hl.dsp.submap("reset"))
+	hl.bind(mainMod .. " + T", hl.dsp.submap("reset"))
+end)
+
+-- ============================================================================
+-- MOUSE
+-- ============================================================================
+
+hl.bind(mainMod .. " + CTRL", hl.dsp.window.drag(), { mouse = true })
+hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "m-1" }))
+hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "m+1" }))

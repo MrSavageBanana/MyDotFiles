@@ -4,9 +4,9 @@
 (
     address: "127.0.0.1:6600",
     password: None,
-    theme: "custom",
+    on_song_change: ["/home/shayan/.config/rmpc/theme-switcher/on_song_change.sh"],
+    theme: "current-song",
     cache_dir: None,
-    on_song_change: None,
     volume_step: 5,
     max_fps: 30,
     scrolloff: 0,
@@ -40,6 +40,7 @@
             "2":       SwitchToTab("Search"),
             "3":       SwitchToTab("Artists"),
             "4":       SwitchToTab("Albums"),
+            "5":       SwitchToTab("Playlists"),
             "q":       Quit,
             ">":       NextTrack,
             "p":       TogglePause,
@@ -151,6 +152,10 @@
             name: "Albums",
             pane: Pane(Albums),
         ),
+	(
+	 name: "Playlists",
+	 pane: Pane(Playlists),
+	),
     ],
     cava: (
         enabled: true,
