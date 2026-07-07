@@ -5,7 +5,6 @@
     "margin-left": 5,
     "margin-right": 5,    
     "spacing": 0,
-
     // Load Modules
     "include": [
 //        "~/.config/ml4w/settings/waybar-quicklinks.json",
@@ -13,6 +12,7 @@
     ],    
     "modules-left": [
 //        "custom/appmenu",
+		// "custom/selected-num",
 		"wlr/taskbar",
         "group/quicklinks",
 //        "hyprland/window"
@@ -36,38 +36,42 @@
 		"custom/privacy-dots",
         "clock"
     ],
-    
 	"group/expandable-tray": {
 	        "orientation": "horizontal",
-	        "modules": ["custom/tray-handle", "tray", "custom/exit"],
+	        "modules": [
+			"custom/tray-handle",
+			 "tray", 
+			"custom/exit"
+],
 	        "drawer": {
 	            "transition-duration": 500,
 	            "children-class": "child-drawer",
 	            "transition-left-to-right": false
 	        }
 	    },
-
 	"custom/tray-handle": {
-	     "exec": "~/.config/waybar/scripts/check-config-sync.py",
-	     "return-type": "json",
-	     "interval": 21600,
-	     "format": "{}",
-	     "tooltip": true,
-	     "on-click-right": "kitty yazi ~/.mydotfiles/"
-	 },
-    // Clock
-    "clock": {
-        "format": "{:%I:%M}",
-        "on-click": "killall waybar && waybar -c /home/shayan/.config/waybar/config -s /home/shayan/.config/waybar/style.css",
-        "on-click-right": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/config -s /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/style.css",
-        "tooltip-format": "<big>{:%I %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "calendar": {
-                    "mode"          : "month",
-                    "weeks-pos"     : "left",
-                    "on-scroll"     : 1,
-                    "format": {
-                              "today":      "<span color='#1ae5cc'><b><u>{}</u></b></span>"
-                              }
-                    },
-    },
+		"exec": "~/.config/waybar/scripts/check-config-sync.py",
+		"return-type": "json",
+		"interval": 1, // used to be 21600
+		"format": "{}",
+		"tooltip": true,
+		"on-click-right": "kitty yazi ~/.mydotfiles/"
+	},
+	// Clock
+	"clock": {
+		"format": "{:%I:%M}",
+		"on-click": "killall waybar && waybar -c /home/shayan/.config/waybar/config -s /home/shayan/.config/waybar/style.css",
+		"on-click-right": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/config -s /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/style.css",
+		"on-scroll-up": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_timer/config -s /home/shayan/.config/waybar/additional_styles/w_timer/style.css",
+		"on-scroll-down": "killall waybar && waybar -c /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/config -s /home/shayan/.config/waybar/additional_styles/w_stopwatch_a_timer/style.css",
+		"tooltip-format": "<big>{:%I %B}</big>\n<tt><small>{calendar}</small></tt>",
+		"calendar": {
+			"mode": "month",
+			"weeks-pos": "left",
+			"on-scroll": 1,
+			"format": {
+				"today": "<span color='#1ae5cc'><b><u>{}</u></b></span>"
+			}
+		},
+	},
 }

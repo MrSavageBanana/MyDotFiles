@@ -205,6 +205,15 @@ window#waybar.empty #window {
 	color: @foreground
 }
 
+#custom-selected-num {
+	background: @color0;
+	border-radius: 15px;
+	font-family: "Fira Sans Semibold";
+	background-color: transparent;
+	font-size: 16px;
+	color: @foreground
+}
+
 /* The styling for the drawer container */
 #group-expandable-tray {
 	background-color: #222;

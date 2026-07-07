@@ -223,6 +223,11 @@
 		"interval": 1,
 		"exec": "cat /tmp/rofi_status 2>/dev/null || echo ''"
 	},
+	"custom/selected-num": {
+		"format": "{}",
+		"interval": 1,
+		"exec": "hyprctl clients -j | jq '[.[] | select(.tags[]? == \"selected\")] | length'"
+	},
 	// Privacy Dots
 	"custom/privacy-dots": {
 		"exec": "/home/shayan/.config/waybar/scripts/privacy_dots.sh", // or if installed from AUR: "exec": "privacy-dots",
