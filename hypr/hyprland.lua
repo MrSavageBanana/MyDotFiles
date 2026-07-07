@@ -14,6 +14,7 @@
 -- NOTE: cursor.conf is merged into environments (XCURSOR_SIZE env var).
 
 require("conf/monitor")
+require("monitors")
 require("conf/environments")
 require("conf/autostart")
 require("conf/input")

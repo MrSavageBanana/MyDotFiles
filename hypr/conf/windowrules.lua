@@ -84,3 +84,12 @@ hl.window_rule({
 	border_color = "rgb(00ff00) rgb(00ff00)",
 	match = { tag = "prev_selected" },
 })
+-- To get more information about a window’s class, title, XWayland status or its size, you can use `hyprctl clients`. (From Hyprland Wiki)
+local windowrulev2 = {
+	"float,class:^(one.alynx.showmethekey)$",
+	"float,class:^(showmethekey-gtk)$", -- make window floating
+	"pin,class:^(showmethekey-gtk)$", -- pin window
+}
+
+-- If your Lua setup expects them to be assigned directly to a config table:
+-- config.windowrulev2 = windowrulev2

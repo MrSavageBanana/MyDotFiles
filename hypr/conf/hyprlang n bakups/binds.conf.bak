@@ -1,0 +1,146 @@
+# Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
+
+# SUPER key
+$mainMod = SUPER
+	
+# Basic Actions
+binde = $mainMod, ESCAPE, exec, kitty --single-instance
+binde = $mainMod, Z, exec, kitty --single-instance
+bind = $mainMod SHIFT, ESCAPE, exec, kitten quick_access_terminal
+bind = $mainMod, A, exec, kitty --class=popup_term -e bash /home/shayan/.local/bin/VP
+bindo = $mainMod, Q, forcekillactive # Close current window
+bind = $mainMod, C, killactive # Close current window
+# It runs both the killactive and the forcekillactive but it doesn't matter
+bindol = $mainMod, C, forcekillactive 
+bindo = $mainMod, M, exit # Exit Hyprland
+bind = $mainMod, F, fullscreen, 1 # Open the window in fake fullscreen
+# I realize that i don't use the fullscreen as much as fake fullscreen because i like seeing my bar. 
+bindo = $mainMod, F, fullscreen # Open the window in fullscreen
+# bind = $mainMod, SPACE, exec, rofi -show drun # Open rofi
+bind = $mainMod, SPACE, exec, bash /home/shayan/.config/rofi/launchers/type-7/launcher.sh
+# bind = $mainMod, G, togglesplit, # dwindle
+# bind = $mainMod, G, pseudo, active
+# Toggle the currently focused window in and out of a group
+
+# Grouping Submap
+bind = $mainMod, G, togglegroup
+
+# Cycle through the active windows (tabs) in the current group
+bind = $mainMod, Tab, changegroupactive, f
+bind = $mainMod SHIFT, Tab, changegroupactive, b
+
+bindr = $mainMod, T, pin
+bindo = $mainMod, T, togglefloating
+bindr = $mainMod, B, exec, killall -SIGUSR1 waybar
+bindo = $mainMod, B, exec, ~/.config/ml4w/scripts/reload-waybar.sh # Reload Waybar
+bind = $mainMod, V, exec, copyq toggle
+bind = $mainMod SHIFT, V, exec, kdeconnect-cli --send-clipboard -n Shayans-Desktop
+bind = $mainMod SHIFT, R, exec, /home/shayan/.config/hypr/scripts/rotate.sh
+binde = $mainMod, Tab, exec, hyprctl dispatch sendshortcut ",right,"
+
+# Audio
+bind = , XF86AudioRaiseVolume, exec, wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%+
+bind = , XF86AudioLowerVolume, exec, wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%-
+bind = , XF86MonBrightnessUp, exec, brightnessctl set 10%+
+bind = , XF86MonBrightnessDown, exec, brightnessctl set 10%-
+bind = , XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bind = , XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+bind = , XF86WLAN, exec, nmcli radio wifi toggle
+bind = , XF86Refresh, exec, xdotool key F5
+
+# Vim navigations 
+binde = $mainMod, h,  exec, ~/.config/hypr/scripts/workspace_nav.sh prev
+binde = $mainMod, l, exec, ~/.config/hypr/scripts/workspace_nav.sh next
+binde = $mainMod SHIFT, h,  exec, ~/.config/hypr/scripts/ws-move-prev.sh
+binde = $mainMod SHIFT, l, exec, ~/.config/hypr/scripts/ws-move-next.sh
+binde = $mainMod ALT, h, movefocus, l
+binde = $mainMod ALT, j, movefocus, d
+binde = $mainMod ALT, k, movefocus, u
+binde = $mainMod ALT, l, movefocus, r 
+binde = $mainMod Control_L, h, movewindow, l
+binde = $mainMod Control_L, j, movewindow, d
+binde = $mainMod Control_L, k, movewindow, u
+binde = $mainMod Control_L, l, movewindow, r 
+binde = Control_L, J, exec, ~/.config/hypr/scripts/vimviva.sh Down Control_L j
+binde = Control_L, K, exec, ~/.config/hypr/scripts/vimviva.sh Up Control_L k
+
+# Resize Submap
+bind = $mainMod, R, submap, resize
+submap = resize
+binde = , h, resizeactive, -20 0
+binde = , l, resizeactive, 20 0
+binde = , k, resizeactive, 0 -20
+binde = , j, resizeactive, 0 20
+# Exit submap
+bind = , escape, submap, reset
+bind = $mainMod, R, submap, reset
+submap = reset
+
+# Special workspaces
+bind = $mainMod, S, exec, ~/.config/hypr/scripts/gotospecial.sh extra
+bind = $mainMod, D, exec, ~/.config/hypr/scripts/gotospecial.sh dashboard
+bind = $mainMod SHIFT, D, exec, ~/.config/hypr/scripts/movetospecial.sh special:dashboard
+bind = $mainMod SHIFT, S, exec, ~/.config/hypr/scripts/movetospecial.sh special:extra
+
+# switch workspaces with mainmod + [0-9]
+bind = $mainMod, 1, workspace, 1 # Switch to workspace 1
+bind = $mainMod, 2, workspace, 2 # Switch to workspace 2
+bind = $mainMod, 3, workspace, 3 # Switch to workspace 3
+bind = $mainMod, 4, workspace, 4 # Switch to workspace 4
+bind = $mainMod, 5, workspace, 5 # Switch to workspace 5
+bind = $mainMod, 6, workspace, 6 # Switch to workspace 6
+bind = $mainMod, 7, workspace, 7 # Switch to workspace 7
+bind = $mainMod, 8, workspace, 8 # Switch to workspace 8
+bind = $mainMod, 9, workspace, 9 # Switch to workspace 9
+bind = $mainMod, 0, workspace, 10 # Switch to workspace 10
+
+# Switch workspaces with mainMod + numpad
+bind = $mainMod, KP_End, workspace, 1
+bind = $mainMod, KP_Down, workspace, 2
+bind = $mainMod, KP_Next, workspace, 3
+bind = $mainMod, KP_Left, workspace, 4
+bind = $mainMod, KP_Begin, workspace, 5
+bind = $mainMod, KP_Right, workspace, 6
+bind = $mainMod, KP_Home, workspace, 7
+bind = $mainMod, KP_Up, workspace, 8
+bind = $mainMod, KP_Prior, workspace, 9
+bind = $mainMod, KP_Insert, workspace, 10
+
+# Move active window to a workspace with numpad + SHIFT + [0-9]
+bind = $mainMod SHIFT, KP_End, movetoworkspace, 1
+bind = $mainMod SHIFT, KP_Down, movetoworkspace, 2
+bind = $mainMod SHIFT, KP_Next, movetoworkspace, 3
+bind = $mainMod SHIFT, KP_Left, movetoworkspace, 4
+bind = $mainMod SHIFT, KP_Begin, movetoworkspace, 5
+bind = $mainMod SHIFT, KP_Right, movetoworkspace, 6
+bind = $mainMod SHIFT, KP_Home, movetoworkspace, 7
+bind = $mainMod SHIFT, KP_Up, movetoworkspace, 8
+bind = $mainMod SHIFT, KP_Prior, movetoworkspace, 9
+bind = $mainMod SHIFT, KP_Insert, movetoworkspace, 10
+
+# Move active window to a workspace with mainMod + SHIFT + [0-9]
+bind = $mainMod SHIFT, 1, movetoworkspace, 1 #  Move window to workspace 1
+bind = $mainMod SHIFT, 2, movetoworkspace, 2 #  Move window to workspace 2
+bind = $mainMod SHIFT, 3, movetoworkspace, 3 #  Move window to workspace 3
+bind = $mainMod SHIFT, 4, movetoworkspace, 4 #  Move window to workspace 4
+bind = $mainMod SHIFT, 5, movetoworkspace, 5 #  Move window to workspace 5
+bind = $mainMod SHIFT, 6, movetoworkspace, 6 #  Move window to workspace 6
+bind = $mainMod SHIFT, 7, movetoworkspace, 7 #  Move window to workspace 7
+bind = $mainMod SHIFT, 8, movetoworkspace, 8 #  Move window to workspace 8
+bind = $mainMod SHIFT, 9, movetoworkspace, 9 #  Move window to workspace 9
+bind = $mainMod SHIFT, 0, movetoworkspace, 10 #  Move window to workspace 10
+
+# Move/resize windows 
+bindm = $mainMod, Control_L, movewindow
+# bindm = $mainMod, ALT_L, resizewindow
+
+# Screenshot
+# bindt = $mainMod, W, exec, grim -g "$(slurp)" - | wl-copy
+# bindo = $mainMod, W, exec, bash -c '~/.config/hypr/scripts/ocr.sh' 
+bindo = $mainMod, W, exec, ~/.config/hypr/scripts/screenshot_handler.sh hold
+bindr = $mainMod, W, exec, ~/.config/hypr/scripts/screenshot_handler.sh release
+bind = $mainMod SHIFT, W, exec, grim -g "$(slurp)" - | swappy -f -
+
+# Vivaldi: Set "Focus Tab Bar to CTRL ALT SHIFT I" for this to work
+bind = $mainMod, X, exec, hyprctl dispatch sendshortcut "CTRL ALT SHIFT,I,activewindow" && hyprctl dispatch sendshortcut "SHIFT,F10,activewindow" 
+bind = $mainMod SHIFT, X, exec, hyprctl dispatch sendshortcut "SHIFT,F10,activewindow" 

@@ -2,7 +2,11 @@
 -- Autostart applications — runs once at session start, not on config reload.
 
 hl.on("hyprland.start", function()
-	hl.dispatch(hl.dsp.exec_cmd("hyprsel"))
+	hl.dispatch(
+		hl.dsp.exec_cmd(
+			"dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP"
+		)
+	)
 	hl.dispatch(hl.dsp.exec_cmd("waybar"))
 	hl.dispatch(hl.dsp.exec_cmd("hyprpaper"))
 	hl.dispatch(hl.dsp.exec_cmd("dunst"))
@@ -16,10 +20,11 @@ hl.on("hyprland.start", function()
 	)
 
 	hl.dispatch(hl.dsp.exec_cmd("copyq"))
+	hl.dispatch(hl.dsp.exec_cmd("syncthing --no-browser"))
 	hl.dispatch(hl.dsp.exec_cmd("/home/shayan/.config/waybar/scripts/waybar_timer serve"))
 	hl.dispatch(hl.dsp.exec_cmd("/home/shayan/.config/hypr/scripts/window-focus-monitor.sh"))
-	hl.dispatch(hl.dsp.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"))
 	hl.dispatch(hl.dsp.exec_cmd("python3 /home/shayan/Downloads/VivaldiCSS/hypr_pos.py"))
 	hl.dispatch(hl.dsp.exec_cmd("/home/shayan/.config/hypr/hyprvim/scripts/apply-theme.sh"))
 	hl.dispatch(hl.dsp.exec_cmd("/home/shayan/.config/hypr/hyprvim/scripts/whichkey-listen.sh"))
+	hl.dispatch(hl.dsp.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'"))
 end)

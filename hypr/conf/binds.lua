@@ -27,25 +27,53 @@ local mainMod = "SUPER"
 --   hsel("resize", "x = 20, y = 0, relative = true")
 --   hsel("move", 'workspace = "m+1"', "move", 'workspace = "m+1", follow = false')
 -- created with Claude. Account: Milobowler
-hl.bind(
-	mainMod .. "+ F1",
-	hl.dsp.exec_cmd(
-		"bash -c 'pkill -f whichkey-listen.sh; sleep 0.2; ~/.config/hypr/hyprvim/scripts/whichkey-listen.sh &'"
-	)
-)
-local function hsel(action, params, multi_action, multi_params)
-	local function build(act, p)
-		if p and p ~= "" then
-			return "dispatch hl.dsp.window." .. act .. "({ " .. p .. ', window = "{}" })'
+-- local function hsel(action, params, multi_action, multi_params)
+-- 	local function build(act, p)
+-- 		if p and p ~= "" then
+-- 			return "dispatch hl.dsp.window." .. act .. "({ " .. p .. ', window = "{}" })'
+-- 		end
+-- 		return "dispatch hl.dsp.window." .. act .. '({ window = "{}" })'
+-- 	end
+-- 	local s = build(action, params)
+-- 	local m = build(multi_action or action, multi_params ~= nil and multi_params or params)
+-- 	if multi_action then
+-- 		return "hyprsel action '" .. s .. "' '" .. m .. "'"
+-- 	end
+-- 	return "hyprsel action '" .. s .. "'"
+-- end
+local function on_tag_group(action)
+	local active = hl.get_active_window()
+	if not active then
+		return
+	end -- no focused window: do nothing
+
+	local active_tags = active.tags
+
+	if #active_tags == 0 then
+		action(active) -- untagged: act on this window only
+		return
+	end
+
+	-- Build a fast O(1) lookup from the active window's tags
+	local tag_set = {}
+	for _, t in ipairs(active_tags) do
+		tag_set[t] = true
+	end
+
+	-- Snapshot matches BEFORE acting to avoid mutation-during-iteration issues
+	local targets = {}
+	for _, win in ipairs(hl.get_windows()) do
+		for _, t in ipairs(win.tags) do
+			if tag_set[t] then
+				targets[#targets + 1] = win
+				break -- found a match; don't double-add this window
+			end
 		end
-		return "dispatch hl.dsp.window." .. act .. '({ window = "{}" })'
 	end
-	local s = build(action, params)
-	local m = build(multi_action or action, multi_params ~= nil and multi_params or params)
-	if multi_action then
-		return "hyprsel action '" .. s .. "' '" .. m .. "'"
+
+	for _, win in ipairs(targets) do
+		action(win)
 	end
-	return "hyprsel action '" .. s .. "'"
 end
 
 -- ============================================================================
@@ -79,9 +107,10 @@ hl.bind("XF86Refresh", hl.dsp.exec_cmd("xdotool key F5"), { submap_universal = t
 -- ============================================================================
 -- LAUNCHERS & SHELL HELPERS
 -- ============================================================================
-
 -- Kitty (single instance)
 hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd("kitty --single-instance"), { submap_universal = true })
+-- Kitty (single instance)
+hl.bind(mainMod .. " + SHIFT + ESCAPE", hl.dsp.exec_cmd("kitten quick-access-terminal"), { submap_universal = true })
 
 -- Rofi
 hl.bind(
@@ -132,7 +161,12 @@ hl.bind(mainMod .. " + D", function()
 	hl.dispatch(hl.dsp.exec_cmd("~/.config/hypr/scripts/gotospecial.sh dashboard"))
 end, { description = "Go to Dashboard" })
 -- Region screenshot to swappy
-hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd([[grim -g "$(slurp)" - | swappy -f -]]))
+-- hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd([[grim -g "$(slurp)" - | swappy -f -]]))
+-- hl.bind(
+-- 	mainMod .. " + SHIFT + W",
+-- 	hl.dsp.exec_cmd([[grim -g "$(slurp)" - | swappy -f - & hyprctl eval 'hl.dispatch(hl.dsp.submap("movement"))']])
+-- )
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("/home/shayan/.config/hypr/scripts/reference_screenshot.sh"))
 
 -- Vivaldi vim-style passthrough
 hl.bind(
@@ -163,25 +197,36 @@ hl.bind(
 -- Exit Hyprland (long press, so it can't be accidental)
 hl.bind(mainMod .. " + N", hl.dsp.exit(), { long_press = true, submap_universal = true })
 
+-- hl.bind(mainMod .. " + semicolon", hl.dsp.focus({ direction = "l" }), { repeating = true })
+hl.bind(mainMod .. " + semicolon", hl.dsp.window.cycle_next({}), { repeating = true })
+-- hl.bind(mainMod .. " + apostrophe", hl.dsp.focus({ direction = "r" }), { repeating = true })
+hl.bind(mainMod .. " + apostrophe", hl.dsp.window.cycle_next({ next = false }), { repeating = true })
+hl.bind(mainMod .. " + bracketleft", hl.dsp.focus({ monitor = "+1" }), { repeating = true })
+
 -- ============================================================================
 -- WINDOW ACTIONS  (selection-aware)
 -- ============================================================================
 
 -- Close
 hl.bind(mainMod .. " + C", function()
-	-- This tag closing isn't closing multiple. I don't like that.
-	hl.dispatch(hl.dsp.window.close({ window = "tag:selected" }))
-	hl.dispatch(hl.dsp.window.close())
+	on_tag_group(function(win)
+		hl.dispatch(hl.dsp.window.close({ window = "address:" .. win.address }))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
 end, { submap_universal = true })
 -- Kill
 hl.bind(mainMod .. " + C", function()
-	hl.dispatch(hl.dsp.window.kill({ window = "tag:selected" }))
-	hl.dispatch(hl.dsp.window.kill())
+	on_tag_group(function(win)
+		hl.dispatch(hl.dsp.window.kill({ window = "address:" .. win.address }))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
 end, { long_press = true, locked = true, submap_universal = true })
 
 hl.bind(mainMod .. " + Q", function()
-	hl.dispatch(hl.dsp.window.kill({ window = "tag:selected" }))
-	hl.dispatch(hl.dsp.window.kill())
+	on_tag_group(function(win)
+		hl.dispatch(hl.dsp.window.kill({ window = "address:" .. win.address }))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
 end, { long_press = true, locked = true, submap_universal = true })
 
 -- Fullscreen maximize (mode = "maximized")
@@ -211,14 +256,46 @@ hl.bind(mainMod .. " + H", hl.dsp.focus({ workspace = "r-1" }), { repeating = tr
 -- MOVE WINDOW TO ANOTHER WORKSPACE  (selection-aware)
 -- ============================================================================
 
-hl.bind(mainMod .. " + SHIFT + L", function()
-	hl.dispatch(hl.dsp.window.move({ workspace = "r+1", window = "tag:selected" }, { submap_universal = true }))
-	hl.dispatch(hl.dsp.window.move({ workspace = "r+1" }, { submap_universal = true }))
-end)
+hl.bind(
+	mainMod .. " + SHIFT + L",
+	function() -- one moves to the workspace to the right and other moves two to the right
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.move({ workspace = "r+1", window = win, follow = true }))
+		end)
+		-- hl.dispatch(hl.dsp.window.move({ workspace = "r+1", window = "tag:selected" }, { submap_universal = true }))
+		-- hl.dispatch(hl.dsp.window.move({ workspace = "r+1" }, { submap_universal = true }))
+	end,
+	{ submap_universal = true }
+)
 hl.bind(mainMod .. " + SHIFT + H", function()
-	hl.dispatch(hl.dsp.window.move({ workspace = "r-1", window = "tag:selected" }, { submap_universal = true }))
-	hl.dispatch(hl.dsp.window.move({ workspace = "r-1" }, { submap_universal = true }))
-end)
+	on_tag_group(function(win)
+		hl.dispatch(hl.dsp.window.move({ workspace = "r-1", window = win, follow = true }))
+	end)
+	-- hl.dispatch(hl.dsp.window.move({ workspace = "r-1", window = "tag:selected" }, { submap_universal = true }))
+	-- hl.dispatch(hl.dsp.window.move({ workspace = "r-1" }, { submap_universal = true }))
+end, { submap_universal = true })
+hl.bind(
+	mainMod .. " + SHIFT + apostrophe",
+	function() -- one moves to the workspace to the right and other moves two to the right
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.move({ workspace = "r+1", window = win, follow = false }))
+			hl.dispatch(hl.dsp.window.clear_tags({ window = win }))
+			hl.dispatch(hl.dsp.submap("reset"))
+		end)
+		-- hl.dispatch(hl.dsp.window.move({ workspace = "r+1", window = "tag:selected" }, { submap_universal = true }))
+		-- hl.dispatch(hl.dsp.window.move({ workspace = "r+1" }, { submap_universal = true }))
+	end,
+	{ submap_universal = true }
+)
+hl.bind(mainMod .. " + SHIFT + semicolon", function()
+	on_tag_group(function(win)
+		hl.dispatch(hl.dsp.window.move({ workspace = "r-1", window = win, follow = false }))
+		hl.dispatch(hl.dsp.window.clear_tags({ window = win }))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end)
+	-- hl.dispatch(hl.dsp.window.move({ workspace = "r-1", window = "tag:selected" }, { submap_universal = true }))
+	-- hl.dispatch(hl.dsp.window.move({ workspace = "r-1" }, { submap_universal = true }))
+end, { submap_universal = true })
 -- ============================================================================
 -- RESIZE SUBMAP  (selection-aware) | Super + R
 -- ============================================================================
@@ -226,6 +303,9 @@ end)
 --   W -> Increase submap (HJKL grow on respective axis)
 --   E -> Decrease submap (HJKL shrink on respective axis)
 -- Escape returns one level; SUPER+R exits entirely.
+-- on_tag_group(function(win)
+-- 	hl.dispatch(hl.dsp.window.close({ window = "address:" .. win.address }))
+-- end)
 
 hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
 hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
@@ -234,47 +314,51 @@ hl.bind(mainMod .. " + P", hl.dsp.submap("properties"), { description = "Propert
 hl.bind(mainMod .. " + R", hl.dsp.submap("resize"), { description = "Resize submap" })
 
 hl.define_submap("resize", function()
-	hl.bind(
-		"H",
-		hl.dsp.exec_cmd(hsel("resize", "x = -20, y = 0, relative = true")),
-		{ repeating = true, description = "Increase Left" }
-	)
-	hl.bind(
-		"L",
-		hl.dsp.exec_cmd(hsel("resize", "x = 20, y = 0, relative = true")),
-		{ repeating = true, description = "Increase Right" }
-	)
-	hl.bind(
-		"K",
-		hl.dsp.exec_cmd(hsel("resize", "x = 0, y = 20, relative = true")),
-		{ repeating = true, description = "Increase Up" }
-	)
-	hl.bind(
-		"J",
-		hl.dsp.exec_cmd(hsel("resize", "x = 0, y = -20, relative = true")),
-		{ repeating = true, description = "Increase Down" }
-	)
+	hl.bind("H", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.resize({ x = -20, y = 0, window = win, relative = true }))
+		end)
+	end, { repeating = true, description = "Increase Left" })
+	hl.bind("L", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.resize({ x = 20, y = 0, window = win, relative = true }))
+		end)
+	end, { repeating = true, description = "Increase Left" })
+	hl.bind("K", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.resize({ x = 0, y = -20, window = win, relative = true }))
+		end)
+	end, { repeating = true, description = "Increase Left" })
+	hl.bind("J", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.resize({ x = 0, y = 20, window = win, relative = true }))
+		end)
+	end, { repeating = true, description = "Increase Left" })
+	-- hl.bind(
+	-- 	"H",
+	-- 	hl.dsp.window.resize({ x = -20, y = 0, relative = true }),
+	-- 	{ repeating = true, description = "Increase Left" }
+	-- )
+	-- hl.bind(
+	-- 	"L",
+	-- 	hl.dsp.window.resize({ x = 20, y = 0, relative = true }),
+	-- 	{ repeating = true, description = "Increase Left" }
+	-- )
+	-- hl.bind(
+	-- 	"K",
+	-- 	hl.dsp.window.resize({ x = 0, y = -20, relative = true }),
+	-- 	{ repeating = true, description = "Increase Left" }
+	-- )
+	-- hl.bind(
+	-- 	"J",
+	-- 	hl.dsp.window.resize({ x = 0, y = 20, relative = true }),
+	-- 	{ repeating = true, description = "Increase Left" }
+	-- )
 	hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
 	hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
 	hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"), { description = "Movement Submap" })
 	hl.bind(mainMod .. " + P", hl.dsp.submap("properties"), { description = "Properties Submap" })
 	hl.bind("Escape", hl.dsp.submap("reset"))
-end)
-
-hl.define_submap("Increase_size", function()
-	hl.bind("H", hl.dsp.exec_cmd(hsel("resize", "x = -20, y = 0, relative = true")), { repeating = true })
-	hl.bind("L", hl.dsp.exec_cmd(hsel("resize", "x = 20, y = 0, relative = true")), { repeating = true })
-	hl.bind("K", hl.dsp.exec_cmd(hsel("resize", "x = 0, y = 20, relative = true")), { repeating = true })
-	hl.bind("J", hl.dsp.exec_cmd(hsel("resize", "x = 0, y = -20, relative = true")), { repeating = true })
-	hl.bind("Escape", hl.dsp.submap("resize"))
-end)
-
-hl.define_submap("Decrease_size", function()
-	hl.bind("H", hl.dsp.exec_cmd(hsel("resize", "x = 20, y = 0, relative = true")), { repeating = true })
-	hl.bind("L", hl.dsp.exec_cmd(hsel("resize", "x = -20, y = 0, relative = true")), { repeating = true })
-	hl.bind("K", hl.dsp.exec_cmd(hsel("resize", "x = 0, y = -20, relative = true")), { repeating = true })
-	hl.bind("J", hl.dsp.exec_cmd(hsel("resize", "x = 0, y = 20, relative = true")), { repeating = true })
-	hl.bind("Escape", hl.dsp.submap("resize"))
 end)
 
 -- ============================================================================
@@ -297,7 +381,7 @@ hl.define_submap("grouping", function()
 		hl.dispatch(hl.dsp.group.lock_active({}))
 		hl.dispatch(hl.dsp.submap("reset"))
 	end, { description = "Lock group" })
-	hl.bind("D", hl.dsp.window.deny_from_group({}), { description = "Deny window from group" })
+	-- hl.bind("D", hl.dsp.window.deny_from_group({}), { description = "Deny window from group" }) -- this doesn't work
 	hl.bind("F", hl.dsp.group.next({}), { description = "Next window in Group" })
 	hl.bind("SHIFT + F", hl.dsp.group.prev({}), { description = "Previous window in Group" })
 	hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
@@ -333,6 +417,8 @@ hl.define_submap("navigation", function()
 	hl.bind("J", hl.dsp.focus({ direction = "d" }), { repeating = true })
 	hl.bind("K", hl.dsp.focus({ direction = "u" }), { repeating = true })
 	hl.bind("L", hl.dsp.focus({ direction = "r" }), { repeating = true })
+	hl.bind("F", hl.dsp.window.tag({ tag = "selected" }), { auto_consuming = true, transparent = true })
+
 	for i = 1, 9 do
 		local n = i
 		hl.bind(tostring(n), function()
@@ -354,12 +440,13 @@ end)
 hl.define_submap("relative", function()
 	hl.bind("L", function()
 		hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
-		hl.dispatch(hl.dsp.submap("reset"))
+		hl.dispatch(hl.dsp.submap("navigation"))
 	end, { description = "Go to Right workspace" })
 	hl.bind("H", function()
 		hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
-		hl.dispatch(hl.dsp.submap("reset"))
+		hl.dispatch(hl.dsp.submap("navigation"))
 	end, { description = "Go to Left workspace" })
+	hl.bind("F", hl.dsp.window.tag({ tag = "selected" }), { auto_consuming = true, transparent = true })
 	hl.bind("Escape", hl.dsp.submap("navigation"))
 end)
 
@@ -386,28 +473,68 @@ hl.define_submap("movement", function()
 		hl.dispatch(hl.dsp.submap("reset"))
 	end, { description = "Move window to dashboard" })
 	hl.bind("G", hl.dsp.submap("Relative"), { description = "Enter Relative Submap" })
-	hl.bind("H", hl.dsp.window.move({ direction = "l" }), { description = "Move window to left" })
-	hl.bind("J", hl.dsp.window.move({ direction = "d" }), { description = "Move window to down" })
-	hl.bind("K", hl.dsp.window.move({ direction = "u" }), { description = "Move window to up" })
-	hl.bind("L", hl.dsp.window.move({ direction = "r" }), { description = "Move window to right" })
+	-- hl.bind("H", hl.dsp.window.move({ direction = "l" }), { description = "Move window to left" })
+	-- hl.bind("J", hl.dsp.window.move({ direction = "d" }), { description = "Move window to down" })
+	-- hl.bind("K", hl.dsp.window.move({ direction = "u" }), { description = "Move window to up" })
+	-- hl.bind("L", hl.dsp.window.move({ direction = "r" }), { description = "Move window to right" })
+	hl.bind("H", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.move({ x = -20, y = 0, window = win, relative = true }))
+		end)
+	end, { repeating = true, description = "Increase Left" })
+	hl.bind("L", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.move({ x = 20, y = 0, window = win, relative = true }))
+		end)
+	end, { repeating = true, description = "Increase Left" })
+	hl.bind("K", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.move({ x = 0, y = -20, window = win, relative = true }))
+		end)
+	end, { repeating = true, description = "Increase Left" })
+	hl.bind("J", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.move({ x = 0, y = 20, window = win, relative = true }))
+		end)
+	end, { repeating = true, description = "Increase Left" })
 	for i = 1, 9 do
 		local n = i
 		hl.bind(tostring(n), function()
-			hl.dispatch(
-				hl.dsp.exec_cmd(
-					hsel("move", 'workspace = "' .. n .. '"', "move", 'workspace = "' .. n .. '", follow = false')
-				)
-			)
+			on_tag_group(function(win)
+				hl.dispatch(hl.dsp.window.move({ workspace = n, window = win }))
+				hl.dispatch(hl.dsp.window.clear_tags({ window = win }))
+			end)
 			hl.dispatch(hl.dsp.submap("reset"))
 		end, { description = "Move window(s) to " .. n })
 	end
 	hl.bind("0", function()
-		hl.dispatch(hl.dsp.exec_cmd(hsel("move", 'workspace = "10"', "move", 'workspace = "10", follow = false')))
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.move({ workspace = "10", window = win }))
+			hl.dispatch(hl.dsp.window.clear_tags({ window = win }))
+		end)
 		hl.dispatch(hl.dsp.submap("reset"))
 	end, { description = "Move window(s) to 10" })
 	-- Group in/out are about the active window's relationship to a group;
-	hl.bind("I", hl.dsp.window.move({ into_group = "r" }), { description = "Move window into group" })
-	hl.bind("O", hl.dsp.window.move({ out_of_group = true }), { description = "Move window out of group" })
+	-- hl.bind("I", hl.dsp.window.move({ into_group = "r" }), { description = "Move window into group" })
+	hl.bind("I", function()
+		on_tag_group(function(win)
+			hl.dispatch(
+				hl.dsp.window.move({ into_group = "r", window = win }),
+				{ description = "Move window into group" }
+			)
+			hl.dispatch(hl.dsp.window.clear_tags({ window = win }))
+		end)
+	end)
+	hl.bind("O", function()
+		on_tag_group(function(win)
+			hl.dispatch(
+				hl.dsp.window.move({ out_of_group = true, window = win }),
+				{ description = "Move window out of group" }
+			)
+			hl.dispatch(hl.dsp.window.clear_tags({ window = win }))
+		end)
+	end)
+	-- hl.bind("O", hl.dsp.window.move({ out_of_group = true }), { description = "Move window out of group" })
 	hl.bind("Control_L", hl.dsp.window.drag(), { mouse = true })
 	hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
 	hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
@@ -415,24 +542,27 @@ hl.define_submap("movement", function()
 	hl.bind(mainMod .. " + R", hl.dsp.submap("resize"), { description = "Resize submap" })
 	hl.bind("Escape", hl.dsp.submap("reset"))
 end)
-hl.define_submap("Relative", function()
-	hl.bind(
-		"L",
-		hl.dsp.exec_cmd(hsel("move", 'workspace = "m+1"', "move", 'workspace = "m+1", follow = false')),
-		{ description = "Move window(s) to Right workspace" }
-	)
-	hl.bind(
-		"H",
-		hl.dsp.exec_cmd(hsel("move", 'workspace = "m-1"', "move", 'workspace = "m-1", follow = false')),
-		{ description = "Move window(s) to Left workspace" }
-	)
-	hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
-	hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
-	hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"), { description = "Movement Submap" })
-	hl.bind(mainMod .. " + P", hl.dsp.submap("properties"), { description = "Properties Submap" })
-	hl.bind(mainMod .. " + R", hl.dsp.submap("resize"), { description = "Resize submap" })
-	hl.bind("Escape", hl.dsp.submap("navigation"))
-end)
+hl.define_submap(
+	"Relative",
+	function() -- unfortunately, this also moves the first workspace to the first non-empty workspace in that direction and then the second to second non-empty workspace in that direction
+		hl.bind("L", function()
+			on_tag_group(function(win)
+				hl.dispatch(hl.dsp.window.move({ window = win, workspace = "m+1" }))
+			end)
+		end, { description = "Move window(s) to Right workspace" })
+		hl.bind("H", function()
+			on_tag_group(function(win)
+				hl.dispatch(hl.dsp.window.move({ window = win, workspace = "m-1" }))
+			end)
+		end, { description = "Move window(s) to Right workspace" })
+		hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
+		hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
+		hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"), { description = "Movement Submap" })
+		hl.bind(mainMod .. " + P", hl.dsp.submap("properties"), { description = "Properties Submap" })
+		hl.bind(mainMod .. " + R", hl.dsp.submap("resize"), { description = "Resize submap" })
+		hl.bind("Escape", hl.dsp.submap("navigation"))
+	end
+)
 
 -- ============================================================================
 -- PROPERTIES SUBMAP  (selection-aware where it makes sense) | Super + P
@@ -446,10 +576,22 @@ end)
 hl.bind(mainMod .. " + P", hl.dsp.submap("properties"))
 
 hl.define_submap("properties", function()
-	hl.bind("T", hl.dsp.exec_cmd(hsel("pin")), { description = "Pin window(s)" })
+	hl.bind("T", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.pin({ window = "address:" .. win.address }))
+		end)
+	end, { description = "Pin window(s)" })
 	hl.bind("S", hl.dsp.layout("togglesplit"), { description = "Toggle split" })
-	hl.bind("F", hl.dsp.exec_cmd(hsel("float")), { description = "Float window{s}" })
-	hl.bind("P", hl.dsp.exec_cmd(hsel("pseudo")), { description = "Toggle pseudo" })
+	hl.bind("F", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.float({ window = "address:" .. win.address }))
+		end)
+	end, { description = "Float window(s)" })
+	hl.bind("P", function()
+		on_tag_group(function(win)
+			hl.dispatch(hl.dsp.window.pseudo({ window = "address:" .. win.address }))
+		end)
+	end, { description = "Toggle pseudo" })
 	hl.bind(mainMod .. " + G", hl.dsp.submap("grouping"), { description = "Grouping Submap" })
 	hl.bind(mainMod .. " + Alt_L", hl.dsp.submap("navigation"), { description = "Navigation Submap" })
 	hl.bind(mainMod .. " + Control_L", hl.dsp.submap("movement"), { description = "Movement Submap" })
@@ -466,14 +608,14 @@ end)
 --        (matches your old D behavior; gets the window completely out of
 --         both "selected" and "prev_selected")
 
-hl.bind("ALT_R", function()
-	hl.dispatch(hl.dsp.window.tag({ tag = "selected" }), { non_consuming = true })
-end, { submap_universal = true })
-hl.bind(mainMod .. " + semicolon", function()
-	hl.dispatch(hl.dsp.window.tag({ tag = "selected" }), { non_consuming = true })
-end, { submap_universal = true })
-hl.bind("SUPER + mouse:272", function()
-	hl.dispatch(hl.dsp.window.tag({ tag = "selected" }))
+-- I don't think i need another keybind to select tabs. I am only batch action(and therefore navigating to all of the tabs ) in navigation submap
+-- hl.bind(mainMod .. " + Return", function()
+-- 	hl.dispatch(hl.dsp.window.tag({ tag = "selected" }), { non_consuming = true })
+-- end, { submap_universal = true })
+hl.bind(mainMod .. " + Return", function()
+	on_tag_group(function(win)
+		hl.dispatch(hl.dsp.window.clear_tags({ window = win }), { non_consuming = true })
+	end)
 end, { submap_universal = true })
 -- I am contemplating removing this submap since tagging is needed to make so much of this script work
 -- hl.bind(mainMod .. " + T", hl.dsp.submap("tagging"))
@@ -484,10 +626,6 @@ end, { submap_universal = true })
 -- 	-- Both are required; one without the other is the bug that was here.
 -- 	hl.bind("S", function()
 -- 		hl.dispatch(hl.dsp.window.tag({ tag = "+selected" }))
--- 	end)
---
--- 	-- D: remove active window from selection (deselect, not clear-all).
--- 	hl.bind("D", function()
 -- 		hl.dispatch(hl.dsp.window.tag({ tag = "-selected", window = "tag:selected" }))
 -- 		hl.dispatch(hl.dsp.window.tag({ tag = "-selected" }))
 -- 	end)
