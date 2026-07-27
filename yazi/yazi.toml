@@ -208,7 +208,7 @@ previewers = [
 
 prepend_previewers = [
 	{ mime = "folder/*", run = 'piper -- eza -TL=3 --color=always --icons=always --group-directories-first --no-quotes "$1"' },
-
+{ url = "search://*", run = "rg-preview" }
 ]
 [input]
 cursor_blink = false

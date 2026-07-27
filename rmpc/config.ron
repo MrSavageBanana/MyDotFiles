@@ -4,7 +4,7 @@
 (
     address: "127.0.0.1:6600",
     password: None,
-    on_song_change: ["/home/shayan/.config/rmpc/theme-switcher/on_song_change.sh"],
+    on_song_change: ["sh", "-c", "/home/shayan/.config/rmpc/theme-switcher/on_song_change.sh &"],
     theme: "current-song",
     cache_dir: None,
     volume_step: 5,

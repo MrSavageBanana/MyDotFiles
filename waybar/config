@@ -27,8 +27,8 @@
 		//		"custom/timer",
 		"pulseaudio",
 		//        "network", 
-		//        "cpu", 
-		//        "memory", 
+		        "cpu", 
+		        "memory", 
 		//        "keyboard-state", 
 		"battery",
 		"group/expandable-tray",
@@ -51,10 +51,12 @@
 	"custom/tray-handle": {
 		"exec": "~/.config/waybar/scripts/check-config-sync.py",
 		"return-type": "json",
+    "signal": 8,
 		"interval": 1, // used to be 21600
 		"format": "{}",
 		"tooltip": true,
-		"on-click-right": "kitty yazi ~/.mydotfiles/"
+		"on-click-right": "kitty yazi ~/.mydotfiles/",
+		"on-click": "kitty sh -c 'python3 /home/shayan/.config/waybar/scripts/check-config-sync.py --diff'"
 	},
 	// Clock
 	"clock": {

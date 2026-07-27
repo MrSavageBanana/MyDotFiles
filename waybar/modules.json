@@ -66,13 +66,15 @@
 	},
 	// CPU
 	"cpu": {
-		"format": "/ C {usage}% ",
-		"on-click": "alacritty -e htop"
+		// "format": "/ C {usage}% ",
+		"format": "\uf4bc  {usage}%  ",
+		"interval": 5,
 	},
 	// Memory
 	"memory": {
-		"format": "/ M {}% ",
-		"on-click": "alacritty -e htop"
+	//	"format": "/ M {}% ",
+		"format": " \uefc5  {}% ",
+		"interval": 3,
 	},
 	// Harddisc space used
 	"disk": {

@@ -83,5 +83,10 @@ use = "yazi-rs/plugins:toggle-pane"
 rev = "8cd50c6"
 hash = "15e5b67a241172cbb86b8fbf9e63692"
 
+[[plugin.deps]]
+use = "TD-Sky/sudo"
+rev = "afd61ce"
+hash = "d390cd2d8b996939a695411b446f58d0"
+
 [flavor]
 deps = []

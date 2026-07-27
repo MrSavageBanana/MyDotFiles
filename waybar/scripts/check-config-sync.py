@@ -5,14 +5,19 @@ import os
 import json
 import hashlib
 import re
+import argparse
 import subprocess
 from pathlib import Path
 from collections import defaultdict
+from xml.sax.saxutils import escape as xml_escape
 
 CONFIG_DIR = Path.home() / ".config"
 MIRROR_DIR = Path.home() / ".mydotfiles" / "Backup"
 SYNC_SCRIPT = Path.home() / ".mydotfiles" / "sync_dots.sh"
 
+# Color used for the app/folder header lines in the tooltip (Pango markup).
+# Waybar tooltips render Pango markup, so this shows up as an actual color.
+APP_HEADER_COLOR = "#1AE5CC"
 
 def get_display_text():
     """Run hyprctl command to get the number of selected clients"""
@@ -158,42 +163,100 @@ def simplify_path(path, all_paths):
     return path
 
 
-def format_tooltip(mismatched_paths, all_paths):
-    """Format tooltip with app grouping"""
-    # Simplify paths
-    simplified = []
-    for path in mismatched_paths:
-        simplified.append((path, simplify_path(path, all_paths)))
+def build_ordered_entries(mismatched_paths, all_paths):
+    """Return mismatched files grouped by app and sorted exactly the way they
+    appear in the tooltip: apps alphabetically, then files alphabetically by
+    their simplified display name within each app.
 
-    # Group by top-level folder (app)
+    Returns a list of (app, simple_path, full_path) tuples, in display order.
+    full_path is the path relative to CONFIG_DIR, so it can be used to build
+    both the config and mirror file locations for diffing.
+    """
+    simplified = [(path, simplify_path(path, all_paths)) for path in mismatched_paths]
+
     grouped = defaultdict(list)
     for full_path, simple_path in simplified:
         app = full_path.split("/")[0].capitalize()
-        grouped[app].append(simple_path)
+        grouped[app].append((simple_path, full_path))
 
-    # Format output
-    lines = []
+    entries = []
     for app in sorted(grouped.keys()):
-        files = sorted(grouped[app])
-        # App name on its own line
-        lines.append(f"{app} -")
-        # All files below it
-        for file in files:
-            lines.append(file)
+        for simple_path, full_path in sorted(grouped[app]):
+            entries.append((app, simple_path, full_path))
+
+    return entries
+
+
+def format_tooltip(entries):
+    """Format tooltip with app grouping, using the pre-ordered entries."""
+    lines = []
+    current_app = None
+
+    for app, simple_path, _full_path in entries:
+        if app != current_app:
+            # App name on its own line, colored via Pango markup
+            # (escape in case an app/folder name ever contains &, <, >)
+            safe_app = xml_escape(app)
+            lines.append(f"<span foreground='{APP_HEADER_COLOR}'><b>{safe_app} -</b></span>")
+            current_app = app
+
+        lines.append(xml_escape(simple_path))
 
     return "\n".join(lines)
 
 
+def run_diffs(entries):
+    """Run `kitten diff <mirror> <config>` for each mismatched file, in the
+    same order they're listed in the tooltip. Waits for each kitten diff to
+    be closed before moving on to the next one."""
+    if not entries:
+        print("No mismatched files to diff.")
+        return
+
+    total = len(entries)
+    for i, (app, simple_path, full_path) in enumerate(entries, start=1):
+        config_file = CONFIG_DIR / full_path
+        mirror_file = MIRROR_DIR / full_path
+
+        print(f"[{i}/{total}] {app}: {simple_path}")
+
+        if not config_file.exists():
+            print(f"  skipping — missing from config: {config_file}")
+            continue
+        if not mirror_file.exists():
+            print(f"  skipping — missing from mirror: {mirror_file}")
+            continue
+
+        try:
+            subprocess.run(["kitten", "diff", str(mirror_file), str(config_file)])
+        except FileNotFoundError:
+            print("  'kitten' command not found — is kitty installed and on PATH?")
+            return
+
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--diff",
+        action="store_true",
+        help="Run `kitten diff` for each mismatched file, in tooltip order, "
+        "instead of printing the waybar JSON.",
+    )
+    args = parser.parse_args()
+
     folders, files = get_watched_config()
     all_watched = get_all_watched_files(folders, files)
     mismatched = find_mismatched_files(folders, files)
+    entries = build_ordered_entries(mismatched, all_watched)
+
+    if args.diff:
+        run_diffs(entries)
+        return
 
     display_text = get_display_text()
 
     if mismatched:
-        tooltip = format_tooltip(mismatched, all_watched)
-
+        tooltip = format_tooltip(entries)
         output = {"text": display_text, "tooltip": tooltip, "class": "out-of-sync"}
     else:
         output = {"text": display_text, "class": "in-sync"}
