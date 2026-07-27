@@ -34,43 +34,43 @@ hl.window_rule({
 -- Profile 1 — Milo (magenta)
 hl.window_rule({
 	border_color = "rgb(ff00ff) rgb(ff00ff)",
-	match = { tag = "vivaldi_profile_1" },
+	match = { title = [[.*\[Milo\].*]] },
 })
 
 -- Profile 2 — Nasr (orange)
 hl.window_rule({
 	border_color = "rgb(ff8800) rgb(ff8800)",
-	match = { tag = "vivaldi_profile_2" },
+	match = { title = [[.*\[Nasr\].*]] },
 })
 
 -- Profile 3 — Unscripted (cyan)
 hl.window_rule({
 	border_color = "rgb(00ccff) rgb(00ccff)",
-	match = { tag = "vivaldi_profile_3" },
+	match = { title = [[.*\[Unscripted\].*]] },
 })
 
 -- Profile 4 — TT (yellow)
 hl.window_rule({
 	border_color = "rgb(ffee00) rgb(ffee00)",
-	match = { tag = "vivaldi_profile_4" },
+	match = { title = [[.*\[TT\].*]] },
 })
 
 -- Profile 5 — Burhan (lime)
 hl.window_rule({
 	border_color = "rgb(88ff00) rgb(88ff00)",
-	match = { tag = "vivaldi_profile_5" },
+	match = { title = [[.*\[Burhan\].*]] },
 })
 
 -- Profile 6 — Amy (pink)
 hl.window_rule({
 	border_color = "rgb(ff69b4) rgb(ff69b4)",
-	match = { tag = "vivaldi_profile_6" },
+	match = { title = [[.*\[Amy\].*]] },
 })
 
 -- Profile 7 — Pics (purple)
 hl.window_rule({
 	border_color = "rgb(9900ff) rgb(9900ff)",
-	match = { tag = "vivaldi_profile_7" },
+	match = { title = [[.*\[Pics\].*]] },
 })
 -- I think the latest takes precedence. Yup
 -- I think the latest takes precedence

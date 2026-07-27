@@ -128,14 +128,13 @@ hl.bind(
 )
 
 -- Popup terminal / Vivaldi-profile picker script (VP)
-hl.bind(
-	mainMod .. " + A",
-	hl.dsp.exec_cmd("kitty --class=popup_term -e bash ~/.local/bin/VP"),
-	{ submap_universal = true }
-)
+hl.bind(mainMod .. " + A", function()
+	hl.dispatch(hl.dsp.exec_cmd("kill $(hyprctl clients -j | jq -r '.[] | select(.class == \"popup_term\") | .pid')"))
+	hl.dispatch(hl.dsp.exec_cmd("kitty --class=popup_term --title VP -e bash ~/.local/bin/VP"))
+end, { submap_universal = true })
 
 -- Waybar: tap = SIGUSR1 reload; hold = full reload
-hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("killall -SIGUSR1 waybar"), { release = true }, { submap_universal = true })
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("killall -SIGUSR1 waybar"), { release = true, submap_universal = true })
 hl.bind(
 	mainMod .. " + B",
 	hl.dsp.exec_cmd("/home/shayan/.config/hypr/scripts/reload-waybar.sh"),
@@ -197,6 +196,7 @@ hl.bind(
 -- Exit Hyprland (long press, so it can't be accidental)
 hl.bind(mainMod .. " + N", hl.dsp.exit(), { long_press = true, submap_universal = true })
 
+hl.bind("ALT + SHIFT + L", hl.dsp.exec_cmd("hyprlock"))
 -- hl.bind(mainMod .. " + semicolon", hl.dsp.focus({ direction = "l" }), { repeating = true })
 hl.bind(mainMod .. " + semicolon", hl.dsp.window.cycle_next({}), { repeating = true })
 -- hl.bind(mainMod .. " + apostrophe", hl.dsp.focus({ direction = "r" }), { repeating = true })
@@ -581,7 +581,10 @@ hl.define_submap("properties", function()
 			hl.dispatch(hl.dsp.window.pin({ window = "address:" .. win.address }))
 		end)
 	end, { description = "Pin window(s)" })
-	hl.bind("S", hl.dsp.layout("togglesplit"), { description = "Toggle split" })
+	hl.bind("S", function()
+		hl.dispatch(hl.dsp.layout("togglesplit"))
+		hl.dispatch(hl.dsp.submap("reset"))
+	end, { description = "Toggle split" })
 	hl.bind("F", function()
 		on_tag_group(function(win)
 			hl.dispatch(hl.dsp.window.float({ window = "address:" .. win.address }))
@@ -614,7 +617,7 @@ end)
 -- end, { submap_universal = true })
 hl.bind(mainMod .. " + Return", function()
 	on_tag_group(function(win)
-		hl.dispatch(hl.dsp.window.clear_tags({ window = win }), { non_consuming = true })
+		hl.dispatch(hl.dsp.window.tag({ tag = "-selected", window = win }), { non_consuming = true })
 	end)
 end, { submap_universal = true })
 -- I am contemplating removing this submap since tagging is needed to make so much of this script work
