@@ -20,7 +20,7 @@
         song: "S",
         dir: "D",
         playlist: "P",
-	marker:"█",
+        marker: "M",
         ellipsis: "...",
         song_style: None,
         dir_style: None,
@@ -163,10 +163,6 @@
             ),
         ],
     ),
-
-    cava: (
-		    bar_color: Single("blue"),
-	    ),
     components: {
         "state": Pane(Property(
             content: [

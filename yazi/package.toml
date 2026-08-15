@@ -73,20 +73,5 @@ use = "yazi-rs/plugins:smart-paste"
 rev = "442d908"
 hash = "3f8d49413bc8691b4c652eb417a20178"
 
-[[plugin.deps]]
-use = "yazi-rs/plugins:piper"
-rev = "38efe09"
-hash = "12126fca34f9f1802bb57b88292f57af"
-
-[[plugin.deps]]
-use = "yazi-rs/plugins:toggle-pane"
-rev = "8cd50c6"
-hash = "15e5b67a241172cbb86b8fbf9e63692"
-
-[[plugin.deps]]
-use = "TD-Sky/sudo"
-rev = "afd61ce"
-hash = "d390cd2d8b996939a695411b446f58d0"
-
 [flavor]
 deps = []

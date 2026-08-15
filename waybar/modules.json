@@ -66,15 +66,13 @@
 	},
 	// CPU
 	"cpu": {
-		// "format": "/ C {usage}% ",
-		"format": "\uf4bc  {usage}%  ",
-		"interval": 5,
+		"format": "/ C {usage}% ",
+		"on-click": "alacritty -e htop"
 	},
 	// Memory
 	"memory": {
-	//	"format": "/ M {}% ",
-		"format": " \uefc5  {}% ",
-		"interval": 3,
+		"format": "/ M {}% ",
+		"on-click": "alacritty -e htop"
 	},
 	// Harddisc space used
 	"disk": {
@@ -224,11 +222,6 @@
 		"format": "{}",
 		"interval": 1,
 		"exec": "cat /tmp/rofi_status 2>/dev/null || echo ''"
-	},
-	"custom/selected-num": {
-		"format": "{}",
-		"interval": 1,
-		"exec": "hyprctl clients -j | jq '[.[] | select(.tags[]? == \"selected\")] | length'"
 	},
 	// Privacy Dots
 	"custom/privacy-dots": {

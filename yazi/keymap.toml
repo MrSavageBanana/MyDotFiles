@@ -9,15 +9,6 @@ prepend_keymap = [
   { on = [ "<C-e>" ], run = "plugin simple-tag -- clear", desc = "Clear all tags from selection" },
   { on = [ "M", "f" ], run = "plugin simple-tag -- filter --input --mode=or", desc = "Filter by tag" },
   { on = [ "M", "F" ], run = "plugin simple-tag -- filter --input --mode=nor", desc = "Filter out by tag" },
-{ on = ["'", "p"], run = "plugin sudo -- paste", desc = "sudo paste" },
-{ on = ["'", "P"], run = "plugin sudo -- paste --force", desc = "sudo paste" },
-{ on = ["'", "r"], run = "plugin sudo -- rename", desc = "sudo rename" },
-{ on = ["'", "-"], run = "plugin sudo -- link", desc = "sudo link" },
-{ on = ["'", "_"], run = "plugin sudo -- link --relative", desc = "sudo link relative path" },
-{ on = ["'", "a"], run = "plugin sudo -- create", desc = "sudo create" },
-{ on = ["'", "d"], run = "plugin sudo -- remove", desc = "sudo trash" },
-{ on = ["'", "D"], run = "plugin sudo -- remove --permanently", desc = "sudo delete" },
-{ on = ["'", "m"], run = "plugin sudo -- chmod", desc = "sudo chmod" },
 ]
 
 keymap = [
@@ -59,9 +50,7 @@ keymap = [
 	{ on = "<Right>", run = "enter", desc = "Enter the child directory" },
 
 	{ on = "H", run = "back",    desc = "Back to previous directory" },
-	#{ on = "L", run = "forward", desc = "Forward to next directory" },
-	{ on = "L", run = "plugin eza-preview",  desc = "Toggle tree/list dir preview" },
-
+	{ on = "L", run = "forward", desc = "Forward to next directory" },
 
 	# Toggle
 	{ on = "<Space>", run = [ "toggle", "arrow next" ], desc = "Toggle the current selection state" },
@@ -84,13 +73,10 @@ keymap = [
 	{ on = "e", run = "plugin jump-to-char", desc = "Jump to char" },
 	{ on = "E", run = "plugin simple-tag -- toggle-tag", desc = "Tag Menu" },
 	# { on = [ "E" ], run = "plugin eza-preview",  desc = "Toggle tree/list dir preview" },
-	{ on = ["F","s"], run = "plugin pdfseparate", desc = "Split PDF pages (extract page range)" }, # F for file operations. I will expand this.
-	{ on = ["F","u"], run = "plugin pdfunite", desc = "Unite PDF files (merge selected PDFs)" },
-	{ on = ["F","c"], run = "plugin what-size", desc = "Calculate size of selected" },
-	{ on = ["P"], run = "plugin smart-paste", desc = "Paste into the hovered directory or CWD" },
-	{ on = ["b","r"], run = "plugin toggle-pane reset", desc = "Reset Panes" },
-	{ on = ["b","M"], run = "plugin toggle-pane max-preview", desc = "Show Only Preview" },
-	{ on = ["b","m"], run = "plugin toggle-pane min-preview", desc = "Hide Preview" },
+	{ on = ["P","s"], run = "plugin pdfseparate", desc = "Split PDF pages (extract page range)" },
+	{ on = ["P","u"], run = "plugin pdfunite", desc = "Unite PDF files (merge selected PDFs)" },
+	{ on = ["P","c"], run = "plugin what-size", desc = "Calculate size of selected" },
+	{ on = ["<C-p>" ], run = "plugin smart-paste", desc = "Paste into the hovered directory or CWD" },
 
 	# Relative-motions
 	{ on = [ "1" ], run = "plugin relative-motions 1 ", desc = "Trigger Relative Motion" },
@@ -138,13 +124,12 @@ keymap = [
 	{ on = ":",         run = "plugin custom-shell -- auto --interactive --block", desc = "Run a shell command (block until finishes)" },
 	{ on = ".",         run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
 	{ on = "s",         run = "search --via=fd",             desc = "Search files by name via fd" },
-  # { on = [ "S", "s" ],        run = "search --via=rg",             desc = "Search files by name via rg" },
-  { on = [ "S", "S" ],        run = "plugin rg-preview",             desc = "Search files by name via rg (syntax-highlight)" },
-	{ on = [ "S", "Z" ],        run = "plugin fr rg",             desc = "Search files by name via rg (fzf)" },
+	# { on = "S",         run = "search --via=rg",             desc = "Search files by name via rg" },
+	{ on = "S",         run = "plugin fr rg",             desc = "Search files by name via rg" },
 	{ on = "z",         run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
 	{ on = "Z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
 #	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
- 	{ on = "<C-y>", run = "shell -- dragon-drop -x -i -T %s1" },
+
 	# Linemode
 	{ on = [ "M", "p" ], run = "linemode permissions", desc = "Linemode: permissions" },
 	{ on = [ "M", "s" ], run = "linemode size",        desc = "Linemode: size" },
